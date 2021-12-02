@@ -1,0 +1,294 @@
+{
+	"directories": [
+		"3com",
+		"acenic",
+		"adaptec",
+		"advansys",
+		"amd",
+		"amdgpu",
+		"amd-ucode",
+		"ar3k",
+		"ath10k",
+		"ath11k",
+		"ath6k",
+		"ath9k_htc",
+		"atmel",
+		"atusb",
+		"av7110",
+		"bnx2",
+		"bnx2x",
+		"brcm",
+		"cadence",
+		"cavium",
+		"cis",
+		"cpia2",
+		"cxgb3",
+		"cxgb4",
+		"cypress",
+		"dabusb",
+		"dpaa2",
+		"dsp56k",
+		"e100",
+		"edgeport",
+		"emi26",
+		"emi62",
+		"ene-ub6250",
+		"ess",
+		"go7007",
+		"i915",
+		"imx",
+		"inside-secure",
+		"intel",
+		"isci",
+		"kaweth",
+		"keyspan",
+		"keyspan_pda",
+		"korg",
+		"libertas",
+		"liquidio",
+		"matrox",
+		"mediatek",
+		"mellanox",
+		"meson",
+		"microchip",
+		"moxa",
+		"mrvl",
+		"mwl8k",
+		"mwlwifi",
+		"myricom",
+		"netronome",
+		"nvidia",
+		"ositech",
+		"qca",
+		"qcom",
+		"qed",
+		"qlogic",
+		"r128",
+		"radeon",
+		"rockchip",
+		"rsi",
+		"RTL8192E",
+		"rtl_bt",
+		"rtl_nic",
+		"rtlwifi",
+		"rtw88",
+		"rtw89",
+		"sb16",
+		"silabs",
+		"slicoss",
+		"sun",
+		"sxg",
+		"tehuti",
+		"ti",
+		"ti-connectivity",
+		"tigon",
+		"ti-keystone",
+		"ttusb-budget",
+		"ueagle-atm",
+		"vicam",
+		"vxge",
+		"yam",
+		"yamaha"
+	],
+	"files": {
+		"TDA7706": [
+			"TDA7706_OM_v*_boot.txt"
+		],
+		"agere": [
+			"agere_ap_fw.bin",
+			"agere_sta_fw.bin"
+		],
+		"ar": [
+			"ar5523.bin",
+			"ar7010.fw",
+			"ar7010_1_1.fw",
+			"ar9170-1.fw",
+			"ar9170-2.fw",
+			"ar9271.fw"
+		],
+		"as102": [
+			"as102_data*_st.hex"
+		],
+		"ath3k": [
+			"ath3k-1.fw"
+		],
+		"atmsar": [
+			"atmsar11.fw"
+		],
+		"bn2x": [
+			"bnx2x-e1*-*.fw"
+		],
+		"carl9170": [
+			"carl9170-1.fw"
+		],
+		"cbfw": [
+			"cbfw-*.bin"
+		],
+		"cmmb": [
+			"cmmb_*.inp"
+		],
+		"ct2fw": [
+			"ct2fw-*.bin"
+		],
+		"ctefx": [
+			"ctefx.bin"
+		],
+		"ctfw": [
+			"ctfw-*.bin"
+		],
+		"ctspeq": [
+			"ctspeq.bin"
+		],
+		"dvb": [
+			"dvb-fe-xc4000-1.4.1.fw",
+			"dvb-fe-xc5000-1.6.114.fw",
+			"dvb-fe-xc5000c-4.1.30.7.fw",
+			"dvb-usb-dib0700-1.20.fw",
+			"dvb-usb-it9135-01.fw",
+			"dvb-usb-it9135-02.fw",
+			"dvb-usb-terratec-h5-drxk.fw",
+			"dvb_nova_12mhz.inp",
+			"dvb_nova_12mhz_b0.inp"
+		],
+		"f2255usb": [
+			"f2255usb.bin"
+		],
+		"go7007": [
+			"s2250.fw",
+			"s2250_loader.fw"
+		],
+		"hfi1": [
+			"hfi1_dc8051.fw",
+			"hfi1_fabric.fw",
+			"hfi1_pcie.fw",
+			"hfi1_sbus.fw"
+		],
+		"htc": [
+			"htc_7010.fw",
+			"htc_9271.fw"
+		],
+		"i2400m": [
+			"i2400m-fw-usb-1.4.sbcf",
+			"i2400m-fw-usb-1.5.sbcf"
+		],
+		"i6050": [
+			"i6050-fw-usb-1.5.sbcf"
+		],
+		"intelliport2": [
+			"intelliport2.bin"
+		],
+		"isdbt": [
+			"isdbt_nova_12mhz.inp",
+			"isdbt_nova_12mhz_b0.inp",
+			"isdbt_rio.inp"
+		],
+		"iwlwifi": [
+			"iwlwifi-*.pnvm",
+			"iwlwifi-*.ucode"
+		],
+		"lbtf": [
+			"lbtf_usb.bin"
+		],
+		"lgs": [
+			"lgs8g75.fw"
+		],
+		"lt": [
+			"lt9611uxc_fw.bin"
+		],
+		"mediatek": [
+			"vpu_d.bin",
+			"vpu_p.bin"
+		],
+		"mt": [
+			"mt7601u.bin",
+			"mt7650.bin",
+			"mt7662.bin",
+			"mt7662_rom_patch.bin"
+		],
+		"mts": [
+			"mts_cdma.fw",
+			"mts_edge.fw",
+			"mts_gsm.fw",
+			"mts_mt9234mu.fw",
+			"mts_mt9234zba.fw"
+		],
+		"myri10ge": [
+			"myri10ge_*.dat"
+		],
+		"phan": [
+			"phanfw.bin"
+		],
+		"qat": [
+			"qat_*.bin"
+		],
+		"qcom": [
+			"a300_pfp.fw",
+			"a300_pm4.fw"
+		],
+		"ql": [
+			"ql*_fw.bin"
+		],
+		"r8a779x": [
+			"r8a779x_usb3_v*.dlmem"
+		],
+		"rp2": [
+			"rp2.fw"
+		],
+		"rsi": [
+			"rsi_91x.fw"
+		],
+		"rt": [
+			"rt*.bin"
+		],
+		"s5p": [
+			"s5p-mfc-v6-v2.fw",
+			"s5p-mfc-v6.fw",
+			"s5p-mfc-v7.fw",
+			"s5p-mfc-v8.fw",
+			"s5p-mfc.fw"
+		],
+		"sdd": [
+			"sdd_sagrad_1091_1098.bin"
+		],
+		"sms1xxx": [
+			"sms1xxx-hcw-55xxx-dvbt-02.fw",
+			"sms1xxx-hcw-55xxx-isdbt-02.fw",
+			"sms1xxx-nova-a-dvbt-01.fw",
+			"sms1xxx-nova-b-dvbt-01.fw",
+			"sms1xxx-stellar-dvbt-01.fw"
+		],
+		"tdmb": [
+			"tdmb_nova_12mhz.inp"
+		],
+		"ti": [
+			"ti_3410.fw",
+			"ti_5052.fw"
+		],
+		"tlg": [
+			"tlg2300_firmware.bin"
+		],
+		"tr": [
+			"tr_smctr.bin"
+		],
+		"usbdux": [
+			"usbdux*.bin"
+		],
+		"v4l-cx": [
+			"v4l-cx*.fw"
+		],
+		"vntw": [
+			"vntwusb.fw"
+		],
+		"whiteheat": [
+			"whiteheat.fw",
+			"whiteheat_loader.fw"
+		],
+		"wil": [
+			"wil6210.brd",
+			"wil6210.fw"
+		],
+		"wsm": [
+			"wsm_22.bin"
+		]
+	}
+}
