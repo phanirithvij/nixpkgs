@@ -38,8 +38,7 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-blibGJyaz+MxMazOXhPbGBAJWZoGubirwSnjVYyLBJs="; # odoo
   };
 
-  # needs some investigation
-  doCheck = false;
+  doCheck = true;
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
