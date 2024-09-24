@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   flake8,
   orderedmultidict,
+  python,
   pytestCheckHook,
   six,
 }:
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # https://github.com/gruns/furl/issues/164#issuecomment-1595637359
   postPatch = ''
     substituteInPlace tests/test_furl.py \
-      --replace '[0:0:0:0:0:0:0:1:1:1:1:1:1:1:1:9999999999999]' '[2001:db8::9999]'
+      --replace-fail '[0:0:0:0:0:0:0:1:1:1:1:1:1:1:1:9999999999999]' '[2001:db8::9999]'
   '';
 
   propagatedBuildInputs = [
@@ -36,10 +36,30 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # AssertionError: assert '//////path' == '////path'
-    "test_odd_urls"
-  ];
+  disabledTests =
+    # test failure "test_odd_urls"
+    # https://github.com/gruns/furl/issues/176
+    let
+      pythonVersionFull = with python.sourceVersion; "${major}.${minor}.${patch}";
+      pythonAtLeast' =
+        v: (python.pythonVersion == lib.versions.majorMinor v) && (lib.versionAtLeast pythonVersionFull v);
+      cond = (
+        lib.lists.any lib.trivial.id (
+          lib.map pythonAtLeast' [
+            "3.13.0"
+            "3.12.4"
+            "3.11.10"
+            "3.10.15"
+            "3.9.20"
+            "3.8.20"
+          ]
+        )
+      );
+    in
+    lib.optionals cond [
+      # AssertionError: assert '//////path' == '////path'
+      "test_odd_urls"
+    ];
 
   pythonImportsCheck = [ "furl" ];
 
