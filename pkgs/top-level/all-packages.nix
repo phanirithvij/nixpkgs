@@ -4858,7 +4858,8 @@ with pkgs;
   espanso = callPackage ../applications/office/espanso {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit System;
   };
-  espanso-wayland = espanso.override {
+  espanso-wayland = callPackage ../applications/office/espanso {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit System;
     x11Support = false;
     waylandSupport = true;
     espanso = espanso-wayland;
