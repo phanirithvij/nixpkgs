@@ -4,38 +4,37 @@
   buildNpmPackage,
   fetchFromGitHub,
   moreutils,
-  npm-lockfile-fix,
+  jd-diff-patch,
   jq,
   git,
 }:
 let
   # finalAttrs when 🥺 (buildGoModule does not support them)
   # https://github.com/NixOS/nixpkgs/issues/273815
-  version = "1.7.5";
+  version = "1.8.1";
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
     rev = "v${version}";
-    hash = "sha256-mZ4j9UWdKa3nygcRO5ceyONetkks3ZGWxvzD34eOXew=";
-
-    # follow https://github.com/thomiceli/opengist/pull/350 and remove here
-    postFetch = ''
-      ${lib.getExe npm-lockfile-fix} $out/package-lock.json
-    '';
+    hash = "sha256-rUE4E5moMujVeN/2obp1LlvyKOPGyP6de1xI/2GdAUc=";
   };
+  jd' = lib.getExe jd-diff-patch;
+  jq' = lib.getExe jq;
+  sponge = "${moreutils}/bin/sponge";
 
   frontend = buildNpmPackage {
     pname = "opengist-frontend";
     inherit version src;
 
-    nativeBuildInputs = [
-      moreutils
-      jq
-    ];
-
     # npm complains of "invalid package". shrug. we can give it a version.
-    preBuild = ''
-      jq '.version = "${version}"' package.json | sponge package.json
+    # esbuild optional dependencies installed explicitly
+    # as they are missing for non-x86_64-linux in package-lock.json
+    # nix shell nixpkgs#{nodejs,jd-diff-patch} -c \
+    #   sh -c "npm add -D esbuild@0.18.20; git difftool -yx jd @ -- package-lock.json > package-lock-esbuild.jd.diff"
+    prePatch = ''
+      ${jq'} '.version = "${version}"' package.json | ${sponge} package.json
+      ${jd'} -o package-lock.json -p ${./package-lock-esbuild.jd.diff} package-lock.json || true
+      ${jq'} -S . package-lock.json | ${sponge} package-lock.json
     '';
 
     # copy pasta from the Makefile upstream, seems to be a workaround of sass
@@ -50,13 +49,13 @@ let
       cp -R public $out
     '';
 
-    npmDepsHash = "sha256-cITkgRvWOml6uH77WkiNgFedEuPNze63Gntet09uS5w=";
+    npmDepsHash = "sha256-uRocJqRsVqmmndqIJ4MqBussnpfh3bpkYVYxFv38Kpw=";
   };
 in
 buildGoModule {
   pname = "opengist";
   inherit version src;
-  vendorHash = "sha256-6PpS/dsonc/akBn8NwUIVFNe2FjynAhF1TYIYT9K/ws=";
+  vendorHash = "sha256-B8h+/pUMDzLew0+r2/nTHDcm3Y7Bnwj9R3FzHts6i+k=";
   tags = [ "fs_embed" ];
   ldflags = [
     "-s"
@@ -73,11 +72,20 @@ buildGoModule {
     export OG_OPENGIST_HOME=$(mktemp -d)
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    make test
+    runHook postCheck
+  '';
+
   postPatch = ''
     cp -R ${frontend}/public/{manifest.json,assets} public/
   '';
 
-  passthru.frontend = frontend;
+  passthru = {
+    inherit frontend;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Self-hosted pastebin powered by Git";
