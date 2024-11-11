@@ -28,6 +28,7 @@ fi
 echo "Updating opengist $oldVersion -> $latestVersion"
 
 update-source-version opengist "${latestVersion}"
+sed -E 's#\bversion = ".*?"#version = "'"$latestVersion"'"#' --in-place "$NIXPKGS_DIR/nixos/modules/services/web-apps/opengist.nix"
 
 pushd "$SCRIPT_DIR" >/dev/null || exit 1
 
