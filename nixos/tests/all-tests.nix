@@ -975,6 +975,7 @@ in
   openarena = handleTest ./openarena.nix { };
   openbao = runTest ./openbao.nix;
   openldap = handleTest ./openldap.nix { };
+  opengist = handleTest ./opengist.nix { };
   opensearch = discoverTests (import ./opensearch.nix);
   openresty-lua = handleTest ./openresty-lua.nix { };
   opensmtpd = handleTest ./opensmtpd.nix { };
