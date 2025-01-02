@@ -15,8 +15,8 @@ mkDprintPlugin {
     ];
   };
   pname = "dprint-plugin-biome";
+  testFile = ./testdata/example.ts;
   updateUrl = "https://plugins.dprint.dev/dprint/biome/latest.json";
   url = "https://plugins.dprint.dev/biome-0.7.1.wasm";
   version = "0.7.1";
-  formattedFile = ./example.ts;
 }

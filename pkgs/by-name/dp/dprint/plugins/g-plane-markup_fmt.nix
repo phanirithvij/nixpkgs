@@ -18,8 +18,8 @@ mkDprintPlugin {
     ];
   };
   pname = "g-plane-markup_fmt";
+  testFile = ./testdata/example.html;
   updateUrl = "https://plugins.dprint.dev/g-plane/markup_fmt/latest.json";
   url = "https://plugins.dprint.dev/g-plane/markup_fmt-v0.18.0.wasm";
   version = "0.18.0";
-  formattedFile = ./example.html;
 }

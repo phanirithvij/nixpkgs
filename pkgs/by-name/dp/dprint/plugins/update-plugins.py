@@ -101,14 +101,48 @@ def write_plugin_derivation(drv_attrs):
     nixfmt(filepath)
 
 
+def write_plugin_test_file(pname, test_file):
+    test_file_path = Path(test_file)
+    file = SCRIPT_DIR / f"{pname}.nix"
+    if not test_file_path.exists():
+        test_file_path.touch()
+    with open(file, "rt") as f:
+        contents = f.read().replace('"@testFile@"', test_file)
+    with open(file, "wt") as f:
+        f.write(contents)
+
+
 def update_plugin_by_name(name):
-    """Update a single plugin by name"""
+    """Update a single official plugin by name"""
 
     # allow passing in filename as well as pname
     if name.endswith(".nix"):
         name = Path(name[:-4]).name
+
+    # To determine the testFile extension
+    data = requests.get("https://plugins.dprint.dev/info.json").json()["latest"]
+    plugin_info = None
+    test_file = None
+    for e in data:
+        pname = e["name"]
+        if "/" in e["name"]:
+            pname = pname.replace("/", "-")
+        if name == pname:
+            test_file = f"./testdata/example.{e["fileExtensions"][0]}"
+            plugin_info = e
+            break
+
+    if test_file is None:
+        print(f"failed to update package: {name}, error: test_file was none")
+        exit(1)
+
     try:
-        p = (SCRIPT_DIR / f"{name}.nix").read_text().replace("\n", "")
+        p = (
+            (SCRIPT_DIR / f"{name}.nix")
+            .read_text()
+            .replace("\n", "")
+            .replace(test_file, '"@testFile@"')
+        )
     except OSError as e:
         print(f"failed to update plugin {name}: error: {e}")
         exit(1)
@@ -120,12 +154,23 @@ def update_plugin_by_name(name):
     p["url"] = data["url"]
     p["version"] = data["version"]
     p["hash"] = nix_prefetch_url(data["url"], f"{name}-{data["version"]}.wasm")
+    p.update(
+        {
+            "description": plugin_info["description"],
+            "initConfig": {
+                "configKey": plugin_info["configKey"],
+                "configExcludes": plugin_info["configExcludes"],
+                "fileExtensions": plugin_info["fileExtensions"],
+            },
+        }
+    )
 
     write_plugin_derivation(p)
+    write_plugin_test_file(name, test_file)
 
 
 def update_plugins():
-    """Update all the plugins"""
+    """Update all the official plugins"""
 
     data = requests.get("https://plugins.dprint.dev/info.json").json()["latest"]
 
@@ -134,6 +179,9 @@ def update_plugins():
         pname = e["name"]
         if "/" in e["name"]:
             pname = pname.replace("/", "-")
+
+        test_file = f"./testdata/example.{e["fileExtensions"][0]}"
+
         drv_attrs = {
             "url": e["url"],
             "hash": nix_prefetch_url(e["url"], f"{pname}-{e["version"]}.wasm"),
@@ -146,8 +194,11 @@ def update_plugins():
                 "configExcludes": e["configExcludes"],
                 "fileExtensions": e["fileExtensions"],
             },
+            # json_to_nix and nix_to_json can't handle nix paths
+            "testFile": "@testFile@",
         }
         write_plugin_derivation(drv_attrs)
+        write_plugin_test_file(pname, test_file)
 
 
 if pname != "":

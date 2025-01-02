@@ -8,8 +8,8 @@ mkDprintPlugin {
     fileExtensions = [ "ipynb" ];
   };
   pname = "dprint-plugin-jupyter";
+  testFile = ./testdata/example.ipynb;
   updateUrl = "https://plugins.dprint.dev/dprint/jupyter/latest.json";
   url = "https://plugins.dprint.dev/jupyter-0.1.5.wasm";
   version = "0.1.5";
-  formattedFile = ./example.ipynb;
 }

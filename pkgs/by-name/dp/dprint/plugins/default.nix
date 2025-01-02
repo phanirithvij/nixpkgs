@@ -15,7 +15,7 @@ let
       updateUrl,
       license ? lib.licenses.mit,
       maintainers ? [ lib.maintainers.phanirithvij ],
-      formattedFile,
+      testFile ? null,
     }:
     fetchurl {
       inherit hash url;
@@ -32,12 +32,16 @@ let
         inherit initConfig updateUrl;
       };
       nativeBuildInputs = [ dprint ];
-      postFetch = ''
-        export DPRINT_CACHE_DIR="$(mktemp -d)"
-        cd "$(mktemp -d)"
-        cp '${formattedFile}' '${builtins.baseNameOf formattedFile}'
-        dprint check --plugins "$downloadedFile"
-      '';
+      postFetch =
+        if testFile != null then
+          ''
+            export DPRINT_CACHE_DIR="$(mktemp -d)"
+            cd "$(mktemp -d)"
+            cp '${testFile}' '${builtins.baseNameOf testFile}'
+            dprint check --plugins "$downloadedFile"
+          ''
+        else
+          "";
     };
   inherit (lib)
     filterAttrs

@@ -15,8 +15,8 @@ mkDprintPlugin {
     ];
   };
   pname = "dprint-plugin-typescript";
+  testFile = ./testdata/example.ts;
   updateUrl = "https://plugins.dprint.dev/dprint/typescript/latest.json";
   url = "https://plugins.dprint.dev/typescript-0.93.3.wasm";
   version = "0.93.3";
-  formattedFile = ./example.ts;
 }
