@@ -11,4 +11,5 @@ mkDprintPlugin {
   updateUrl = "https://plugins.dprint.dev/dprint/toml/latest.json";
   url = "https://plugins.dprint.dev/toml-0.6.3.wasm";
   version = "0.6.3";
+  formattedFile = ./example.toml;
 }

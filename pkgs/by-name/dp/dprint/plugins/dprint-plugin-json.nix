@@ -11,4 +11,5 @@ mkDprintPlugin {
   updateUrl = "https://plugins.dprint.dev/dprint/json/latest.json";
   url = "https://plugins.dprint.dev/json-0.19.4.wasm";
   version = "0.19.4";
+  formattedFile = ./example.json;
 }

@@ -16,4 +16,5 @@ mkDprintPlugin {
   updateUrl = "https://plugins.dprint.dev/g-plane/malva/latest.json";
   url = "https://plugins.dprint.dev/g-plane/malva-v0.11.1.wasm";
   version = "0.11.1";
+  formattedFile = ./example.css;
 }

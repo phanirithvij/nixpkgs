@@ -1,4 +1,8 @@
-{ lib, fetchurl }:
+{
+  lib,
+  fetchurl,
+  dprint,
+}:
 let
   mkDprintPlugin =
     {
@@ -11,6 +15,7 @@ let
       updateUrl,
       license ? lib.licenses.mit,
       maintainers ? [ lib.maintainers.phanirithvij ],
+      formattedFile,
     }:
     fetchurl {
       inherit hash url;
@@ -26,6 +31,13 @@ let
         updateScript = ./update-plugins.py;
         inherit initConfig updateUrl;
       };
+      nativeBuildInputs = [ dprint ];
+      postFetch = ''
+        export DPRINT_CACHE_DIR="$(mktemp -d)"
+        cd "$(mktemp -d)"
+        cp '${formattedFile}' '${builtins.baseNameOf formattedFile}'
+        dprint check --plugins "$downloadedFile"
+      '';
     };
   inherit (lib)
     filterAttrs
