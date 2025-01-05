@@ -11,9 +11,10 @@ import requests
 USAGE = """Usage: {0} [ | plugin-name | plugin-file-path]
 
 eg.
-  {0}
-  {0} dprint-plugin-json
-  {0} /path/to/dprint-plugin-json.nix"""
+  {0}   - to only update official dprint plugins from plugins.dprint.dev
+  {0} dprint-plugin-json - to update a single plugin by name
+  {0} /path/to/dprint-plugin-json.nix - to update a single plugin by filepath
+"""
 
 FILE_PATH = Path(os.path.realpath(__file__))
 SCRIPT_DIR = FILE_PATH.parent
@@ -93,54 +94,101 @@ def get_update_url(plugin_url):
     return "https://plugins.dprint.dev/" + "/".join(names) + "/latest.json"
 
 
-def write_plugin_derivation(drv_attrs):
-    drv = f"{{ mkDprintPlugin }}: mkDprintPlugin {json_to_nix(drv_attrs)}"
-    filepath = SCRIPT_DIR / f"{drv_attrs["pname"]}.nix"
+def write_plugin_derivation(drv_attrs, filepath=None):
+    drv = f"{{ mkDprintPlugin, ... }}: mkDprintPlugin {json_to_nix(drv_attrs)}"
+    if filepath is None:
+        filepath = SCRIPT_DIR / f"{drv_attrs["pname"]}.nix"
     with open(filepath, "w+", encoding="utf8") as f:
         f.write(drv)
     nixfmt(filepath)
 
 
-def update_plugin_by_name(name):
-    """Update a single plugin by name"""
+def update_plugin_by_filepath(filepath):
+    """Update a single unofficial plugin by filepath"""
+    pass
 
-    # allow passing in filename as well as pname
+
+def update_plugin_by_name(name):
+    """Update a single official plugin by name or filepath"""
+
+    # allow passing in filepath as well as pname
+    filepath = None
     if name.endswith(".nix"):
+        filepath = Path(name)
         name = Path(name[:-4]).name
+    if filepath is None:
+        filepath = SCRIPT_DIR / f"{name}.nix"
+
     try:
-        p = (SCRIPT_DIR / f"{name}.nix").read_text().replace("\n", "")
+        p = filepath.read_text().replace("\n", "")
     except OSError as e:
         print(f"failed to update plugin {name}: error: {e}")
         exit(1)
 
+    # To update all the fields
+    data = requests.get("https://plugins.dprint.dev/info.json").json()["latest"]
+    plugin_info = None
+    for e in data:
+        pname = e["name"]
+        if "/" in pname:
+            pname = pname.replace("/", "-")
+        if name == pname:
+            plugin_info = e
+            break
+
     start_idx = p.find("mkDprintPlugin {") + len("mkDprintPlugin {")
-    p = nix_to_json("{" + p[start_idx:].strip())
+    p = "{" + p[start_idx:].strip()
+
+    try:
+        p = nix_to_json(p)
+    except Exception as e:
+        update_plugin_by_filepath(filepath, p)
 
     data = requests.get(p["updateUrl"]).json()
     p["url"] = data["url"]
-    p["version"] = data["version"]
-    p["hash"] = nix_prefetch_url(data["url"], f"{name}-{data["version"]}.wasm")
+    # ignore verison attribute, get it from url
+    p["version"] = p["url"].split("-")[-1][:-5]
+    p["hash"] = nix_prefetch_url(data["url"], f"{name}-{p["version"]}.wasm")
+    p["changelog"] = f"{p["homepage"]}/releases/{p["version"]}"
+    if plugin_info is not None:
+        p.update(
+            {
+                "description": plugin_info["description"],
+                "initConfig": {
+                    "configKey": plugin_info["configKey"],
+                    "configExcludes": plugin_info["configExcludes"],
+                    "fileExtensions": plugin_info["fileExtensions"],
+                },
+            }
+        )
 
-    write_plugin_derivation(p)
+    write_plugin_derivation(p, filepath)
 
 
 def update_plugins():
-    """Update all the plugins"""
+    """Update all the official plugins"""
 
     data = requests.get("https://plugins.dprint.dev/info.json").json()["latest"]
 
     for e in data:
         update_url = get_update_url(e["url"])
         pname = e["name"]
-        if "/" in e["name"]:
+        homepage = f"https://github.com/dprint/{pname}"
+        if "/" in pname:
+            homepage = f"https://github.com/{pname}"
             pname = pname.replace("/", "-")
+
+        # ignore version provided by json, extract it from release url
+        version = e["url"].split("-")[-1][:-5]
         drv_attrs = {
             "url": e["url"],
-            "hash": nix_prefetch_url(e["url"], f"{pname}-{e["version"]}.wasm"),
+            "hash": nix_prefetch_url(e["url"], f"{pname}-{version}.wasm"),
             "updateUrl": update_url,
             "pname": pname,
-            "version": e["version"],
+            "version": version,
             "description": e["description"],
+            "homepage": homepage,
+            "changelog": f"{homepage}/releases/{version}",
             "initConfig": {
                 "configKey": e["configKey"],
                 "configExcludes": e["configExcludes"],

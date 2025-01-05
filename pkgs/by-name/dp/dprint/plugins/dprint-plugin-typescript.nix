@@ -1,7 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintPlugin, ... }:
 mkDprintPlugin {
+  changelog = "https://github.com/dprint/dprint-plugin-typescript/releases/0.93.3";
   description = "TypeScript/JavaScript code formatter.";
   hash = "sha256-urgKQOjgkoDJCH/K7DWLJCkD0iH0Ok+rvrNDI0i4uS0=";
+  homepage = "https://github.com/dprint/dprint-plugin-typescript";
   initConfig = {
     configExcludes = [ "**/node_modules" ];
     configKey = "typescript";

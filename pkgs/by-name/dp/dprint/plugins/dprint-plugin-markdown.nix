@@ -1,7 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintPlugin, ... }:
 mkDprintPlugin {
+  changelog = "https://github.com/dprint/dprint-plugin-markdown/releases/0.17.8";
   description = "Markdown code formatter.";
   hash = "sha256-PIEN9UnYC8doJpdzS7M6QEHQNQtj7WwXAgvewPsTjqs=";
+  homepage = "https://github.com/dprint/dprint-plugin-markdown";
   initConfig = {
     configExcludes = [ ];
     configKey = "markdown";

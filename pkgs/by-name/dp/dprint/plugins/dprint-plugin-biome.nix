@@ -1,7 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintPlugin, ... }:
 mkDprintPlugin {
+  changelog = "https://github.com/dprint/dprint-plugin-biome/releases/0.7.1";
   description = "Biome (JS/TS) wrapper plugin.";
   hash = "sha256-+zY+myazFAUxeNuWFigkvF4zpKBs+jzVYQT09jRWFKI=";
+  homepage = "https://github.com/dprint/dprint-plugin-biome";
   initConfig = {
     configExcludes = [ "**/node_modules" ];
     configKey = "biome";

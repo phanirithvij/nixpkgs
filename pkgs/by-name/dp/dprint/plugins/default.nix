@@ -1,6 +1,8 @@
 {
   lib,
+  pkgs,
   fetchurl,
+  callPackage,
   dprint,
 }:
 let
@@ -13,6 +15,9 @@ let
       description,
       initConfig,
       updateUrl,
+      homepage,
+      changelog,
+      updateScript ? ./update-plugins.py,
       license ? lib.licenses.mit,
       maintainers ? [ lib.maintainers.phanirithvij ],
     }:
@@ -24,11 +29,12 @@ let
           description
           license
           maintainers
+          homepage
+          changelog
           ;
       };
       passthru = {
-        updateScript = ./update-plugins.py;
-        inherit initConfig updateUrl;
+        inherit initConfig updateUrl updateScript;
       };
       nativeBuildInputs = [ dprint ];
       postFetch = ''
@@ -43,12 +49,14 @@ let
     nameValuePair
     removeSuffix
     ;
+  inherit (lib.path) append;
   files = filterAttrs (
     name: type: type == "regular" && name != "default.nix" && lib.hasSuffix ".nix" name
   ) (builtins.readDir ./.);
+  # gather all plugins as an attrset from plugins/*.nix
   plugins = mapAttrs' (
     name: _:
-    nameValuePair (removeSuffix ".nix" name) (import (./. + "/${name}") { inherit mkDprintPlugin; })
+    nameValuePair (removeSuffix ".nix" name) (callPackage (append ./. name) { inherit mkDprintPlugin; })
   ) files;
 in
 plugins // { inherit mkDprintPlugin; }

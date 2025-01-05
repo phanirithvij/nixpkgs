@@ -1,7 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintPlugin, ... }:
 mkDprintPlugin {
+  changelog = "https://github.com/dprint/dprint-plugin-toml/releases/0.6.3";
   description = "TOML code formatter.";
   hash = "sha256-aDfo/sKfOeNpyfd/4N1LgL1bObTTnviYrA8T7M/1KNs=";
+  homepage = "https://github.com/dprint/dprint-plugin-toml";
   initConfig = {
     configExcludes = [ ];
     configKey = "toml";

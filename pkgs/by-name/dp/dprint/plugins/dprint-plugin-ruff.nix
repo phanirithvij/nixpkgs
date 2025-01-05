@@ -1,7 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintPlugin, ... }:
 mkDprintPlugin {
+  changelog = "https://github.com/dprint/dprint-plugin-ruff/releases/0.3.9";
   description = "Ruff (Python) wrapper plugin.";
   hash = "sha256-15InHQgF9c0Js4yUJxmZ1oNj1O16FBU12u/GOoaSAJ8=";
+  homepage = "https://github.com/dprint/dprint-plugin-ruff";
   initConfig = {
     configExcludes = [ ];
     configKey = "ruff";

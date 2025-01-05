@@ -1,7 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintPlugin, ... }:
 mkDprintPlugin {
+  changelog = "https://github.com/dprint/dprint-plugin-json/releases/0.19.4";
   description = "JSON/JSONC code formatter.";
   hash = "sha256-Sw+HkUb4K2wrLuQRZibr8gOCR3Rz36IeId4Vd4LijmY=";
+  homepage = "https://github.com/dprint/dprint-plugin-json";
   initConfig = {
     configExcludes = [ "**/*-lock.json" ];
     configKey = "json";
