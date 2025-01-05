@@ -1,11 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python -p nix nixfmt-rfc-style 'python3.withPackages (pp: [ pp.requests ])'
+#!nix-shell -i python -p git nix nixfmt-rfc-style 'python3.withPackages (pp: [ pp.requests ])'
 
+from copy import deepcopy
 import json
 import os
 from pathlib import Path
-import sys
 import subprocess
+import sys
 import requests
 
 USAGE = """Usage: {0} [ | plugin-name | plugin-file-path]
@@ -69,12 +70,33 @@ def json_to_nix(jsondata):
 def nix_to_json(nixstr):
     return json.loads(
         subprocess.check_output(
-            f"nix --extra-experimental-features nix-command eval --json --expr '{nixstr}'",
+            f"nix --extra-experimental-features nix-command eval --json --impure --expr '{nixstr}'",
             shell=True,
         )
         .decode("utf-8")
         .rstrip()
     )
+
+
+NIXPKGS = (
+    subprocess.check_output(["git", "rev-parse", "--show-toplevel"])
+    .decode("utf-8")
+    .rstrip()
+)
+
+
+def get_plugin_drv_attrs(filepath: Path) -> str:
+    script = f"""
+    let
+      pkgs = import {NIXPKGS} {{ }};
+    in
+    builtins.removeAttrs (
+        pkgs.callPackage ./{filepath.name} {{
+            mkDprintPlugin = f: f;
+        }})
+        [ "override" "overrideDerivation" ]
+    """
+    return nix_to_json(script)
 
 
 # nixfmt a file
@@ -95,7 +117,28 @@ def get_update_url(plugin_url):
 
 
 def write_plugin_derivation(drv_attrs, filepath=None):
-    drv = f"{{ mkDprintPlugin, ... }}: mkDprintPlugin {json_to_nix(drv_attrs)}"
+    # TODO if file not exists write
+    # if file exists overwrite only the relavent lines and sections
+    # i.e. version, hash
+    # and first { } attrset only for official plugins
+    # NOTE tried nix-update but only version changes not the hash
+    attrs = deepcopy(drv_attrs)
+    for k in ("version", "hash", "homepage", "url"):
+        attrs.pop(k, None)
+    url = drv_attrs["url"].replace(drv_attrs["version"], "${version}")
+    drv = f"""
+    {{ mkDprintPlugin, ... }}:
+    let
+      version = "{drv_attrs["version"]}";
+      hash = "{drv_attrs["hash"]}";
+      homepage = "{drv_attrs["homepage"]}";
+    in
+    mkDprintPlugin ({json_to_nix(attrs)} // {{
+        inherit version hash homepage;
+        url = "{url}";
+        changelog = "${{homepage}}/releases/${{version}}";
+    }})
+    """
     if filepath is None:
         filepath = SCRIPT_DIR / f"{drv_attrs["pname"]}.nix"
     with open(filepath, "w+", encoding="utf8") as f:
@@ -149,7 +192,6 @@ def update_plugin_by_name(name):
     # ignore verison attribute, get it from url
     p["version"] = p["url"].split("-")[-1][:-5]
     p["hash"] = nix_prefetch_url(data["url"], f"{name}-{p["version"]}.wasm")
-    p["changelog"] = f"{p["homepage"]}/releases/{p["version"]}"
     if plugin_info is not None:
         p.update(
             {
@@ -188,7 +230,6 @@ def update_plugins():
             "version": version,
             "description": e["description"],
             "homepage": homepage,
-            "changelog": f"{homepage}/releases/{version}",
             "initConfig": {
                 "configKey": e["configKey"],
                 "configExcludes": e["configExcludes"],

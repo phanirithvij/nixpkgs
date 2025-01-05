@@ -1,19 +1,26 @@
 { mkDprintPlugin, ... }:
-mkDprintPlugin {
-  changelog = "https://github.com/dprint/dprint-plugin-ruff/releases/0.3.9";
-  description = "Ruff (Python) wrapper plugin.";
+let
+  version = "0.3.9";
   hash = "sha256-15InHQgF9c0Js4yUJxmZ1oNj1O16FBU12u/GOoaSAJ8=";
   homepage = "https://github.com/dprint/dprint-plugin-ruff";
-  initConfig = {
-    configExcludes = [ ];
-    configKey = "ruff";
-    fileExtensions = [
-      "py"
-      "pyi"
-    ];
-  };
-  pname = "dprint-plugin-ruff";
-  updateUrl = "https://plugins.dprint.dev/dprint/ruff/latest.json";
-  url = "https://plugins.dprint.dev/ruff-0.3.9.wasm";
-  version = "0.3.9";
-}
+in
+mkDprintPlugin (
+  {
+    description = "Ruff (Python) wrapper plugin.";
+    initConfig = {
+      configExcludes = [ ];
+      configKey = "ruff";
+      fileExtensions = [
+        "py"
+        "pyi"
+      ];
+    };
+    pname = "dprint-plugin-ruff";
+    updateUrl = "https://plugins.dprint.dev/dprint/ruff/latest.json";
+  }
+  // {
+    inherit version hash homepage;
+    url = "https://plugins.dprint.dev/ruff-${version}.wasm";
+    changelog = "${homepage}/releases/${version}";
+  }
+)

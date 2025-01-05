@@ -34,7 +34,12 @@ let
           ;
       };
       passthru = {
-        inherit initConfig updateUrl updateScript;
+        inherit
+          initConfig
+          updateUrl
+          updateScript
+          version
+          ;
       };
       nativeBuildInputs = [ dprint ];
       postFetch = ''
