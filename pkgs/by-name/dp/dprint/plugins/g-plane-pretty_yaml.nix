@@ -14,5 +14,4 @@ mkDprintPlugin {
   updateUrl = "https://plugins.dprint.dev/g-plane/pretty_yaml/latest.json";
   url = "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.0.wasm";
   version = "0.5.0";
-  formattedFile = ./example.yaml;
 }

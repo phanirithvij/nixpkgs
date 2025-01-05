@@ -14,5 +14,4 @@ mkDprintPlugin {
   updateUrl = "https://plugins.dprint.dev/g-plane/pretty_graphql/latest.json";
   url = "https://plugins.dprint.dev/g-plane/pretty_graphql-v0.2.1.wasm";
   version = "0.2.1";
-  formattedFile = ./example.graphql;
 }

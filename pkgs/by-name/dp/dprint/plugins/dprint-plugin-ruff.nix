@@ -14,5 +14,4 @@ mkDprintPlugin {
   updateUrl = "https://plugins.dprint.dev/dprint/ruff/latest.json";
   url = "https://plugins.dprint.dev/ruff-0.3.9.wasm";
   version = "0.3.9";
-  formattedFile = ./example.py;
 }

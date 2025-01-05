@@ -1,5 +1,0 @@
-{
-  project(name: "nixpkgs") {
-    tagline
-  }
-}
