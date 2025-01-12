@@ -8716,6 +8716,8 @@ with pkgs;
   draco = callPackage ../development/libraries/draco { };
   tinygltf = callPackage ../development/libraries/tinygltf { };
 
+  tinyexr = callPackage ../development/libraries/tinyexr { };
+
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
