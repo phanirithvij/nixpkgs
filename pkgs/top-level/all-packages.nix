@@ -9810,6 +9810,7 @@ with pkgs;
     qemu.override {
       hostCpuOnly = true;
       nixosTestRunner = true;
+      vncSupport = true;
     }
   );
 
