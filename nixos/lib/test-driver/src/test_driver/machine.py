@@ -905,17 +905,12 @@ class Machine:
             filename += ".png"
         if "/" not in filename:
             filename = os.path.join(self.out_dir, filename)
-        tmp = f"{filename}.ppm"
 
         with self.nested(
             f"making screenshot {filename}",
             {"image": os.path.basename(filename)},
         ):
-            self.send_monitor_command(f"screendump {tmp}")
-            ret = subprocess.run(f"pnmtopng '{tmp}' > '{filename}'", shell=True)
-            os.unlink(tmp)
-            if ret.returncode != 0:
-                raise Exception("Cannot convert screenshot")
+            self.send_monitor_command(f"screendump {filename} -f png")
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the
