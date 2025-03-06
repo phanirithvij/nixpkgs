@@ -12212,7 +12212,7 @@ with pkgs;
     glusterfsSupport = lib.meta.availableOn stdenv.hostPlatform glusterfs && lib.meta.availableOn stdenv.hostPlatform libuuid;
   });
 
-  qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
+  qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; vncSupport = true; });
 
   linux-firmware = callPackage ../os-specific/linux/firmware/linux-firmware { };
 
