@@ -875,8 +875,8 @@ class Machine:
         The file will be deleted when leaving the generator.
         """
         with tempfile.TemporaryDirectory() as tmpdir:
-            screenshot_path: Path = Path(tmpdir) / "ppm"
-            self.send_monitor_command(f"screendump {screenshot_path}")
+            screenshot_path: Path = Path(tmpdir) / "png"
+            self.send_monitor_command(f"screendump {screenshot_path} -f png")
             yield screenshot_path
 
     def screenshot(self, filename: str) -> None:
@@ -893,14 +893,7 @@ class Machine:
             f"making screenshot {filename}",
             {"image": os.path.basename(filename)},
         ):
-            with self._managed_screenshot() as screenshot_path:
-                ret = subprocess.run(
-                    f"pnmtopng '{screenshot_path}' > '{filename}'", shell=True
-                )
-                if ret.returncode != 0:
-                    raise MachineError(
-                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
-                    )
+            self.send_monitor_command(f"screendump {filename} -f png")
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the

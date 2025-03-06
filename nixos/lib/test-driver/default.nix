@@ -13,7 +13,6 @@
   ruff,
   remote-pdb,
 
-  netpbm,
   nixosTests,
   qemu_pkg ? qemu_test,
   qemu_test,
@@ -48,7 +47,6 @@ buildPythonApplication {
 
   propagatedBuildInputs = [
     coreutils
-    netpbm
     qemu_pkg
     socat
     vde2
