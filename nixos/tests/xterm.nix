@@ -7,6 +7,8 @@
     services.xserver.desktopManager.xterm.enable = false;
   };
 
+  enableOCR = true;
+
   testScript = ''
     machine.wait_for_x()
     machine.succeed("DISPLAY=:0 xterm -title testterm -class testterm -fullscreen >&2 &")
