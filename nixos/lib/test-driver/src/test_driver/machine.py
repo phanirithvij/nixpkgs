@@ -182,6 +182,10 @@ def retry(fn: Callable, timeout: int = 900) -> None:
         raise Exception(f"action timed out after {timeout} seconds")
 
 
+# assume maximun 32 vnc processes can run in host
+VNC_DISPLAY_LMT = 32
+
+
 class StartCommand:
     """The Base Start Command knows how to append the necessary
     runtime qemu options as determined by a particular test driver
@@ -196,6 +200,7 @@ class StartCommand:
         monitor_socket_path: Path,
         qmp_socket_path: Path,
         shell_socket_path: Path,
+        vnc_socket_path: Path | None = None,
         allow_reboot: bool = False,
     ) -> str:
         display_opts = ""
@@ -213,6 +218,9 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
+        if vnc_socket_path:
+            # qemu_opts += f" -vnc :2,to={VNC_DISPLAY_LMT}"
+            qemu_opts += f" -vnc unix:{vnc_socket_path}"
 
         return (
             f"{self._cmd}"
@@ -246,11 +254,16 @@ class StartCommand:
         monitor_socket_path: Path,
         qmp_socket_path: Path,
         shell_socket_path: Path,
+        vnc_socket_path: Path | None,
         allow_reboot: bool,
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(
-                monitor_socket_path, qmp_socket_path, shell_socket_path, allow_reboot
+                monitor_socket_path,
+                qmp_socket_path,
+                shell_socket_path,
+                vnc_socket_path,
+                allow_reboot,
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -292,6 +305,7 @@ class Machine:
     monitor_path: Path
     qmp_path: Path
     shell_path: Path
+    vnc_path: Path | None = None
 
     start_command: StartCommand
     keep_vm_state: bool
@@ -339,6 +353,10 @@ class Machine:
         self.monitor_path = self.state_dir / "monitor"
         self.qmp_path = self.state_dir / "qmp"
         self.shell_path = self.state_dir / "shell"
+        # TODO vncSupport for qemu_test, override conditionally per derivation
+        # TODO vnc enabled or not conditional
+        if True:
+            self.vnc_path = self.state_dir / "vnc"
         if (not self.keep_vm_state) and self.state_dir.exists():
             self.cleanup_statedir()
         self.state_dir.mkdir(mode=0o700, exist_ok=True)
@@ -912,6 +930,48 @@ class Machine:
         ):
             self.send_monitor_command(f"screendump {filename} -f png")
 
+    def start_capture(
+        self,
+        filename: str,
+        timestamp_file: str | None = None,
+        capture_audio: bool = False,
+    ) -> None:
+        """
+        Start a video capture of the running test.
+        The resulting video will be available in the derivation output.
+        See end_capture for ending video capture. And also
+
+        ::: {.note}
+        See [`captureVideo`](#test-opt-captureVideo) to capture the full video. (default false)
+        And [`captureAudio`](#test-opt-captureAudio) to capture the full audio. (default false)
+        :::
+        """
+        # TODO
+        # - allow capture/stop in the middle
+        # - start capture on start if captureVideo or something is true
+        # - end capture on crash/shutdown always (it is optional to explicitly end_capture)
+        # - capture tests, partial, and full
+        #   - console mode, xserver, wayland
+        #   - nix-vm-test, all targets
+        # - Asciinema console capture after BOOT
+        #   - it is very much impossible to capture logs as text before system boot
+        # LATER
+        # - wavcapture (qemu) + stopcapture along with video (has builtin stuff)
+        # - audio and video separate, combined
+        # - not every nixostest needs it, so provide minimal ffmpeg/whatnot free nixos-driver
+        # - timestamp vtt! like openqa
+        # - dup frames, playbackrate, screenshot_interval, etc.
+        # - something far better than screendump, a dedicated capture process
+        # - some vnc backend, vncdotool
+        # - libvirt backend, etc.
+        pass
+
+    def end_capture(self, filename: str) -> None:
+        # TODO
+        # multiple captures can occur, use filename as key
+        # ffmpeg re-encode options?
+        pass
+
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the
         shell into the destination file. Works without host-guest shared folder.
@@ -1126,6 +1186,7 @@ class Machine:
             self.monitor_path,
             self.qmp_path,
             self.shell_path,
+            self.vnc_path,
             allow_reboot,
         )
         self.monitor, _ = monitor_socket.accept()
