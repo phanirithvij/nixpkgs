@@ -1,0 +1,132 @@
+diff --git a/main.go b/main.go
+index 9b895cc..f648795 100644
+--- a/main.go
++++ b/main.go
+@@ -2,11 +2,12 @@ package main
+ 
+ import (
+ 	"context"
+-	"fmt"
++	"errors"
++	"net"
++
+ 	vnc "github.com/amitbet/vnc2video"
+ 	"github.com/sirupsen/logrus"
+ 	"github.com/urfave/cli/v2"
+-	"net"
+ 
+ 	"os"
+ 	"os/exec"
+@@ -22,7 +23,7 @@ func main() {
+ 		Usage:   "Connect to a vnc server and record the screen to a video.",
+ 		Version: "0.3.0",
+ 		Authors: []*cli.Author{
+-			&cli.Author{
++			{
+ 				Name:  "Daniel Widerin",
+ 				Email: "daniel@widerin.net",
+ 			},
+@@ -36,22 +37,10 @@ func main() {
+ 				EnvVars: []string{"VR_FFMPEG_BIN"},
+ 			},
+ 			&cli.StringFlag{
+-				Name:    "host",
+-				Value:   "localhost",
+-				Usage:   "VNC host",
+-				EnvVars: []string{"VR_VNC_HOST"},
+-			},
+-			&cli.IntFlag{
+-				Name:    "port",
+-				Value:   5900,
+-				Usage:   "VNC port",
+-				EnvVars: []string{"VR_VNC_PORT"},
+-			},
+-			&cli.StringFlag{
+-				Name:    "password",
+-				Value:   "secret",
+-				Usage:   "Password to connect to the VNC host",
+-				EnvVars: []string{"VR_VNC_PASSWORD"},
++				Name:    "socket",
++				Value:   "",
++				Usage:   "VNC domain socket",
++				EnvVars: []string{"VR_VNC_SOCK"},
+ 			},
+ 			&cli.IntFlag{
+ 				Name:    "framerate",
+@@ -80,15 +69,20 @@ func main() {
+ }
+ 
+ func recorder(c *cli.Context) error {
+-	address := fmt.Sprintf("%s:%d", c.String("host"), c.Int("port"))
+-	dialer, err := net.DialTimeout("tcp", address, 5*time.Second)
++	socketAddr := c.String("socket")
++	if socketAddr == "" {
++		err := errors.New("unix socket addr not provided")
++		logrus.Error(err)
++		return err
++	}
++	dialer, err := net.Dial("unix", c.String("socket"))
+ 	if err != nil {
+ 		logrus.WithError(err).Error("connection to VNC host failed.")
+ 		return err
+ 	}
+ 	defer dialer.Close()
+ 
+-	logrus.WithField("address", address).Info("connection established.")
++	logrus.WithField("socket", c.String("socket")).Info("connection established.")
+ 
+ 	// Negotiate connection with the server.
+ 	cchServer := make(chan vnc.ServerMessage)
+@@ -114,15 +108,10 @@ func recorder(c *cli.Context) error {
+ 		ServerMessageCh:  cchServer,
+ 		Messages:         vnc.DefaultServerMessages,
+ 		Encodings: []vnc.Encoding{
+-			&vnc.RawEncoding{},
+-			&vnc.TightEncoding{},
+-			&vnc.HextileEncoding{},
+ 			&vnc.ZRLEEncoding{},
+ 			&vnc.CopyRectEncoding{},
+ 			&vnc.CursorPseudoEncoding{},
+ 			&vnc.CursorPosPseudoEncoding{},
+-			&vnc.ZLibEncoding{},
+-			&vnc.RREEncoding{},
+ 		},
+ 		ErrorCh: errorCh,
+ 	}
+@@ -160,14 +149,10 @@ func recorder(c *cli.Context) error {
+ 	}
+ 
+ 	vncConnection.SetEncodings([]vnc.EncodingType{
++		vnc.EncZRLE,
++		vnc.EncCopyRect,
+ 		vnc.EncCursorPseudo,
+ 		vnc.EncPointerPosPseudo,
+-		vnc.EncCopyRect,
+-		vnc.EncTight,
+-		vnc.EncZRLE,
+-		vnc.EncHextile,
+-		vnc.EncZlib,
+-		vnc.EncRRE,
+ 	})
+ 
+ 	go func() {
+@@ -200,7 +185,12 @@ func recorder(c *cli.Context) error {
+ 	for {
+ 		select {
+ 		case err := <-errorCh:
+-			panic(err)
++			logrus.WithError(err).Error("VNC disconnect")
++
++			vcodec.Close()
++			// give some time to write the file
++			time.Sleep(time.Second * 1)
++			os.Exit(1)
+ 		case msg := <-cchClient:
+ 			logrus.WithFields(logrus.Fields{
+ 				"messageType": msg.Type(),
+@@ -231,5 +221,4 @@ func recorder(c *cli.Context) error {
+ 			}
+ 		}
+ 	}
+-	return nil
+ }
