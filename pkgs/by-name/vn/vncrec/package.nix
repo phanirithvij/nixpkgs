@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   libX11,
   xorgproto,
@@ -22,8 +23,19 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ronja.twibright.com/utils/vncrec-twibright.tgz";
-    sha256 = "1yp6r55fqpdhc8cgrgh9i0mzxmkls16pgf8vfcpng1axr7cigyhc";
+    hash = "sha256-DPoX2cldhWcvcxu5d03QdNb+K4gJvvwYYrBd7ErJ5vo=";
   };
+
+  patches = [
+    # this patch fixes the build
+    ./fixes.patch
+    # this patch adds unix_socket support, added by maintainer @phanirithvij
+    (fetchpatch2 {
+      name = "unix_socket.patch";
+      url = "https://github.com/phanirithvij/vncrec-twibright/commit/ae1637dfcbf0448cd87960f8e9d45a35a4383ef3.patch?full_index=1";
+      hash = "sha256-EFpidPwaTn+BDTdelVxWj7gyKWUHj7pdzuQ42mN2xQs=";
+    })
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -56,8 +68,9 @@ stdenv.mkDerivation {
   meta = {
     description = "VNC recorder";
     homepage = "http://ronja.twibright.com/utils/vncrec/";
-    platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
     mainProgram = "vncrec";
+    maintainers = with lib.maintainers; [ phanirithvij ];
+    platforms = lib.platforms.linux;
   };
 }

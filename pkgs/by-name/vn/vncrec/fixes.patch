@@ -1,0 +1,46 @@
+commit b3fe2f7effb276f58efe08a65e3cfe91d25d6ed6
+Author: phanirithvij <phanirithvij2000@gmail.com>
+Date:   Fri Mar 7 13:06:10 2025 +0530
+
+    fixes
+    
+    Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+
+diff --git a/libvncauth/vncauth.c b/libvncauth/vncauth.c
+index b5d4283..10f05e2 100644
+--- a/libvncauth/vncauth.c
++++ b/libvncauth/vncauth.c
+@@ -26,6 +26,7 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <time.h>
+ #include <vncauth.h>
+ #include <d3des.h>
+ 
+diff --git a/vncconnect/vncconnect.c b/vncconnect/vncconnect.c
+index 2ec451a..5f24666 100644
+--- a/vncconnect/vncconnect.c
++++ b/vncconnect/vncconnect.c
+@@ -3,6 +3,8 @@
+  */
+ 
+ #include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
+ #include <X11/Xlib.h>
+ #include <X11/Xatom.h>
+ 
+diff --git a/vncpasswd/vncpasswd.c b/vncpasswd/vncpasswd.c
+index 8ca5e88..7a2b3ad 100644
+--- a/vncpasswd/vncpasswd.c
++++ b/vncpasswd/vncpasswd.c
+@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
+       }
+       for (i = 0; i < strlen(passwd); i++)
+ 	passwd[i] = passwd1[i] = '\0';
+-      return;
++      return 0;
+     }
+ 
+     fprintf(stderr,"They don't match. Try again.\n\n");
