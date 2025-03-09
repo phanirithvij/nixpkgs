@@ -431,6 +431,7 @@ in
         { nodes, ... }:
         sharedTestFunctions
         + ''
+          v, a = machine.start_capture("video")
           start_all()
           machine.wait_for_unit("multi-user.target")
 
@@ -489,6 +490,7 @@ in
               # lomiri-system-settings has a separate VM test to test its basic functionalities
 
               machine.send_key("alt-f4")
+          machine.end_capture("video");
         '';
     }
   );

@@ -12,8 +12,8 @@ import sys
 import tempfile
 import threading
 import time
-from collections.abc import Callable, Iterable
-from contextlib import _GeneratorContextManager, nullcontext
+from collections.abc import Callable, Iterable, Iterator
+from contextlib import _GeneratorContextManager, contextmanager, nullcontext
 from pathlib import Path
 from queue import Queue
 from typing import Any
@@ -182,8 +182,8 @@ def retry(fn: Callable, timeout: int = 900) -> None:
         raise Exception(f"action timed out after {timeout} seconds")
 
 
-# assume maximun 32 vnc processes can run in host
-VNC_DISPLAY_LMT = 32
+# Holds video, audio references to allow cancelling later
+type RecordingRef = tuple[subprocess.Popen[bytes] | None, int | None]
 
 
 class StartCommand:
@@ -218,9 +218,16 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
+
         if vnc_socket_path:
-            # qemu_opts += f" -vnc :2,to={VNC_DISPLAY_LMT}"
             qemu_opts += f" -vnc unix:{vnc_socket_path}"
+
+        # TODO only if audio capture enabled
+        if True:
+            # from os-autoinst
+            qemu_opts += " -device intel-hda"
+            qemu_opts += " -device hda-output,audiodev=snd0"
+            qemu_opts += " -audiodev none,id=snd0"
 
         return (
             f"{self._cmd}"
@@ -345,6 +352,8 @@ class Machine:
         self.callbacks = callbacks if callbacks is not None else []
         self.logger = logger
 
+        self._recordings: dict[str, RecordingRef] = {}
+
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
         self.shared_dir.mkdir(mode=0o700, exist_ok=True)
@@ -353,7 +362,6 @@ class Machine:
         self.monitor_path = self.state_dir / "monitor"
         self.qmp_path = self.state_dir / "qmp"
         self.shell_path = self.state_dir / "shell"
-        # TODO vncSupport for qemu_test, override conditionally per derivation
         # TODO vnc enabled or not conditional
         if True:
             self.vnc_path = self.state_dir / "vnc"
@@ -929,48 +937,143 @@ class Machine:
             {"image": os.path.basename(filename)},
         ):
             self.send_monitor_command(f"screendump {filename} -f png")
+            self.logger.log(
+                "*" * 100 + "\n" + f"SHAH: {self.monitor_path}\n" + "*" * 100
+            )
+
+    @contextmanager
+    def record(self, *args: Any, **kwargs: Any) -> Iterator[None]:
+        """
+        Capture video and/or audio using
+        ```
+          with machine.record("video", audio=True):
+              machine.run("something")
+        ```
+        See start_capture to see the arguments that can be passed to machine.record
+        """
+        vid_p, a_ref = self.start_capture(*args, **kwargs)
+        yield
+        if vid_p:
+            vid_p.terminate()
+            self.logger.info(f"Stopped video capture for {args[0]}")
+        if a_ref is not None:
+            ret = self.send_monitor_command(f"stopcapture {a_ref}")
+            self.logger.info(f"Stopped audio capture for {args[0]}: {ret}")
 
     def start_capture(
         self,
         filename: str,
-        timestamp_file: str | None = None,
-        capture_audio: bool = False,
-    ) -> None:
+        video: bool = True,
+        audio: bool = False,
+        encode_format: str = "mp4",
+        # timestamp_file: str | None = None,
+    ) -> RecordingRef:
         """
-        Start a video capture of the running test.
-        The resulting video will be available in the derivation output.
-        See end_capture for ending video capture. And also
+        Start a video and/or audio capture of the running test.
+        The resulting media will be available in the derivation output.
+        See end_capture for ending the capture. And also
 
         ::: {.note}
-        See [`captureVideo`](#test-opt-captureVideo) to capture the full video. (default false)
-        And [`captureAudio`](#test-opt-captureAudio) to capture the full audio. (default false)
+        See [`recordVideo`](#test-opt-recordVideo) to capture the video of the full execution. (default false)
+        And [`recordAudio`](#test-opt-recordAudio) to capture the audio of the full execution. (default false)
+        Just a single video output will be produced if both audio and video are requested to be captured.
+        valid encode_formats: mp4, webm, mkv | y4m, rawvideo, vncrec
         :::
         """
+
+        if encode_format != "rawvideo":
+            # TODO assert ffmpeg exists
+            pass
+
+        if self.vnc_path is None and video:
+            # audio capture can be done without vnc, via monitor commands wavcapture/stopcapture
+            self.logger.error(
+                f"video capturing requires qemu to have vncSupport enabled, unable to capture {filename}"
+            )
+            return (None, None)
+
+        if not audio and not video:
+            self.logger.warning(
+                f"start_capture requires either audio or video, ignoring capture request for {filename}"
+            )
+            return (None, None)
+
+        dest_filename = filename
+        ext = ".wav"
+        if video:
+            ext = ".mp4"
+
+        if not filename.endswith(ext):
+            dest_filename += ext
+        if "/" not in filename:
+            dest_filename = os.path.join(self.out_dir, dest_filename)
+
+        if filename in self._recordings:
+            return self._recordings[filename]
+        else:
+            vid_p = None
+            a_ref = None
+            if video:
+                cmd_ = f"xvfb-run vncrec -hideWindow -record {dest_filename}.vncrec unix:{self.vnc_path}"
+                self.logger.warning(cmd_)
+                vid_p = subprocess.Popen(cmd_, shell=True)
+                # let the xvfb-run start a fake display inside the nix sandbox
+                time.sleep(2)
+            if audio:
+                a_ref = 0
+                # https://qemu-project.gitlab.io/qemu/system/monitor.html wavcapture
+                self.logger.error(
+                    self.send_monitor_command("wavcapture audio.wav snd0")
+                )  # 44100 16 2
+                # TODO see if multiple never makes sense
+                self.logger.warning(self.send_monitor_command("info capture"))
+
+            self._recordings[filename] = (vid_p, a_ref)
+            return self._recordings[filename]
+
         # TODO
+        # if vncSupport enabled get a qemu_test_vnc with vncSupport enabled, auto override qemu.package for required test
+        # requires runTest[On] for qemu.package option, it is not available in old makeTest
+        #  - but need it in old handleTest as well!!
         # - allow capture/stop in the middle
         # - start capture on start if captureVideo or something is true
         # - end capture on crash/shutdown always (it is optional to explicitly end_capture)
-        # - capture tests, partial, and full
+        # - wavcapture (qemu) + stopcapture along with video (has builtin stuff)
+        # - tests
+        #   - capture tests, partial (with block, manual start/end), and full capture
+        #   - video only, audio only, video+audio tests
         #   - console mode, xserver, wayland
-        #   - nix-vm-test, all targets
+        #   - nix-vm-test, all targets (ubuntu, fedora, arch, I think)
         # - Asciinema console capture after BOOT
         #   - it is very much impossible to capture logs as text before system boot
+        #     - NOT true, tap qemu output, or journalctl -b or something...
         # LATER
-        # - wavcapture (qemu) + stopcapture along with video (has builtin stuff)
         # - audio and video separate, combined
         # - not every nixostest needs it, so provide minimal ffmpeg/whatnot free nixos-driver
         # - timestamp vtt! like openqa
+        #   - not possible to do it trivially, need to modify vncrec code for that
         # - dup frames, playbackrate, screenshot_interval, etc.
         # - something far better than screendump, a dedicated capture process
         # - some vnc backend, vncdotool
         # - libvirt backend, etc.
-        pass
 
     def end_capture(self, filename: str) -> None:
         # TODO
         # multiple captures can occur, use filename as key
-        # ffmpeg re-encode options?
-        pass
+
+        # if not in dict return -> get from dict, kill popen
+        if filename not in self._recordings:
+            self.logger.error(
+                f"Recording for {filename} is non-existent, cannot end capture."
+            )
+        vid_p, a_ref = self._recordings[filename]
+
+        if vid_p:
+            vid_p.terminate()
+            self.logger.info(f"Stopped video capture for {filename}")
+        if a_ref is not None:
+            ret = self.send_monitor_command(f"stopcapture {a_ref}")
+            self.logger.info(f"Stopped audio capture for {filename}: {ret}")
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the

@@ -6,10 +6,12 @@
   coreutils,
   imagemagick_light,
   qemu_test,
+  vncrec-rgb,
   socat,
   ruff,
   tesseract4,
   vde2,
+  xvfb-run,
   extraPythonPackages ? (_: [ ]),
   nixosTests,
 }:
@@ -37,6 +39,8 @@ python3Packages.buildPythonApplication {
     [
       coreutils
       qemu_pkg
+      vncrec-rgb
+      xvfb-run
       socat
       vde2
     ]
