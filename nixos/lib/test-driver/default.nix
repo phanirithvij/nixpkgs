@@ -10,6 +10,7 @@
   mypy,
   ptpython,
   python,
+  vncrec-rgb,
   ruff,
   remote-pdb,
 
@@ -22,6 +23,7 @@
   vde2,
 
   enableOCR ? false,
+  xvfb-run,
   extraPythonPackages ? (_: [ ]),
 }:
 
@@ -48,6 +50,8 @@ buildPythonApplication {
   propagatedBuildInputs = [
     coreutils
     qemu_pkg
+    vncrec-rgb
+    xvfb-run
     socat
     vde2
   ]
