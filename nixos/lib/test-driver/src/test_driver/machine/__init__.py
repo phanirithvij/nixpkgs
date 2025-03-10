@@ -1002,6 +1002,8 @@ class Machine:
                 vid_p = subprocess.Popen(cmd_, shell=True)
                 # let the xvfb-run start a fake display inside the nix sandbox
                 time.sleep(2)
+                # TODO check if process exited and then raise an Exception, because this is the wrong way of writing it
+                # should come after start_all
             if audio:
                 a_ref = 0
                 # https://qemu-project.gitlab.io/qemu/system/monitor.html wavcapture
@@ -1040,6 +1042,7 @@ class Machine:
         # - some vnc backend, vncdotool
         # - libvirt backend, etc.
 
+    # START/STOP_CAPTURE?
     def end_capture(self, filename: str) -> None:
         # TODO
         # multiple captures can occur, use filename as key
