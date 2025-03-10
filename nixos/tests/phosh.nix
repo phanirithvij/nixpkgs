@@ -55,6 +55,7 @@ import ./make-test-python.nix (
       import time
 
       start_all()
+      phone.start_capture("video")
       phone.wait_for_unit("phosh.service")
 
       with subtest("Check that we can see the lock screen info page"):
@@ -83,6 +84,8 @@ import ./make-test-python.nix (
          phone.send_chars("\n")
          phone.wait_for_text("Tweak advanced mobile settings");
          phone.screenshot("05settings")
+
+      phone.end_capture("video")
     '';
   }
 )

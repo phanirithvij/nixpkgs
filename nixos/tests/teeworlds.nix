@@ -31,10 +31,13 @@ import ./make-test-python.nix (
 
     testScript = ''
       start_all()
+      server.start_capture("server")
 
       server.wait_for_unit("teeworlds.service")
       server.wait_until_succeeds("ss --numeric --udp --listening | grep -q 8303")
 
+      client1.start_capture("client1")
+      client2.start_capture("client2")
       client1.wait_for_x()
       client2.wait_for_x()
 
@@ -52,6 +55,10 @@ import ./make-test-python.nix (
 
       client1.screenshot("screen_client1")
       client2.screenshot("screen_client2")
+
+      client1.end_capture("client1")
+      client2.end_capture("client2")
+      server.end_capture("server")
     '';
 
   }

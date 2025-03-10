@@ -66,6 +66,10 @@ mapAttrs (
           ./common/x11.nix
         ];
         virtualisation.memorySize = 2047;
+        virtualisation.resolution = {
+          x = 1280;
+          y = 1024;
+        };
         test-support.displayManager.auto.user = user;
         environment = {
           systemPackages = [ chromiumPkg ];
@@ -197,6 +201,7 @@ mapAttrs (
 
 
         machine.wait_for_x()
+        machine.start_capture("video")
 
         launch_browser()
 
@@ -286,6 +291,7 @@ mapAttrs (
 
 
         machine.shutdown()
+        machine.end_capture("video")
       '';
   }
 ) channelMap

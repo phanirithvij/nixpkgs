@@ -17,8 +17,8 @@
   testScript =
     # py
     ''
-      with machine.record("video.mp4", capture_audio=False):
-        machine.wait_for_x()
+      machine.wait_for_x()
+      with machine.record("video.mp4", audio=False):
         machine.succeed("DISPLAY=:0 xterm -title testterm -class testterm -fullscreen >&2 &")
         machine.sleep(2)
         machine.send_chars("echo $XTERM_VERSION >> /tmp/xterm_version\n")
