@@ -2,28 +2,31 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
-  stdenv,
-  shadow,
-  util-linux,
+  pkgsStatic,
 }:
 
 buildGoModule rec {
   pname = "lilipod";
-  version = "0.0.3";
+  version = "0.0.3-unstable-2025-02-06";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "lilipod";
-    rev = "v${version}";
-    hash = "sha256-PqeYNLr4uXe+H+DLENlUpl1H2wV6VJvDoA+MVP3SRqY=";
+    rev = "960bb8e0591ec4a2cdfa06050d3cbedf27b35a32";
+    hash = "sha256-pSImeXLYZ7jQJWagvkgKVGgjdhd84FiCCozv6m5Ijqs=";
   };
 
+  patches = [ ./busybox_devendor.patch ];
+
   vendorHash = null;
+
+  ldflags = [ "-s" ];
 
   buildPhase = ''
     runHook preBuild
 
+    # busybox is embedded inside lilipod via go:embed
+    cp ${pkgsStatic.busybox}/bin/busybox .
     RELEASE_VERSION=${version} make all
 
     runHook postBuild
