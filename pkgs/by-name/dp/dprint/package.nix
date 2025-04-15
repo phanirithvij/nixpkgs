@@ -6,7 +6,9 @@
   installShellFiles,
   testers,
   nix-update-script,
-  dprint,
+  writeShellScriptBin,
+  dprint, # self
+  dprint-plugins,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -57,8 +59,22 @@ rustPlatform.buildRustPackage rec {
         DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
       '';
     };
-
     updateScript = nix-update-script { };
+
+    withPlugins =
+      cb:
+      let
+        plugins = dprint-plugins.withPlugins cb;
+        wrapper = writeShellScriptBin "dprint" ''
+          plugins=(${builtins.concatStringsSep " " plugins})
+          if [[ "''${#plugins[@]}" -eq 0 || "$#" -eq 0 ]]; then
+            ${lib.getExe dprint} "''$@"
+          else
+            ${lib.getExe dprint} "''$@" --plugins "''${plugins[@]}"
+          fi
+        '';
+      in
+      wrapper;
   };
 
   meta = with lib; {
