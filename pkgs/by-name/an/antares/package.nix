@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   lib,
   buildNpmPackage,
   electron,
@@ -25,8 +26,11 @@ buildNpmPackage rec {
   patches = [
     # Since version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
     # This patch will probably be removed in the next version
-    # If it does not build without it, you just need to do a npm update in the antares project and copy the patch
-    ./npm-lock.patch
+    # If it does not build without it, you just need to do a npm update in the antares project and open a pr fixing it upstream and use that diff via fetchpatch2
+    (fetchpatch2 {
+      url = "https://github.com/antares-sql/antares/pull/988/commits/d67fb3cfc31e9e431fe73da641785b0c37016aa1.patch";
+      hash = "sha256-eA6dDLRWaAHgvt5KZ09wCXGTVmDbtyP77Iz5Vp1RX40=";
+    })
   ];
 
   buildInputs = [ nodejs ];
