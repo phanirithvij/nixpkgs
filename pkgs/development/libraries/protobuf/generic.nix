@@ -13,7 +13,6 @@
   zlib,
   version,
   hash,
-  replaceVars,
   versionCheckHook,
 
   # downstream dependencies

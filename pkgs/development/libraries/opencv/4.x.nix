@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   unzip,
@@ -274,6 +275,13 @@ let
   #https://github.com/OpenMathLib/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
   openblas_ = blas.provider.override { singleThreaded = true; };
 
+  protobuf_custom = protobuf_21.overrideAttrs (old: {
+    # required to fix cross compilation of opencv
+    # taken from protobuf commit 3163111b6fb1da08b9d6ad75518d91b89cd03bbf
+    # patch exists in protobuf version >= 29, remove this if protobuf version is updated
+    patches = (old.patches or [ ]) ++ [ ./patch-protobuf_21-protoc-exe.patch ];
+  });
+
   inherit (cudaPackages.flags) cmakeCudaArchitecturesString cudaCapabilities;
 
 in
@@ -300,6 +308,11 @@ effectiveStdenv.mkDerivation {
   patches =
     [
       ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+      # remove patch after opencv v4.12.0
+      (fetchpatch2 {
+        url = "https://github.com/opencv/opencv/pull/27428.patch?full_index=1";
+        hash = "sha256-T+zmrOeyEmNyu1hJPDGUub59EMXwe6ZqP6PV/tDJFCk=";
+      })
     ]
     ++ optionals enableCuda [
       ./cuda_opt_flow.patch
@@ -335,7 +348,7 @@ effectiveStdenv.mkDerivation {
       glib
       glog
       pcre2
-      protobuf_21
+      protobuf_custom
       zlib
     ]
     ++ optionals enablePython [
