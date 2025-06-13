@@ -20,12 +20,7 @@
   pytz,
   xxhash,
 
-  # for passthru.tests
-  falcon,
-  fastapi,
-  gradio,
-  mashumaro,
-  ufolib2,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -68,7 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "orjson" ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       falcon
       fastapi
       gradio

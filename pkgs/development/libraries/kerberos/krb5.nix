@@ -9,13 +9,8 @@
   perl,
   pkg-config,
 
-  # for passthru.tests
-  bind,
-  curl,
+  pkgs, # for passthru.tests
   nixosTests,
-  openssh,
-  postgresql,
-  python3,
 
   # Extra Arguments
   withLdap ? false,
@@ -154,11 +149,11 @@ stdenv.mkDerivation rec {
     implementation = "krb5";
     tests = {
       inherit (nixosTests) kerberos;
-      inherit (python3.pkgs) requests-credssp;
-      bind = bind.override { enableGSSAPI = true; };
-      curl = curl.override { gssSupport = true; };
-      openssh = openssh.override { withKerberos = true; };
-      postgresql = postgresql.override { gssSupport = true; };
+      inherit (pkgs.python3.pkgs) requests-credssp;
+      bind = pkgs.bind.override { enableGSSAPI = true; };
+      curl = pkgs.curl.override { gssSupport = true; };
+      openssh = pkgs.openssh.override { withKerberos = true; };
+      postgresql = pkgs.postgresql.override { gssSupport = true; };
     };
   };
 }

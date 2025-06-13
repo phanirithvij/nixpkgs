@@ -7,11 +7,7 @@
 
   callPackage,
 
-  # for passthru.tests
-  imagemagick,
-  libheif,
-  imlib2Full,
-  gst_all_1,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit imagemagick libheif imlib2Full;
-    inherit (gst_all_1) gst-plugins-bad;
+    inherit (pkgs) imagemagick libheif imlib2Full;
+    inherit (pkgs.gst_all_1) gst-plugins-bad;
 
     test-corpus-decode = callPackage ./test-corpus-decode.nix {
       libde265 = finalAttrs.finalPackage;

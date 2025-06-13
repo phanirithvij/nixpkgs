@@ -71,8 +71,7 @@
   libX11,
   wayland,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -171,7 +170,7 @@ buildPythonPackage rec {
   };
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
     withOutdatedFreetype = matplotlib.override {
       doCheck = true;
       freetype = freetype.overrideAttrs (_: {

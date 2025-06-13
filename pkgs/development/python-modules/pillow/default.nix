@@ -32,13 +32,7 @@
   pytest-cov-stub,
   pytestCheckHook,
 
-  # for passthru.tests
-  imageio,
-  matplotlib,
-  pilkit,
-  pydicom,
-  reportlab,
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -129,7 +123,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       imageio
       matplotlib
       pilkit

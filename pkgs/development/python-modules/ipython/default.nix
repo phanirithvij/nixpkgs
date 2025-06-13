@@ -24,8 +24,7 @@
   # Optional dependencies
   matplotlib,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 
   # Test dependencies
   pickleshare,
@@ -95,7 +94,7 @@ buildPythonPackage rec {
     ];
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = {

@@ -5,10 +5,7 @@
   autoreconfHook,
   testers,
 
-  # for passthru.tests
-  gtk3,
-  gtk4,
-  sassc,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit gtk3 gtk4 sassc;
+    inherit (pkgs) gtk3 gtk4 sassc;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

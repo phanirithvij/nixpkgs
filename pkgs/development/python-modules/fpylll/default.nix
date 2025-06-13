@@ -15,8 +15,7 @@
   fplll,
   numpy,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 
   # tests
   pytestCheckHook,
@@ -64,7 +63,7 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = with lib; {

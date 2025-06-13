@@ -8,13 +8,7 @@
   asciidoc,
   xmlto,
   enableDrafts ? false,
-  # for passthru.tests
-  azmq,
-  cppzmq,
-  czmq,
-  zmqpp,
-  ffmpeg,
-  python3,
+  pkgs, # for passthru.tests
   testers,
 }:
 
@@ -77,14 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       azmq
       cppzmq
       czmq
       zmqpp
       ;
-    pyzmq = python3.pkgs.pyzmq;
-    ffmpeg = ffmpeg.override { withZmq = true; };
+    pyzmq = pkgs.python3.pkgs.pyzmq;
+    ffmpeg = pkgs.ffmpeg.override { withZmq = true; };
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

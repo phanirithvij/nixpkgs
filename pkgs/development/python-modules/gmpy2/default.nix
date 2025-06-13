@@ -12,8 +12,8 @@
   hypothesis,
   cython,
   mpmath,
-  # Reverse dependency
-  sage,
+
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gmpy2" ];
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = {

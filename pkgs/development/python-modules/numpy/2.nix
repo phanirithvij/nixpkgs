@@ -19,11 +19,10 @@
 
   # native dependencies
   blas,
+
+  pkgs, # for passthru.tests
+
   lapack,
-
-  # Reverse dependency
-  sage,
-
   # tests
   hypothesis,
   pytest-xdist,
@@ -174,7 +173,7 @@ buildPythonPackage rec {
     inherit cfg;
     coreIncludeDir = "${numpy_2}/${python.sitePackages}/numpy/_core/include";
     tests = {
-      inherit sage;
+      inherit (pkgs) sage;
     };
   };
 

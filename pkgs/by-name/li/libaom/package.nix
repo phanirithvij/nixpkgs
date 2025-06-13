@@ -12,10 +12,7 @@
   libvmaf,
   gitUpdater,
 
-  # for passthru.tests
-  ffmpeg,
-  libavif,
-  libheif,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -113,8 +110,8 @@ stdenv.mkDerivation rec {
       ignoredVersions = "(alpha|beta|rc).*";
     };
     tests = {
-      inherit libavif libheif;
-      ffmpeg = ffmpeg.override { withAom = true; };
+      inherit (pkgs) libavif libheif;
+      ffmpeg = pkgs.ffmpeg.override { withAom = true; };
     };
   };
 

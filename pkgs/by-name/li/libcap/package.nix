@@ -11,17 +11,7 @@
   go,
   withGo ? lib.meta.availableOn stdenv.buildPlatform go && stdenv.hostPlatform.go.GOARCH != null,
 
-  # passthru.tests
-  bind,
-  chrony,
-  htop,
-  libgcrypt,
-  libvirt,
-  ntp,
-  qemu,
-  squid,
-  tor,
-  uwsgi,
+  pkgs, # for passthru.tests
 }:
 
 assert usePam -> pam != null;
@@ -114,7 +104,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       bind
       chrony
       htop

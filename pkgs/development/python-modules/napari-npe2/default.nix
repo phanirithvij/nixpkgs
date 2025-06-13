@@ -7,7 +7,6 @@
   hatchling,
   hatch-vcs,
   magicgui,
-  napari, # reverse dependency, for tests
   pydantic,
   pythonOlder,
   pytomlpp,
@@ -15,6 +14,7 @@
   rich,
   typer,
   tomli-w,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "npe2" ];
 
   passthru.tests = {
-    inherit napari;
+    inherit (pkgs) napari;
   };
 
   meta = with lib; {

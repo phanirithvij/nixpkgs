@@ -18,10 +18,7 @@
   c-ares,
   libuv,
 
-  # for passthru.tests
-  dulwich,
-  gunicorn,
-  pika,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -67,7 +64,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       dulwich
       gunicorn
       pika

@@ -14,14 +14,7 @@
   libvorbis,
   alsa-lib,
 
-  # for passthru.tests
-  audacity,
-  freeswitch,
-  gst_all_1,
-  libsamplerate,
-  moc,
-  pipewire,
-  pulseaudio,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -78,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       audacity
       freeswitch
       libsamplerate
@@ -90,7 +83,7 @@ stdenv.mkDerivation rec {
       soundfile
       wavefile
       ;
-    inherit (gst_all_1) gst-plugins-bad;
+    inherit (pkgs.gst_all_1) gst-plugins-bad;
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
 

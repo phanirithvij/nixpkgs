@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   perl,
   nixosTests,
@@ -57,17 +58,10 @@
   zstdSupport ? false,
   zstd,
 
-  # for passthru.tests
-  coeurl,
-  curlpp,
-  haskellPackages,
-  ocamlPackages,
-  phpExtensions,
+  pkgs, # for passthru.tests
   pkgsStatic,
-  python3,
   tests,
   testers,
-  fetchpatch,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -268,12 +262,12 @@ stdenv.mkDerivation (finalAttrs: {
             version = 1;
           };
         };
-        curlpp = useThisCurl curlpp;
-        coeurl = useThisCurl coeurl;
-        haskell-curl = useThisCurl haskellPackages.curl;
-        ocaml-curly = useThisCurl ocamlPackages.curly;
-        pycurl = useThisCurl python3.pkgs.pycurl;
-        php-curl = useThisCurl phpExtensions.curl;
+        curlpp = useThisCurl pkgs.curlpp;
+        coeurl = useThisCurl pkgs.coeurl;
+        haskell-curl = useThisCurl pkgs.haskellPackages.curl;
+        ocaml-curly = useThisCurl pkgs.ocamlPackages.curly;
+        pycurl = useThisCurl pkgs.python3.pkgs.pycurl;
+        php-curl = useThisCurl pkgs.phpExtensions.curl;
         # error: attribute 'override' missing
         # Additional checking with support http3 protocol.
         # nginx-http3 = useThisCurl nixosTests.nginx-http3;

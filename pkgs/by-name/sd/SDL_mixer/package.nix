@@ -10,8 +10,7 @@
   pkg-config,
   smpeg,
   stdenv,
-  # passthru.tests
-  onscripter-en,
+  pkgs, # for passthru.tests
   # Boolean flags
   enableNativeMidi ? false,
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
@@ -108,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru.tests = {
-    inherit onscripter-en;
+    inherit (pkgs) onscripter-en;
   };
 
   meta = {

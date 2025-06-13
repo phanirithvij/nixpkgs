@@ -17,8 +17,6 @@ in
 
   # Required by various phases
   callPackage,
-  jq,
-  llvm,
 }:
 
 let

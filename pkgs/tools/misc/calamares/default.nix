@@ -26,8 +26,7 @@
   xkeyboard_config,
   mkDerivation,
   nixos-extensions ? false,
-  # passthru.tests
-  calamares-nixos,
+  calamares-nixos, # for passthru.tests
 }:
 
 mkDerivation rec {

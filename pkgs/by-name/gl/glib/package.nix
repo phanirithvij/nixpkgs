@@ -15,7 +15,6 @@
   libffi,
   pcre2,
   elfutils,
-  gnome,
   libselinux,
   bash,
   gnum4,
@@ -40,6 +39,8 @@
     stdenv.hostPlatform.emulatorAvailable buildPackages
     && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
+
+  pkgs, # for passthru
 }:
 
 assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
@@ -360,7 +361,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
-    updateScript = gnome.updateScript {
+    updateScript = pkgs.gnome.updateScript {
       packageName = "glib";
       versionPolicy = "odd-unstable";
     };

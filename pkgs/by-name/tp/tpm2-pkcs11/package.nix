@@ -26,13 +26,14 @@
   swtpm,
   tpm2-abrmd,
   tpm2-openssl,
-  tpm2-pkcs11, # for passthru tests
-  tpm2-pkcs11-esapi,
-  tpm2-pkcs11-fapi,
   tpm2-tools,
   tpm2-tss,
   which,
   xxd,
+
+  pkgs, # for passthru.tests
+  tpm2-pkcs11,
+
   abrmdSupport ? false,
   fapiSupport ? true,
   defaultToFapi ? false,
@@ -223,15 +224,15 @@ chosenStdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = rec {
-    esapi = tpm2-pkcs11-esapi;
-    fapi = tpm2-pkcs11-fapi;
+    esapi = pkgs.tpm2-pkcs11-esapi;
+    fapi = pkgs.tpm2-pkcs11-fapi;
     abrmd = tpm2-pkcs11.override {
       abrmdSupport = true;
     };
-    esapi-abrmd = tpm2-pkcs11-esapi.override {
+    esapi-abrmd = pkgs.tpm2-pkcs11-esapi.override {
       abrmdSupport = true;
     };
-    fapi-abrmd = tpm2-pkcs11-fapi.override {
+    fapi-abrmd = pkgs.tpm2-pkcs11-fapi.override {
       abrmdSupport = true;
     };
     tests = {

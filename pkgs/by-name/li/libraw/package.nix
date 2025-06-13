@@ -6,11 +6,7 @@
   lcms2,
   pkg-config,
 
-  # for passthru.tests
-  freeimage,
-  hdrmerge,
-  imagemagick,
-  python3,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -45,8 +41,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit imagemagick hdrmerge; # freeimage
-    inherit (python3.pkgs) rawkit;
+    inherit (pkgs) imagemagick hdrmerge; # freeimage
+    inherit (pkgs.python3.pkgs) rawkit;
   };
 
   meta = with lib; {

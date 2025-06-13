@@ -5,8 +5,7 @@
   glibcLocales,
   mpmath,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -28,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sympy" ];
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = with lib; {

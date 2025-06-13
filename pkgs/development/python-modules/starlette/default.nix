@@ -22,8 +22,7 @@
   pythonOlder,
   trio,
 
-  # reverse dependencies
-  fastapi,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -70,7 +69,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "starlette" ];
 
   passthru.tests = {
-    inherit fastapi;
+    inherit (pkgs) fastapi;
   };
 
   meta = with lib; {

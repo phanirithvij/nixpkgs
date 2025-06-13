@@ -30,13 +30,7 @@
   xorg, # with CUPS, X11 only adds very little
   dynamicDrivers ? true,
 
-  # for passthru.tests
-  graphicsmagick,
-  imagemagick,
-  libspectre,
-  lilypond,
-  pstoedit,
-  python3,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -220,14 +214,14 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     test-corpus-render = callPackage ./test-corpus-render.nix { };
-    inherit
+    inherit (pkgs)
       graphicsmagick
       imagemagick
       libspectre
       lilypond
       pstoedit
       ;
-    inherit (python3.pkgs) matplotlib;
+    inherit (pkgs.python3.pkgs) matplotlib;
   };
 
   meta = {

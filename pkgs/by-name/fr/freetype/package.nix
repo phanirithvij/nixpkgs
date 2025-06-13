@@ -12,27 +12,13 @@
   brotli,
   libpng,
   gnumake,
-  glib,
 
   # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
   useEncumberedCode ? true,
 
-  # for passthru.tests
-  cairo,
-  fontforge,
-  ghostscript,
-  graphicsmagick,
-  gtk3,
-  harfbuzz,
-  imagemagick,
-  pango,
-  poppler,
-  python3,
-  qt5,
-  texmacs,
-  ttfautohint,
+  pkgs, # for passthru.tests
   testers,
   __flattenIncludeHackHook,
 }:
@@ -108,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       cairo
       fontforge
       ghostscript
@@ -121,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
       texmacs
       ttfautohint
       ;
-    inherit (python3.pkgs) freetype-py;
-    inherit (qt5) qtbase;
+    inherit (pkgs.python3.pkgs) freetype-py;
+    inherit (pkgs.qt5) qtbase;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

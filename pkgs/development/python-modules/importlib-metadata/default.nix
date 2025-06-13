@@ -9,8 +9,7 @@
   toml,
   zipp,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -42,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "importlib_metadata" ];
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = with lib; {

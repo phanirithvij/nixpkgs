@@ -21,8 +21,7 @@
   blas,
   lapack,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 
   # tests
   hypothesis,
@@ -187,7 +186,7 @@ buildPythonPackage rec {
     inherit cfg;
     coreIncludeDir = "${numpy_1}/${python.sitePackages}/numpy/core/include";
     tests = {
-      inherit sage;
+      inherit (pkgs) sage;
     };
   };
 

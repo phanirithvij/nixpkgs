@@ -11,11 +11,7 @@
   pythonOlder,
   setuptools,
 
-  # for passthru.tests
-  django-allauth,
-  django-oauth-toolkit,
-  google-auth-oauthlib,
-  requests-oauthlib,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -60,7 +56,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "oauthlib" ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       django-allauth
       django-oauth-toolkit
       google-auth-oauthlib

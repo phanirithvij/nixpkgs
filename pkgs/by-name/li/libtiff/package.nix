@@ -27,14 +27,7 @@
   # See https://github.com/mesonbuild/meson/issues/14234
   withLerc ? !stdenv.hostPlatform.isStatic,
 
-  # for passthru.tests
-  libgeotiff,
-  python3Packages,
-  imagemagick,
-  graphicsmagick,
-  gdal,
-  openimageio,
-  freeimage,
+  pkgs, # for passthru.tests
   testers,
 }:
 
@@ -115,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit
+      inherit (pkgs)
         libgeotiff
         imagemagick
         graphicsmagick
@@ -123,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
         openimageio
         freeimage
         ;
-      inherit (python3Packages) pillow imread;
+      inherit (pkgs.python3Packages) pillow imread;
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };

@@ -9,17 +9,7 @@
   pkg-config,
   pkgsStatic,
 
-  # for passthru.tests
-  bind,
-  cmake,
-  knot-resolver,
-  sbclPackages,
-  luajitPackages,
-  mosquitto,
-  neovim,
-  nodejs,
-  ocamlPackages,
-  python3,
+  pkgs, # for passthru.tests
   testers,
 }:
 
@@ -179,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       bind
       cmake
       knot-resolver
@@ -187,12 +177,12 @@ stdenv.mkDerivation (finalAttrs: {
       neovim
       nodejs
       ;
-    inherit (sbclPackages) cl-libuv;
-    luajit-libluv = luajitPackages.libluv;
-    luajit-luv = luajitPackages.luv;
-    ocaml-luv = ocamlPackages.luv;
-    python-pyuv = python3.pkgs.pyuv;
-    python-uvloop = python3.pkgs.uvloop;
+    inherit (pkgs.sbclPackages) cl-libuv;
+    luajit-libluv = pkgs.luajitPackages.libluv;
+    luajit-luv = pkgs.luajitPackages.luv;
+    ocaml-luv = pkgs.ocamlPackages.luv;
+    python-pyuv = pkgs.python3.pkgs.pyuv;
+    python-uvloop = pkgs.python3.pkgs.uvloop;
     static = pkgsStatic.libuv;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };

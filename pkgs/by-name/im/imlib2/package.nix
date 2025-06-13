@@ -18,21 +18,14 @@
   bzip2,
   pkg-config,
   x11Support ? true,
+  xorg,
   webpSupport ? true,
   svgSupport ? false,
   heifSupport ? false,
   jxlSupport ? false,
   psSupport ? false,
 
-  # for passthru.tests
-  libcaca,
-  diffoscopeMinimal,
-  feh,
-  icewm,
-  openbox,
-  fluxbox,
-  enlightenment,
-  xorg,
+  pkgs, # for passthru.tests
   testers,
 
   gitUpdater,
@@ -90,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit
+      inherit (pkgs)
         libcaca
         diffoscopeMinimal
         feh

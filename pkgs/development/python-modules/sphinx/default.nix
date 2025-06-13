@@ -38,8 +38,7 @@
   pytest-xdist,
   typing-extensions,
 
-  # reverse dependencies to test
-  breathe,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -154,7 +153,7 @@ buildPythonPackage rec {
     ];
 
   passthru.tests = {
-    inherit breathe;
+    inherit (pkgs) breathe;
   };
 
   meta = {

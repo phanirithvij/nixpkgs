@@ -11,19 +11,7 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableShared ? !stdenv.hostPlatform.isStatic,
 
-  # for passthru.tests
-  dvgrab,
-  epeg,
-  gd,
-  graphicsmagick,
-  imagemagick,
-  imlib2,
-  jhead,
-  libjxl,
-  mjpegtools,
-  opencv,
-  python3,
-  vips,
+  pkgs, # for passthru.tests
   testers,
   nix-update-script,
 }:
@@ -91,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     dev_private = throw "not supported anymore";
     tests = {
-      inherit
+      inherit (pkgs)
         dvgrab
         epeg
         gd
@@ -104,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
         opencv
         vips
         ;
-      inherit (python3.pkgs) pillow imread pyturbojpeg;
+      inherit (pkgs.python3.pkgs) pillow imread pyturbojpeg;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };

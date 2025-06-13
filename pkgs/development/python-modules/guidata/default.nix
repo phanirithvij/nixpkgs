@@ -20,12 +20,7 @@
   qt6,
   pyqt6,
 
-  # passthru.tests
-  guidata,
-  pyside6,
-  qt5,
-  pyqt5,
-  pyside2,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -82,26 +77,26 @@ buildPythonPackage rec {
 
   passthru = {
     tests = {
-      withPyQt6 = guidata.override {
+      withPyQt6 = pkgs.guidata.override {
         pyqt6 = pyqt6;
         qt6 = qt6;
       };
-      withPySide6 = guidata.override {
-        pyqt6 = pyside6;
+      withPySide6 = pkgs.guidata.override {
+        pyqt6 = pkgs.pyside6;
         qt6 = qt6;
       };
-      withPyQt5 = guidata.override {
-        pyqt6 = pyqt5;
-        qt6 = qt5;
+      withPyQt5 = pkgs.guidata.override {
+        pyqt6 = pkgs.pyqt5;
+        qt6 = pkgs.qt5;
       };
     };
     # Upstream doesn't officially supports all of them, although they use qtpy,
     # see: https://github.com/PlotPyStack/PlotPy/issues/20 . See also the
     # comment near this attribute at plotpy
     knownFailingTests = {
-      withPySide2 = guidata.override {
-        pyqt6 = pyside2;
-        qt6 = qt5;
+      withPySide2 = pkgs.guidata.override {
+        pyqt6 = pkgs.pyside2;
+        qt6 = pkgs.qt5;
       };
     };
   };

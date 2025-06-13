@@ -7,11 +7,11 @@
   ncurses,
   numpy,
   pkg-config,
-  pygame-ce,
   python,
-  sage, # Reverse dependency
   setuptools,
   stdenv,
+
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     '';
 
   passthru.tests = {
-    inherit pygame-ce sage;
+    inherit (pkgs) pygame-ce sage;
   };
 
   # Force code regeneration in source distributions

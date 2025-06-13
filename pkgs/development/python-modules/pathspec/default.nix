@@ -5,11 +5,7 @@
   flit-core,
   unittestCheckHook,
 
-  # for passthru.tests
-  awsebcli,
-  black,
-  hatchling,
-  yamllint,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -29,7 +25,7 @@ buildPythonPackage rec {
   checkInputs = [ unittestCheckHook ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       awsebcli
       black
       hatchling

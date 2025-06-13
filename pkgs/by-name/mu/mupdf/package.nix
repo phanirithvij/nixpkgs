@@ -38,10 +38,7 @@
   gitUpdater,
   enableBarcode ? false,
 
-  # for passthru.tests
-  cups-filters,
-  zathura,
-  mupdf,
+  pkgs, # for passthru.tests
 }:
 
 assert enablePython -> enableCxx;
@@ -266,9 +263,9 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      inherit cups-filters zathura;
+      inherit (pkgs) cups-filters zathura;
       inherit (python3.pkgs) pikepdf pymupdf;
-      mupdf-all = mupdf.override {
+      mupdf-all = pkgs.mupdf.override {
         enableCurl = true;
         enableGL = true;
         enableOcr = true;

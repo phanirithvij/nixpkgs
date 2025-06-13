@@ -8,11 +8,7 @@
   pyyaml,
   pygments,
 
-  # for passthru.tests
-  mkdocstrings,
-  mkdocs-material,
-  mkdocs-mermaid2-plugin,
-  hydrus,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -77,7 +73,7 @@ buildPythonPackage rec {
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       mkdocstrings
       mkdocs-material
       mkdocs-mermaid2-plugin

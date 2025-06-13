@@ -6,10 +6,7 @@
   nix-update-script,
   python3,
 
-  # for passthru.tests
-  ninja,
-  php,
-  spamassassin,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +41,7 @@ stdenv.mkDerivation rec {
       ];
     };
     tests = {
-      inherit ninja php spamassassin;
+      inherit (pkgs) ninja php spamassassin;
     };
   };
 

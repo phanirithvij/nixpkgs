@@ -13,13 +13,7 @@
   libaom,
   gdk-pixbuf,
 
-  # for passthru.tests
-  gimp,
-  imagemagick,
-  imlib2Full,
-  imv,
-  python3Packages,
-  vips,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -66,14 +60,14 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       gimp
       imagemagick
       imlib2Full
       imv
       vips
       ;
-    inherit (python3Packages) pillow-heif;
+    inherit (pkgs.python3Packages) pillow-heif;
   };
 
   meta = {

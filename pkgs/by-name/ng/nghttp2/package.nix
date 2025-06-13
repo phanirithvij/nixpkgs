@@ -23,16 +23,13 @@
   jemalloc,
   enablePython ? false,
   python3,
-  ncurses,
 
   # Unit tests ; we have to set TZDIR, which is a GNUism.
   enableTests ? stdenv.hostPlatform.isGnu,
   cunit,
   tzdata,
 
-  # downstream dependencies, for testing
-  curl,
-  libsoup_3,
+  pkgs, # for passthru.tests
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use fetchpatch!
@@ -119,7 +116,7 @@ stdenv.mkDerivation rec {
     '';
 
   passthru.tests = {
-    inherit curl libsoup_3;
+    inherit (pkgs) curl libsoup_3;
   };
 
   meta = {

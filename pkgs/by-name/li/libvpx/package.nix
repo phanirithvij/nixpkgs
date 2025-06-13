@@ -44,9 +44,7 @@
   experimentalFpMbStatsSupport ? false,
   experimentalEmulateHardwareSupport ? false,
 
-  # for passthru.tests
-  ffmpeg,
-  gst_all_1,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -254,8 +252,8 @@ stdenv.mkDerivation rec {
   postInstall = ''moveToOutput bin "$bin" '';
 
   passthru.tests = {
-    inherit (gst_all_1) gst-plugins-good;
-    ffmpeg = ffmpeg.override { withVpx = true; };
+    inherit (pkgs.gst_all_1) gst-plugins-good;
+    ffmpeg = pkgs.ffmpeg.override { withVpx = true; };
   };
 
   meta = {

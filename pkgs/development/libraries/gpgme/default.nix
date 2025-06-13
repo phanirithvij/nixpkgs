@@ -13,10 +13,7 @@
   texinfo,
   buildPackages,
   qtbase ? null,
-  # only for passthru.tests
-  libsForQt5,
-  qt6Packages,
-  python3,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -97,9 +94,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    python = python3.pkgs.gpgme;
-    qt5 = libsForQt5.qgpgme;
-    qt6 = qt6Packages.qgpgme;
+    python = pkgs.python3.pkgs.gpgme;
+    qt5 = pkgs.libsForQt5.qgpgme;
+    qt6 = pkgs.qt6Packages.qgpgme;
   };
 
   meta = with lib; {

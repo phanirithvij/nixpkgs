@@ -7,9 +7,7 @@
   pytestCheckHook,
   setuptools,
 
-  # for passthru.tests
-  aiobotocore,
-  moto,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -38,7 +36,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit aiobotocore moto;
+    inherit (pkgs) aiobotocore moto;
   };
 
   meta = {

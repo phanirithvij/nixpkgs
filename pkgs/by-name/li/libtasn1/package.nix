@@ -5,10 +5,7 @@
   perl,
   texinfo,
 
-  # for passthru.tests
-  gnutls,
-  samba,
-  qemu,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +34,7 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.isDarwin then "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs" else null;
 
   passthru.tests = {
-    inherit gnutls samba qemu;
+    inherit (pkgs) gnutls samba qemu;
   };
 
   meta = {

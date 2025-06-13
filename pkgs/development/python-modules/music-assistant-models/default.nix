@@ -14,8 +14,7 @@
   pytestCheckHook,
   pytest-cov-stub,
 
-  # reverse dependencies
-  music-assistant-client,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -52,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit music-assistant-client;
+    inherit (pkgs) music-assistant-client;
   };
 
   meta = {

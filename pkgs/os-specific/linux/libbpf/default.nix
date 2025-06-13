@@ -6,11 +6,8 @@
   zlib,
   lib,
 
-  # for passthru.tests
-  knot-dns,
+  pkgs, # for passthru.tests
   nixosTests,
-  systemd,
-  tracee,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,9 +34,9 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    inherit knot-dns tracee;
+    inherit (pkgs) knot-dns tracee;
     bpf = nixosTests.bpf;
-    systemd = systemd.override { withLibBPF = true; };
+    systemd = pkgs.systemd.override { withLibBPF = true; };
   };
 
   postInstall = ''

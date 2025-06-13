@@ -10,14 +10,15 @@
   pkgsBuildTarget,
   targetPackages,
   testers,
-  skopeo,
   buildGo124Module,
+
+  pkgs, # for passthru.tests
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap122.nix { };
 
-  skopeoTest = skopeo.override { buildGoModule = buildGo124Module; };
+  skopeoTest = pkgs.skopeo.override { buildGoModule = buildGo124Module; };
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target

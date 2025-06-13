@@ -12,10 +12,7 @@
   pcre2,
   libiconv,
   staticBuild ? stdenv.hostPlatform.isStatic,
-  # for passthru.tests
-  libgit2-glib,
-  python3Packages,
-  gitstatus,
+  pkgs, # for passthru.tests
   llhttp,
   withGssapi ? false,
   krb5,
@@ -91,9 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = lib.mapAttrs (_: v: v.override { libgit2 = finalAttrs.finalPackage; }) {
-    inherit libgit2-glib;
-    inherit (python3Packages) pygit2;
-    inherit gitstatus;
+    inherit (pkgs) libgit2-glib gitstatus;
+    inherit (pkgs.python3Packages) pygit2;
   };
 
   meta = with lib; {

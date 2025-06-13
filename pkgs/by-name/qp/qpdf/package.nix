@@ -7,11 +7,7 @@
   perl,
   zlib,
 
-  # for passthru.tests
-  cups-filters,
-  pdfmixtool,
-  pdfslicer,
-  python3,
+  pkgs, # for passthru.tests
   testers,
   versionCheckHook,
 }:
@@ -59,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-    inherit (python3.pkgs) pikepdf;
-    inherit
+    inherit (pkgs.python3.pkgs) pikepdf;
+    inherit (pkgs)
       cups-filters
       pdfmixtool
       pdfslicer

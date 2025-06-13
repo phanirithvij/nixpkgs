@@ -11,8 +11,7 @@
   # dependencies
   importlib-metadata,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 
   # tests
   jaraco-collections,
@@ -49,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "importlib_resources" ];
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = with lib; {

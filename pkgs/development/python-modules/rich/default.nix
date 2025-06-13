@@ -20,11 +20,7 @@
   pytestCheckHook,
   which,
 
-  # for passthru.tests
-  enrich,
-  httpie,
-  rich-rst,
-  textual,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -69,7 +65,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "rich" ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       enrich
       httpie
       rich-rst

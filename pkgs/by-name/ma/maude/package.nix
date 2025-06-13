@@ -13,8 +13,7 @@
   gmpxx,
   cln,
   yices,
-  # passthru.tests
-  tamarin-prover,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -78,7 +77,7 @@ stdenv.mkDerivation {
 
   passthru.tests = {
     # tamarin-prover only supports specific versions of maude explicitly
-    inherit tamarin-prover;
+    inherit (pkgs) tamarin-prover;
   };
 
   enableParallelBuilding = true;

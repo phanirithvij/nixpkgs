@@ -6,16 +6,8 @@
   ninja,
   pkg-config,
   libpng,
-  glib, # just passthru
 
-  # for passthru.tests
-  cairo,
-  qemu,
-  scribus,
-  tigervnc,
-  wlroots_0_17,
-  wlroots_0_18,
-  xwayland,
+  pkgs, # for passthru.tests
 
   gitUpdater,
   testers,
@@ -73,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit
+      inherit (pkgs)
         cairo
         qemu
         scribus
