@@ -23,12 +23,8 @@
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
-  # for passthru.tests
-  gimp,
-  gtk3,
-  gtk4,
-  mapnik,
-  qt5,
+
+  pkgs, # for passthru.tests
   testers,
 }:
 
@@ -114,13 +110,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       gimp
       gtk3
       gtk4
       mapnik
       ;
-    inherit (qt5) qtbase;
+    inherit (pkgs.qt5) qtbase;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };

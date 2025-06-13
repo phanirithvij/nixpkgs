@@ -56,9 +56,7 @@
   superlu_dist,
   suitesparse,
 
-  # Used in passthru.tests
-  petsc,
-  mpich,
+  pkgs, # for passthru.tests
 }:
 assert withFullDeps -> withCommonDeps;
 
@@ -283,17 +281,17 @@ stdenv.mkDerivation (finalAttrs: {
     );
     tests =
       {
-        serial = petsc.override {
+        serial = pkgs.petsc.override {
           mpiSupport = false;
         };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        fullDeps = petsc.override {
+        fullDeps = pkgs.petsc.override {
           withFullDeps = true;
           withParmetis = false;
         };
-        mpich = petsc.override {
-          mpi = mpich;
+        mpich = pkgs.petsc.override {
+          mpi = pkgs.mpich;
         };
       };
   };

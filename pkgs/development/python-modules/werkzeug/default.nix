@@ -21,9 +21,7 @@
   pytest-timeout,
   pytestCheckHook,
 
-  # reverse dependencies
-  moto,
-  sentry-sdk,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -76,7 +74,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit moto sentry-sdk;
+    inherit (pkgs) moto sentry-sdk;
   };
 
   meta = {

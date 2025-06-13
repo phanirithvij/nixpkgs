@@ -12,7 +12,6 @@
   python3,
   python3Packages,
   libffi,
-  ld64,
   libbfd,
   libpfm,
   libxml2,

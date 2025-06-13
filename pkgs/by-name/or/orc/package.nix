@@ -9,11 +9,7 @@
   gtk-doc ? null,
   buildDevDoc ? gtk-doc != null,
 
-  # for passthru.tests
-  gnuradio,
-  gst_all_1,
-  qt6,
-  vips,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,9 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     );
 
   passthru.tests = {
-    inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
-    inherit gnuradio vips;
-    qt6-qtmultimedia = qt6.qtmultimedia;
+    inherit (pkgs.gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+    inherit (pkgs) gnuradio vips;
+    qt6-qtmultimedia = pkgs.qt6.qtmultimedia;
   };
 
   meta = with lib; {

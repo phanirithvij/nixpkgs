@@ -21,10 +21,7 @@
   xarSupport ? stdenv.hostPlatform.isUnix,
   libxml2,
 
-  # for passthru.tests
-  cmake,
-  nix,
-  samba,
+  pkgs, # for passthru.tests
 
   # for passthru.lore
   binlore,
@@ -162,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru.tests = {
-    inherit cmake nix samba;
+    inherit (pkgs) cmake nix samba;
   };
 
   # bsdtar is detected as "cannot" because its exec is internal to

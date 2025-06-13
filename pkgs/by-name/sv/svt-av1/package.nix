@@ -6,8 +6,7 @@
   cmake,
   nasm,
 
-  # for passthru.tests
-  ffmpeg,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       rev-prefix = "v";
     };
     tests = {
-      ffmpeg = ffmpeg.override { withSvtav1 = true; };
+      ffmpeg = pkgs.ffmpeg.override { withSvtav1 = true; };
     };
   };
 

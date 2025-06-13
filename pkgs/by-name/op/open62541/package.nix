@@ -19,8 +19,7 @@
   openssl,
   mbedtls,
 
-  # for passthru.tests only
-  open62541,
+  open62541, # for passthru.tests
 }:
 
 let

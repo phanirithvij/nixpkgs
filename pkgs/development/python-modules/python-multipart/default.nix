@@ -7,12 +7,7 @@
   mock,
   pyyaml,
 
-  # for passthru.tests
-  asgi-csrf,
-  connexion,
-  fastapi,
-  gradio,
-  starlette,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -38,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       asgi-csrf
       connexion
       fastapi

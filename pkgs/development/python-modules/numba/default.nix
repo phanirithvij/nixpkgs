@@ -8,7 +8,6 @@
   buildPythonPackage,
   setuptools,
   numpy,
-  numpy_1,
   llvmlite,
   replaceVars,
   writers,
@@ -26,6 +25,8 @@
   cudaSupport ? config.cudaSupport,
   testsWithoutSandbox ? false,
   doFullCheck ? false,
+
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -148,7 +149,7 @@ buildPythonPackage rec {
       testsWithoutSandbox = false;
     };
     numpy_1 = numba.override {
-      numpy = numpy_1;
+      numpy = pkgs.numpy_1;
     };
   };
 

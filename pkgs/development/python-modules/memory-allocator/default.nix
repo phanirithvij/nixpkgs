@@ -4,8 +4,7 @@
   buildPythonPackage,
   cython,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "memory_allocator" ];
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = with lib; {

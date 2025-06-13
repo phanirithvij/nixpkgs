@@ -8,10 +8,7 @@
   openssl,
   libsodium,
 
-  # for passthru.tests
-  ffmpeg,
-  sshping,
-  wireshark,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit ffmpeg sshping wireshark;
+    inherit (pkgs) ffmpeg sshping wireshark;
   };
 
   meta = with lib; {

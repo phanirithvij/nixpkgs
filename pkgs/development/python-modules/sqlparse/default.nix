@@ -7,11 +7,7 @@
   pytestCheckHook,
   pythonOlder,
 
-  # for passthru.tests
-  django,
-  django_4,
-  django-silk,
-  pgadmin4,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -37,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       django
       django_4
       django-silk

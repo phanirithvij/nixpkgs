@@ -22,9 +22,8 @@
   makeFontsConf,
   gentium-plus,
 
-  # passthru.tests
+  pkgs, # for passthru.tests
   runCommand,
-  poppler-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -157,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "${finalAttrs.pname}-test"
         {
           nativeBuildInputs = [
-            poppler-utils
+            pkgs.poppler-utils
             finalAttrs.finalPackage
           ];
           inherit (finalAttrs) FONTCONFIG_FILE;

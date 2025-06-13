@@ -6,7 +6,7 @@
   setuptools,
   setuptools-scm,
   simplesqlite,
-  sqliteschema,
+  sqliteschema, # self
   tabledata,
   typepy,
   pytestCheckHook,

@@ -15,12 +15,7 @@
   vulkan-loader,
   vulkan-headers,
 
-  # for passthru.tests
-  ffmpeg,
-  gdal,
-  handbrake,
-  libavif,
-  libheif,
+  pkgs, # for passthru.tests
 }:
 
 assert useVulkan -> withExamples;
@@ -65,7 +60,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       ffmpeg
       gdal
       handbrake

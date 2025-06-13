@@ -7,8 +7,7 @@
   pytestCheckHook,
   doFullCheck ? false, # weird filenames cause issues on some filesystems
 
-  # for passthru.tests
-  jpylyzer,
+  jpylyzer, # for passthru.tests
 }:
 
 let

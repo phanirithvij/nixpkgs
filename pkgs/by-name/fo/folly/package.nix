@@ -33,9 +33,7 @@
 
   nix-update-script,
 
-  # for passthru.tests
-  python3,
-  watchman,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -211,8 +209,8 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
 
     tests = {
-      inherit watchman;
-      inherit (python3.pkgs) django pywatchman;
+      inherit (pkgs) watchman;
+      inherit (pkgs.python3.pkgs) django pywatchman;
     };
   };
 

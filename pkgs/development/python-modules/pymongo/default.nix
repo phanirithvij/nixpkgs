@@ -8,13 +8,7 @@
   pythonOlder,
   dnspython,
 
-  # for passthru.tests
-  celery, # check-input only
-  flask-pymongo,
-  kombu, # check-input only
-  mongoengine,
-  motor,
-  pymongo-inmemory,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -44,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pymongo" ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       celery
       flask-pymongo
       kombu

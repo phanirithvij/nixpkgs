@@ -3,12 +3,7 @@
   stdenv,
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
-  # for passthru.tests
-  python3,
-  perlPackages,
-  haskellPackages,
-  luaPackages,
-  ocamlPackages,
+  pkgs, # for passthru.tests
   testers,
 }:
 
@@ -61,12 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit python3;
-    inherit (python3.pkgs) xmltodict;
-    inherit (haskellPackages) hexpat;
-    inherit (perlPackages) XMLSAXExpat XMLParser;
-    inherit (luaPackages) luaexpat;
-    inherit (ocamlPackages) ocaml_expat;
+    inherit (pkgs) python3;
+    inherit (pkgs.python3.pkgs) xmltodict;
+    inherit (pkgs.haskellPackages) hexpat;
+    inherit (pkgs.perlPackages) XMLSAXExpat XMLParser;
+    inherit (pkgs.luaPackages) luaexpat;
+    inherit (pkgs.ocamlPackages) ocaml_expat;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };

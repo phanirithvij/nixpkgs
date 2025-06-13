@@ -19,16 +19,7 @@
   swap16bitcspSupport ? false, # Byte swap for 16bit color spaces
   libwebpmuxSupport ? true, # Build libwebpmux
 
-  # for passthru.tests
-  gd,
-  graphicsmagick,
-  haskellPackages,
-  imagemagick,
-  imlib2,
-  libjxl,
-  opencv,
-  python3,
-  vips,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -68,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals gifSupport [ giflib ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       gd
       graphicsmagick
       imagemagick
@@ -77,8 +68,8 @@ stdenv.mkDerivation rec {
       opencv
       vips
       ;
-    inherit (python3.pkgs) pillow imread;
-    haskell-webp = haskellPackages.webp;
+    inherit (pkgs.python3.pkgs) pillow imread;
+    haskell-webp = pkgs.haskellPackages.webp;
   };
 
   meta = with lib; {

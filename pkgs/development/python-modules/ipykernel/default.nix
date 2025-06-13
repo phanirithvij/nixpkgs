@@ -19,8 +19,7 @@
   tornado,
   traitlets,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -59,7 +58,7 @@ buildPythonPackage rec {
 
   passthru.tests = {
     pytest = callPackage ./tests.nix { };
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = {

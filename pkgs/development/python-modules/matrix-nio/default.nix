@@ -32,12 +32,8 @@
   pytest-benchmark,
   pytestCheckHook,
 
-  # passthru tests
+  pkgs, # for passthru.tests
   nixosTests,
-  opsdroid,
-  pantalaimon,
-  weechatScripts,
-  zulip,
 
   withOlm ? false,
 }:
@@ -156,8 +152,8 @@ buildPythonPackage rec {
       matrix-conduit
       mjolnir
       ;
-    inherit (weechatScripts) weechat-matrix;
-    inherit opsdroid pantalaimon zulip;
+    inherit (pkgs.weechatScripts) weechat-matrix;
+    inherit (pkgs) opsdroid pantalaimon zulip;
   };
 
   meta = with lib; {

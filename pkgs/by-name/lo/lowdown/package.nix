@@ -8,8 +8,7 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableDarwinSandbox ? true,
-  # for passthru.tests
-  nix,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -111,7 +110,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     # most important consumer in nixpkgs
-    inherit nix;
+    inherit (pkgs) nix;
   };
 
   meta = with lib; {

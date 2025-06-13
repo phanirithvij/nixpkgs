@@ -22,12 +22,7 @@
   qt6,
   pyqt6,
 
-  # passthru.tests
-  plotpy,
-  pyside6,
-  qt5,
-  pyqt5,
-  pyside2,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -85,13 +80,15 @@ buildPythonPackage rec {
 
   passthru = {
     tests = {
-      withPyQt6 = plotpy.override {
-        pyqt6 = pyqt6;
-        qt6 = qt6;
+      withPyQt6 = pkgs.plotpy.override {
+        inherit (pkgs)
+          pyqt6
+          qt6
+          ;
       };
-      withPyQt5 = plotpy.override {
-        pyqt6 = pyqt5;
-        qt6 = qt5;
+      withPyQt5 = pkgs.plotpy.override {
+        pyqt6 = pkgs.pyqt5;
+        qt6 = pkgs.qt5;
       };
     };
     # Upstream doesn't officially supports all of them, although they use
@@ -100,15 +97,15 @@ buildPythonPackage rec {
       # Was failing with a peculiar segmentation fault during the tests, since
       # this package was added to Nixpkgs. This is not too bad as PySide2
       # shouldn't be used for modern applications.
-      withPySide2 = plotpy.override {
-        pyqt6 = pyside2;
-        qt6 = qt5;
+      withPySide2 = pkgs.plotpy.override {
+        pyqt6 = pkgs.pyside2;
+        qt6 = pkgs.qt5;
       };
       # Has started failing too similarly to pyside2, ever since a certain
       # version bump. See also:
       # https://github.com/PlotPyStack/PlotPy/blob/v2.7.4/README.md?plain=1#L62
-      withPySide6 = plotpy.override {
-        pyqt6 = pyside6;
+      withPySide6 = pkgs.plotpy.override {
+        pyqt6 = pkgs.pyside6;
         qt6 = qt6;
       };
     };

@@ -4,11 +4,7 @@
   fetchFromGitHub,
   cmake,
 
-  # for passthru.tests
-  gst_all_1,
-  mpd,
-  ocamlPackages,
-  vlc,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -31,9 +27,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   passthru.tests = {
-    inherit mpd vlc;
-    inherit (gst_all_1) gst-plugins-bad;
-    ocaml-faad = ocamlPackages.faad;
+    inherit (pkgs) mpd vlc;
+    inherit (pkgs.gst_all_1) gst-plugins-bad;
+    ocaml-faad = pkgs.ocamlPackages.faad;
   };
 
   meta = with lib; {

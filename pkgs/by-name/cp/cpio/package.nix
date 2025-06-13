@@ -4,11 +4,8 @@
   fetchurl,
   autoreconfHook,
 
-  # for passthru.tests
-  git,
-  libguestfs,
+  pkgs, # for passthru.tests
   nixosTests,
-  rpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,8 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit libguestfs rpm;
-    git = git.tests.withInstallCheck;
+    inherit (pkgs) libguestfs rpm;
+    git = pkgs.git.tests.withInstallCheck;
     initrd = nixosTests.systemd-initrd-simple;
   };
 

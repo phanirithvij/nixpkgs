@@ -5,13 +5,7 @@
   fetchpatch,
   autoconf,
 
-  # for passthru.tests
-  audacity,
-  mpd,
-  normalize,
-  ocamlPackages,
-  streamripper,
-  vlc,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -74,14 +68,14 @@ stdenv.mkDerivation rec {
   preConfigure = "autoconf";
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       audacity
       mpd
       normalize
       streamripper
       vlc
       ;
-    ocaml-mad = ocamlPackages.mad;
+    ocaml-mad = pkgs.ocamlPackages.mad;
   };
 
   meta = with lib; {

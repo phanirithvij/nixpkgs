@@ -10,11 +10,7 @@
   # tests
   pytestCheckHook,
 
-  # reverse dependencies
-  jinja2,
-  mkdocs,
-  quart,
-  werkzeug,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -38,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "markupsafe" ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       jinja2
       mkdocs
       quart

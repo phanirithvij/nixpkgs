@@ -7,10 +7,7 @@
   enableCapabilities ? false,
   libcap,
   buildPackages,
-  # for passthru.tests
-  gnupg,
-  libotr,
-  rsyslog,
+  pkgs, # for passthru.tests
 }:
 
 assert enableCapabilities -> stdenv.hostPlatform.isLinux;
@@ -98,7 +95,7 @@ stdenv.mkDerivation rec {
   enableParallelChecking = true;
 
   passthru.tests = {
-    inherit gnupg libotr rsyslog;
+    inherit (pkgs) gnupg libotr rsyslog;
   };
 
   meta = {

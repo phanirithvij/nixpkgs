@@ -11,8 +11,7 @@
   gmpy2,
   sphinx,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -62,7 +61,7 @@ buildPythonPackage rec {
   '';
 
   passthru.tests = {
-    inherit sage;
+    inherit (pkgs) sage;
   };
 
   meta = with lib; {

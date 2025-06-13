@@ -8,12 +8,7 @@
   ncurses,
   updateAutotoolsGnuConfigScriptsHook,
 
-  # for tests
-  python3Packages,
-  sqldiff,
-  sqlite-analyzer,
-  sqlite-rsync,
-  tinysparql,
+  pkgs, # for passthru.tests
 
   # uses readline & ncurses for a better interactive experience if set to true
   interactive ? false,
@@ -132,8 +127,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      inherit (python3Packages) sqlalchemy;
-      inherit
+      inherit (pkgs.python3Packages) sqlalchemy;
+      inherit (pkgs)
         sqldiff
         sqlite-analyzer
         sqlite-rsync

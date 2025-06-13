@@ -8,10 +8,7 @@
   pythonAtLeast,
   pythonOlder,
 
-  # for passthru.tests
-  pyramid,
-  routes,
-  tokenlib,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -44,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit pyramid routes tokenlib;
+    inherit (pkgs) pyramid routes tokenlib;
   };
 
   meta = with lib; {

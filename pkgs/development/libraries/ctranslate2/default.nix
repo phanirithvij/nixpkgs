@@ -17,9 +17,7 @@
   openblas,
   withRuy ? true,
 
-  # passthru tests
-  libretranslate,
-  wyoming-faster-whisper,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -82,7 +80,7 @@ stdenv.mkDerivation rec {
     ];
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       libretranslate
       wyoming-faster-whisper
       ;

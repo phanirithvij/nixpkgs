@@ -20,14 +20,9 @@
   python-dotenv,
 
   # tests
-  greenlet,
   pytestCheckHook,
 
-  # reverse dependencies
-  flask-limiter,
-  flask-restful,
-  flask-restx,
-  moto,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -58,7 +53,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       flask-limiter
       flask-restful
       flask-restx

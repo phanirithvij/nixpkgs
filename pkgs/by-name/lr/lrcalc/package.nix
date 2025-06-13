@@ -4,8 +4,7 @@
   fetchFromBitbucket,
   autoreconfHook,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  passthru.tests = { inherit sage; };
+  passthru.tests = { inherit (pkgs) sage; };
 
   meta = with lib; {
     description = "Littlewood-Richardson calculator";

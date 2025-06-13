@@ -10,16 +10,7 @@
   libGL,
   nix-update-script,
 
-  # passthru tests
-  SDL2_ttf,
-  SDL2_net,
-  SDL2_gfx,
-  SDL2_sound,
-  SDL2_mixer,
-  SDL2_image,
-  SDL_compat,
-  ffmpeg,
-  qemu,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-        inherit
+        inherit (pkgs)
           SDL_compat
           SDL2_ttf
           SDL2_net
@@ -91,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
           ;
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit qemu;
+        inherit (pkgs) qemu;
       };
 
     updateScript = nix-update-script {

@@ -11,15 +11,7 @@
   withBluez ? false,
   withRemote ? false,
 
-  # for passthru.tests
-  ettercap,
-  nmap,
-  ostinato,
-  tcpreplay,
-  vde2,
-  wireshark,
-  python3,
-  haskellPackages,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +58,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       ettercap
       nmap
       ostinato
@@ -74,8 +66,8 @@ stdenv.mkDerivation rec {
       vde2
       wireshark
       ;
-    inherit (python3.pkgs) pcapy-ng scapy;
-    haskell-pcap = haskellPackages.pcap;
+    inherit (pkgs.python3.pkgs) pcapy-ng scapy;
+    haskell-pcap = pkgs.haskellPackages.pcap;
   };
 
   meta = with lib; {

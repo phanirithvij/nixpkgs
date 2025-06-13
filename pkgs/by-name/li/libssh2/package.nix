@@ -6,12 +6,7 @@
   zlib,
   windows,
 
-  # for passthru.tests
-  aria2,
-  curl,
-  libgit2,
-  mc,
-  vlc,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation rec {
@@ -39,13 +34,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       aria2
       libgit2
       mc
       vlc
       ;
-    curl = (curl.override { scpSupport = true; }).tests.withCheck;
+    curl = (pkgs.curl.override { scpSupport = true; }).tests.withCheck;
   };
 
   meta = with lib; {

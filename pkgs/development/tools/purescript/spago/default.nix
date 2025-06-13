@@ -3,12 +3,7 @@
   haskellPackages,
   lib,
 
-  # The following are only needed for the passthru.tests:
-  spago,
-  cacert,
-  git,
-  nodejs,
-  purescript,
+  pkgs, # for passthru.tests
   runCommand,
 }:
 
@@ -31,7 +26,7 @@ lib.pipe haskellPackages.spago [
         runCommand "spago-tests"
           {
             __noChroot = true;
-            nativeBuildInputs = [
+            nativeBuildInputs = with pkgs; [
               cacert
               git
               nodejs

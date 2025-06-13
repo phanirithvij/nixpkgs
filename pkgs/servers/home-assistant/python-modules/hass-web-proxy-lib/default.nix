@@ -18,8 +18,7 @@
   pytest-timeout,
   pytestCheckHook,
 
-  # reverse dependencies
-  home-assistant-custom-components,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -65,13 +64,13 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit (home-assistant-custom-components) frigate;
+    inherit (pkgs.home-assistant-custom-components) frigate;
   };
 
   meta = {
     description = "A library to proxy web traffic through Home Assistant integrations";
     homepage = "https://github.com/dermotduffy/hass-web-proxy-lib";
     license = lib.licenses.mit;
-    maintainers = home-assistant-custom-components.frigate.meta.maintainers;
+    maintainers = pkgs.home-assistant-custom-components.frigate.meta.maintainers;
   };
 }

@@ -21,7 +21,7 @@
   versionCheckHook,
   # passthru
   nix-update-script,
-  python3Packages,
+  pkgs, # for passthru.tests
   # Expose features to the user for the wasm web viewer build
   # So he can easily override them
   # We omit the "analytics" feature because it is opt-out and not opt-in.
@@ -145,7 +145,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      inherit (python3Packages) rerun-sdk;
+      inherit (pkgs.python3Packages) rerun-sdk;
     };
   };
 

@@ -50,8 +50,7 @@
 
   # for passthru.updateScript
   nix-update-script,
-  # for passthru.tests
-  gnutls,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -212,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     tests = {
-      inherit gnutls;
+      inherit (pkgs) gnutls;
       nixos-test = nixosTests.unbound;
       nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
     };

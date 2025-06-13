@@ -15,17 +15,7 @@
   fcgi, # JPIP Server
   jdk,
 
-  # for passthru.tests
-  ffmpeg,
-  gdal,
-  gdcm,
-  ghostscript,
-  imagemagick,
-  leptonica,
-  mupdf,
-  poppler,
-  python3,
-  vips,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -111,11 +101,11 @@ stdenv.mkDerivation rec {
   passthru = {
     incDir = "openjpeg-${lib.versions.majorMinor version}";
     tests = {
-      ffmpeg = ffmpeg.override { withOpenjpeg = true; };
-      imagemagick = imagemagick.override { openjpegSupport = true; };
-      pillow = python3.pkgs.pillow;
+      ffmpeg = pkgs.ffmpeg.override { withOpenjpeg = true; };
+      imagemagick = pkgs.imagemagick.override { openjpegSupport = true; };
+      pillow = pkgs.python3.pkgs.pillow;
 
-      inherit
+      inherit (pkgs)
         gdal
         gdcm
         ghostscript

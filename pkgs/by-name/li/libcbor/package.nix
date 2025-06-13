@@ -5,11 +5,7 @@
   cmake,
   cmocka,
 
-  # for passthru.tests
-  libfido2,
-  mysql80,
-  openssh,
-  systemd,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ cmocka ];
 
   passthru.tests = {
-    inherit libfido2 mysql80;
-    openssh = (openssh.override { withFIDO = true; });
+    inherit (pkgs) libfido2 mysql80;
+    openssh = (pkgs.openssh.override { withFIDO = true; });
     systemd = (
-      systemd.override {
+      pkgs.systemd.override {
         withFido2 = true;
         withCryptsetup = true;
       }

@@ -4,9 +4,7 @@
   fetchFromGitHub,
   flit-core,
 
-  # reverse dependencies
-  mashumaro,
-  pydantic,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -26,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "typing_extensions" ];
 
   passthru.tests = {
-    inherit mashumaro pydantic;
+    inherit (pkgs) mashumaro pydantic;
   };
 
   meta = with lib; {

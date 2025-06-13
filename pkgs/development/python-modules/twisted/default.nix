@@ -25,6 +25,7 @@
   bcrypt,
   cryptography,
   h2,
+  httpx,
   idna,
   priority,
   pyopenssl,
@@ -38,18 +39,7 @@
   pyhamcrest,
   hypothesis,
 
-  # for passthru.tests
-  cassandra-driver,
-  httpx,
-  klein,
-  magic-wormhole,
-  scrapy,
-  treq,
-  txaio,
-  txamqp,
-  txrequests,
-  txtorcon,
-  thrift,
+  pkgs, # for passthru.tests
   nixosTests,
 }:
 
@@ -243,7 +233,7 @@ buildPythonPackage rec {
 
   passthru = {
     tests = {
-      inherit
+      inherit (pkgs)
         cassandra-driver
         klein
         magic-wormhole

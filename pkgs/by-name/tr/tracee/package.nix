@@ -11,9 +11,10 @@
   zlib,
   zstd,
 
+  # for passthru.tests
   nixosTests,
   testers,
-  tracee,
+  tracee, # self
   makeWrapper,
 }:
 

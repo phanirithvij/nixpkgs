@@ -11,20 +11,7 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableShared ? !stdenv.hostPlatform.isStatic,
 
-  # for passthru.tests
-  dvgrab,
-  epeg,
-  freeimage,
-  gd,
-  graphicsmagick,
-  imagemagick,
-  imlib2,
-  jhead,
-  libjxl,
-  mjpegtools,
-  opencv,
-  python3,
-  vips,
+  pkgs, # for passthru.tests
   testers,
 }:
 
@@ -100,9 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckTarget = "test";
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       dvgrab
       epeg
+      freeimage
       gd
       graphicsmagick
       imagemagick
@@ -113,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       opencv
       vips
       ;
-    inherit (python3.pkgs) pillow imread pyturbojpeg;
+    inherit (pkgs.python3.pkgs) pillow imread pyturbojpeg;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 

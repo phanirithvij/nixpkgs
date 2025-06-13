@@ -27,20 +27,8 @@
   p11-kit,
   # certificate compression - only zlib now, more possible: zstd, brotli
 
-  # for passthru.tests
-  curlWithGnuTls,
-  emacs,
-  ffmpeg,
-  haskellPackages,
-  knot-resolver,
-  ngtcp2-gnutls,
-  ocamlPackages,
+  pkgs, # for passthru.tests
   pkgsStatic,
-  python3Packages,
-  qemu,
-  rsyslog,
-  openconnect,
-  samba,
 
   gitUpdater,
 }:
@@ -194,7 +182,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru.tests = {
-    inherit
+    inherit (pkgs)
       ngtcp2-gnutls
       curlWithGnuTls
       ffmpeg
@@ -204,10 +192,10 @@ stdenv.mkDerivation rec {
       samba
       openconnect
       ;
-    #inherit (ocamlPackages) ocamlnet;
-    #haskell-gnutls = haskellPackages.gnutls;
-    python3-gnutls = python3Packages.python3-gnutls;
-    rsyslog = rsyslog.override { withGnutls = true; };
+    #inherit (pkgs.ocamlPackages) ocamlnet;
+    #haskell-gnutls = pkgs.haskellPackages.gnutls;
+    python3-gnutls = pkgs.python3Packages.python3-gnutls;
+    rsyslog = pkgs.rsyslog.override { withGnutls = true; };
     static = pkgsStatic.gnutls;
   };
 

@@ -36,15 +36,7 @@
   jq,
   nix,
 
-  # for passthru.tests
-  enlightenment,
-  ffmpeg,
-  gegl,
-  gimp,
-  imagemagick,
-  imlib2,
-  vips,
-  xfce,
+  pkgs, # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -207,16 +199,16 @@ stdenv.mkDerivation (finalAttrs: {
         updateLockfile
       ];
     tests = {
-      inherit
+      inherit (pkgs)
         gegl
         gimp
         imagemagick
         imlib2
         vips
         ;
-      inherit (enlightenment) efl;
-      inherit (xfce) xfwm4;
-      ffmpeg = ffmpeg.override { withSvg = true; };
+      inherit (pkgs.enlightenment) efl;
+      inherit (pkgs.xfce) xfwm4;
+      ffmpeg = pkgs.ffmpeg.override { withSvg = true; };
     };
   };
 

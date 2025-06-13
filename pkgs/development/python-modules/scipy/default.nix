@@ -37,8 +37,7 @@
   pytestCheckHook,
   pytest-xdist,
 
-  # Reverse dependency
-  sage,
+  pkgs, # for passthru.tests
 }:
 
 let
@@ -226,7 +225,7 @@ buildPythonPackage {
       # Pass it the names of the datasets to update their hashes
       ++ (builtins.attrNames datasetsHashes);
     tests = {
-      inherit sage;
+      inherit (pkgs) sage;
     };
   };
 

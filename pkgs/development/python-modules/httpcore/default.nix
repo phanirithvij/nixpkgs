@@ -16,10 +16,7 @@
   pythonOlder,
   socksio,
   trio,
-  # for passthru.tests
-  httpx,
-  httpx-socks,
-  respx,
+  pkgs, # for passthru.tests
 }:
 
 buildPythonPackage rec {
@@ -66,7 +63,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
-    inherit httpx httpx-socks respx;
+    inherit (pkgs) httpx httpx-socks respx;
   };
 
   meta = with lib; {
