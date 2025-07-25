@@ -587,22 +587,20 @@ getVersion() {
     local rev=
     local gitDir="$dir/.git"
     if [ -e "$gitDir" ]; then
-        if [ -z "$(type -P git)" ]; then
-            echo "warning: Git not found; cannot figure out revision of $dir" >&2
-            return
+        cd "$dir" || return
+        head_ref=$(cat "$gitDir/HEAD")
+        if [[ "$head_ref" == ref:* ]]; then
+            rev=$(cut -c1-12 <"$gitDir/${head_ref#ref: }");
+        else
+            rev=$(echo "$head_ref" | cut -c1-12);
         fi
-        cd "$dir"
-        rev=$(git --git-dir="$gitDir" rev-parse --short HEAD)
-        if git --git-dir="$gitDir" describe --always --dirty | grep -q dirty; then
-            rev+=M
+        if [ -f "$gitDir/index" ]; then
+            dirty=$(find . -newer "$gitDir/index" ! -path './.git/*' ! -name '.git' ! -path '.')
+            [ -n "$dirty" ] && rev+=M
         fi
-    fi
-
-    if [ -n "$rev" ]; then
-        echo ".git.$rev"
+        [ -n "$rev" ] && echo ".git.$rev"
     fi
 }
-
 
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
