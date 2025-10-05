@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/quickemu-project/quickemu/commit/f25205f4513c4fa72be6940081c62e613d1fddc6.patch";
       hash = "sha256-OAXGyhMVDwbUypEPj/eRnH0wZYaL9WLGjbyoobe20UY=";
     })
+    ./quickget_allow_existing_dir.patch
   ];
 
   postPatch = ''

@@ -1,0 +1,14 @@
+diff --git a/quickget b/quickget
+index ac01549..0d96a60 100755
+--- a/quickget
++++ b/quickget
+@@ -3369,7 +3369,7 @@ function create_config() {
+     local FIXED_ISO=""
+ 
+     OS="custom"
+-    if ! mkdir "${VM_PATH}" 2>/dev/null; then
++    if ! mkdir -p "${VM_PATH}" 2>/dev/null; then
+         echo "ERROR! Could not create directory: ${VM_PATH}. Please verify that it does not already exist"
+         exit 1
+     fi
+
