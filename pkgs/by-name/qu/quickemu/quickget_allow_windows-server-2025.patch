@@ -1,0 +1,14 @@
+diff --git a/quickget b/quickget
+index ac01549..b55adb3 100755
+--- a/quickget
++++ b/quickget
+@@ -1135,7 +1135,7 @@ function languages_windows() {
+ }
+ 
+ function releases_windows-server() {
+-    echo 2022 2019 2016
++    echo 2025 2022 2019 2016
+ }
+ 
+ function languages_windows-server() {
+

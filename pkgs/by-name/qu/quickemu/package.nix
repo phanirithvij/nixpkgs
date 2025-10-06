@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-OAXGyhMVDwbUypEPj/eRnH0wZYaL9WLGjbyoobe20UY=";
     })
     ./quickget_allow_existing_dir.patch
+    ./quickget_allow_windows-server-2025.patch
   ];
 
   postPatch = ''
