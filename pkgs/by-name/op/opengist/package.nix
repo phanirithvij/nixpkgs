@@ -12,9 +12,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "opengist";
-
   version = "1.11.1";
-
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
@@ -26,16 +24,9 @@ buildGoModule (finalAttrs: {
     pname = "opengist-frontend";
     inherit (finalAttrs) version src;
 
-    # npm complains of "invalid package". shrug. we can give it a version.
+    # npm complains of "invalid package". we can give it a version.
     postPatch = ''
       ${lib.getExe jq} '.version = "${finalAttrs.version}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
-    '';
-
-    # copy pasta from the Makefile upstream, seems to be a workaround of sass
-    # issues, unsure why it is not done in vite:
-    # https://github.com/thomiceli/opengist/blob/05eccfa8e728335514a40476cd8116cfd1ca61dd/Makefile#L16-L19
-    postBuild = ''
-      EMBED=1 npx postcss 'public/assets/embed-*.css' -c public/postcss.config.js --replace
     '';
 
     installPhase = ''
@@ -71,7 +62,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postPatch = ''
-    cp -R ${finalAttrs.frontend}/public/{manifest.json,assets} public/
+    cp -R ${finalAttrs.frontend}/public/{.vite/manifest.json,assets} public/
   '';
 
   passthru = {
