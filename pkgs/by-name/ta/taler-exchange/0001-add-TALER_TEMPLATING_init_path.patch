@@ -9,17 +9,17 @@ headers, which makes it harder to patch in the correct directory.
 To circumvent this, a similar function that takes the templates path
 directly is added.
 ---
- src/include/taler_templating_lib.h |  9 +++++++++
- src/templating/templating_api.c    | 25 +++++++++++++++++++++++++
- 2 files changed, 34 insertions(+)
+ src/include/taler/taler_templating_lib.h | 10 ++++++++++
+ src/templating/templating_api.c          | 25 +++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/src/include/taler_templating_lib.h b/src/include/taler_templating_lib.h
-index 6af6db715..343004ef1 100644
---- a/src/include/taler_templating_lib.h
-+++ b/src/include/taler_templating_lib.h
-@@ -120,6 +120,16 @@ TALER_TEMPLATING_reply_error (struct MHD_Connection *connection,
+diff --git a/src/include/taler/taler_templating_lib.h b/src/include/taler/taler_templating_lib.h
+index 0ea3c73af..bd68f6767 100644
+--- a/src/include/taler/taler_templating_lib.h
++++ b/src/include/taler/taler_templating_lib.h
+@@ -139,6 +139,16 @@ TALER_TEMPLATING_reply_error (struct MHD_Connection *connection,
  enum GNUNET_GenericReturnValue
- TALER_TEMPLATING_init (const char *subsystem);
+ TALER_TEMPLATING_init (const struct GNUNET_OS_ProjectData *pd);
 
 +/**
 + * Preload templates from path.
@@ -35,10 +35,10 @@ index 6af6db715..343004ef1 100644
  /**
   * Nicely shut down templating subsystem.
 diff --git a/src/templating/templating_api.c b/src/templating/templating_api.c
-index 88a17c682..a9afa2b70 100644
+index dbcf05a47..8ed74be26 100644
 --- a/src/templating/templating_api.c
 +++ b/src/templating/templating_api.c
-@@ -506,6 +506,31 @@ TALER_TEMPLATING_init (const char *subsystem)
+@@ -546,6 +546,31 @@ TALER_TEMPLATING_init (const struct GNUNET_OS_ProjectData *pd)
  }
 
 
