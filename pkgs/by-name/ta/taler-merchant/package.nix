@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "1.0.1";
+  version = "1.0.4";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-H/JqMGLP0u68g/bMqsollAk6sKL73TCZ9no49psYST0=";
+    hash = "sha256-8arlFM24yfuSy94KoMQz2Nz3QNiD7pMGw4NUj2LFxlA=";
   };
 
   postUnpack = ''
@@ -38,8 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/backend/taler-merchant-httpd.c \
       --replace-fail 'TALER_TEMPLATING_init (TALER_MERCHANT_project_data ())' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\")"
 
-    substituteInPlace src/backend/taler-merchant-httpd_spa.c \
-      --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
+    # TODO patch TALER_MHD_spa_load in taler-exchange?
+    # Also GNUNET_OS_IPK_BINDIR GNUNET_OS_IPK_DATADIR other usages
+    #substituteInPlace src/backend/taler-merchant-httpd_spa.c \
+    #  --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
   '';
 
   nativeBuildInputs = [
