@@ -179,7 +179,10 @@ buildGoModule (finalAttrs: {
     description = "Web UI and orchestrator for restic backup";
     homepage = "https://github.com/garethgeorge/backrest";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = with lib.maintainers; [
+      iedame
+      alexandru0-dev
+    ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };
