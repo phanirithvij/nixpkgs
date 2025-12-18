@@ -5,6 +5,17 @@
   modulesPath,
   ...
 }:
+/*
+  - [ ] module
+    - [ ] nginx virutalhost config option
+    - [x] config format ini
+    - [x] release notes
+    - [x] include module list
+    - [x] include in tests list
+  - [ ] tests
+    - [x] find if there are upstream tests (none from what I can tell)
+    - [ ] basic test
+*/
 let
   cfg = config.services.goupile;
   goupileWebServiceName = "goupile";
