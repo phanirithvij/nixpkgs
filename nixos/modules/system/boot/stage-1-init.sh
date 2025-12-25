@@ -666,12 +666,16 @@ if [ ! -e "$targetRoot/$stage2Init" ]; then
     fi
 fi
 
+set -x
+
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
 
 mount --move /proc $targetRoot/proc
 mount --move /sys $targetRoot/sys
 mount --move /dev $targetRoot/dev
 mount --move /run $targetRoot/run
+
+set +x
 
 exec env -i $(type -P switch_root) "$targetRoot" "$stage2Init"
 
