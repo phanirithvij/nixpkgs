@@ -91,14 +91,7 @@ in
             Description = "Goupile eCRF";
           };
 
-          # path = [ pkgs.coreutils ]; # doesn't work?
-
           serviceConfig = {
-            ExecStartPre = [
-              #"${pkgs.coreutils}/bin/echo $PATH"
-              "${pkgs.coreutils}/bin/mkdir -p /var/lib/goupile/instances" # just mkdir doesn't work
-            ];
-            # ${pkgs.strace}/bin/strace
             ExecStart = ''
               ${lib.getExe cfg.package} \
                 ${lib.optionalString cfg.enableSandbox "--sandbox"} \
@@ -111,15 +104,19 @@ in
 
             RuntimeDirectory = "goupile";
             RuntimeDirectoryPreserve = "yes";
-            StateDirectory = "goupile";
+            StateDirectory = "goupile"; # [ "goupile/instances" ];
             UMask = 0077;
             WorkingDirectory = "%S/goupile";
 
             SystemCallArchitectures = "native";
             SystemCallFilter = [
-              "@system-service ~@privileged @clock"
-              #"@default"
+              #"~@privileged @system-service @clock"
               #"@known"
+              "~@privileged"
+              "@system-service"
+              "@file-system"
+              "@basic-io"
+              "@clock"
             ];
 
             # dovecot
@@ -148,4 +145,6 @@ in
       }
     ]
   );
+
+  meta.maintainers = lib.teams.ngi.members;
 }

@@ -6,7 +6,10 @@
     { lib, pkgs, ... }:
     {
       services.goupile.enable = true;
-      services.goupile.enableSandbox = true; # fails in vm if enabled
+      # reaction unix_chkpwd vm
+      # nix-diff
+      # TODO fails in vm if enabled
+      services.goupile.enableSandbox = false;
       services.goupile.settings.HTTP.Port = 8889;
       #environment.variables.SYSTEMD_SECCOMP = "0";
     };
@@ -38,11 +41,6 @@
       port = config.services.goupile.settings.HTTP.Port;
     in
     {
-      environment.systemPackages = with pkgs; [
-        btop
-        sysz
-      ];
-
       virtualisation.forwardPorts = map (port: {
         from = "host";
         host.port = port;
@@ -51,7 +49,9 @@
 
       # forwarded ports need to be accessible
       networking.firewall.allowedTCPPorts = [ port ];
+
+      virtualisation.graphics = false;
     };
 
-  meta.maintainers = with lib.maintainers; [ phanirithvij ] ++ lib.teams.ngi.members;
+  meta.maintainers = lib.teams.ngi.members;
 }
