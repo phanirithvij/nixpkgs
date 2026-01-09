@@ -8,7 +8,7 @@
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodePackages,
+  grunt-cli,
   fetchzip,
 }:
 let
@@ -32,14 +32,14 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-l7/pld9s+VXxdS90cPgLU/vi5aPk1c9zF86DkOEB70k=";
   };
 
-  vendorHash = "sha256-OUjmhxpTgKpqL0fmglRZQSdy1LQQcZcVm9bDSchoEpI=";
+  vendorHash = "sha256-YhOleTmJc8lxuKxSSfaMvWAaJPjqWXJIUBTro/kioOc=";
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
     # Needed for executing package.json scripts
-    nodePackages.grunt-cli
+    grunt-cli
   ];
 
   offlineCache = fetchYarnDeps {
