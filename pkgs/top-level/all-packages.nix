@@ -10798,6 +10798,7 @@ with pkgs;
   libreoffice-collabora = callPackage ../applications/office/libreoffice {
     variant = "collabora";
     withFonts = true;
+    kdeIntegration = true;
   };
 
   lmms = libsForQt5.callPackage ../applications/audio/lmms {

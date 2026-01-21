@@ -316,7 +316,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-detect-qt-paths-from-qmake.patch
 
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
-    ./readd-explicit-zlib-link.patch
+    #./readd-explicit-zlib-link.patch
   ]
   ++ lib.optionals (lib.versionOlder version "25.8.2.1") [
     # Backport patch to fix build with Poppler 25.09
@@ -340,11 +340,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.05
-    (fetchpatch2 {
-      url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
-      includes = [ "sdext/*" ];
-      hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
-    })
+    #(fetchpatch2 {
+    #url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+    #includes = [ "sdext/*" ];
+    #hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+    #})
     # Currently included in the condition above
     # Uncomment if Collabora is again the only version needing it
     # Remove if Collabora is updated far enough not to need it anymore

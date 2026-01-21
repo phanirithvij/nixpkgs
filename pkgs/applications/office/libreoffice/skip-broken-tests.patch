@@ -20,18 +20,6 @@ index 231aea8d0f3c..214a23c82562 100644
      LibLibreOffice_Impl aOffice;
      LibLODocument_Impl* pDocument = loadDoc("search.ods");
      pDocument->pClass->initializeForRendering(pDocument, nullptr);
-diff --git a/svgio/qa/cppunit/data/tdf160386.svg b/svgio/qa/cppunit/data/tdf160386.svg
-index 1644b0d15514..cf429508bcd4 100644
---- a/svgio/qa/cppunit/data/tdf160386.svg
-+++ b/svgio/qa/cppunit/data/tdf160386.svg
-@@ -8,7 +8,6 @@
-     <text systemLanguage="en">Hello!</text>
-     <text systemLanguage="es">Hola!</text>
-     <text systemLanguage="fr">Bonjour!</text>
--    <text systemLanguage="ja">こんにちは</text>
-     <text systemLanguage="ru">Привет!</text>
-     <text>☺</text>
-   </switch>
 diff --git a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx b/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
 index d8093e57a4e8..c95a742a68d3 100644
 --- a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
