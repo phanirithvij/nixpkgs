@@ -601,6 +601,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-libstaroffice"
     "--without-system-libqxp"
     "--without-system-dragonbox"
+    "--without-system-fast_float"
     "--without-system-libfixmath"
 
     # TODO: bump this to 0.20
