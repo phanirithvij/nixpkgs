@@ -652,17 +652,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildTargets = [ "build-nocheck" ];
+  buildPhase = ''
+    export HOME=$(pwd)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+    make $checkTarget
+    exit 1
+  '';
 
   doCheck = true;
 
   preCheck = ''
     export HOME=$(pwd)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   checkTarget = concatStringsSep " " [
-    "unitcheck"
-    "slowcheck"
+    "CppunitTest_slideshow_engine"
+    "CppunitTest_svx_unit"
+    "CppunitTest_xmloff_draw"
+    "CppunitTest_sd_export_tests-ooxml2"
+    "CppunitTest_sd_filter_eppt"
+    "CppunitTest_vcl_pdfexport"
+    "CppunitTest_sc_subsequent_filters_test3"
+    "CppunitTest_sc_subsequent_filters_test4"
     "--keep-going" # easier to debug test failures
   ];
 
