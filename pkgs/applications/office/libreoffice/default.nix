@@ -1,5 +1,8 @@
 {
-  stdenv,
+  ccacheStdenv,
+  #writableTmpDirAsHomeHook,
+  autoPatchelfHook,
+  breakpointHook,
   runCommand,
   fetchurl,
   fetchgit,
@@ -272,6 +275,7 @@ let
 
   tarballPath = "external/tarballs";
 
+  stdenv = ccacheStdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
@@ -372,9 +376,23 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix for Python 3.12
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
+
+    # TODO remove in final commit
+    export CCACHE_COMPRESS=1
+    export CCACHE_SLOPPINESS=random_seed
+    export CCACHE_DIR=/var/cache/ccache
+    export CCACHE_UMASK=007
   '';
 
   nativeBuildInputs = [
+    breakpointHook
+    autoPatchelfHook
+    /*
+      NOTE: had to use breakpointHook then `CCACHE_LOGFILE=... CCACHE_DEBUG=1 gcc -c test.c`
+      and see ccache logs, to find that it was trying to write to ~/.cache/ccache
+      meaning CCACHE_DIR is empty
+    */
+    #writableTmpDirAsHomeHook
     autoconf
     automake
     bison
