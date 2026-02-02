@@ -1,5 +1,5 @@
 {
-  stdenv,
+  ccacheStdenv,
   runCommand,
   fetchurl,
   fetchgit,
@@ -272,6 +272,7 @@ let
 
   tarballPath = "external/tarballs";
 
+  stdenv = ccacheStdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
