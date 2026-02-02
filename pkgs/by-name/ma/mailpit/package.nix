@@ -110,6 +110,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://mailpit.axllent.org";
     license = lib.licenses.mit;
     mainProgram = "mailpit";
-    maintainers = with lib.maintainers; [ stephank ];
+    maintainers = with lib.maintainers; [
+      stephank
+      phanirithvij
+    ];
   };
 })
