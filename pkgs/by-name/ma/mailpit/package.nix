@@ -1,15 +1,16 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   buildGoModule,
+  fetchNpmDeps,
+  npmHooks,
   nodejs,
+
   python3,
   libtool,
   cctools,
-  npmHooks,
-  fetchFromGitHub,
-  fetchNpmDeps,
-  testers,
+
   mailpit,
   nixosTests,
 }:
@@ -64,7 +65,7 @@ let
 
 in
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "mailpit";
   inherit src version vendorHash;
 
@@ -72,35 +73,43 @@ buildGoModule {
 
   ldflags = [
     "-s"
-    "-w"
     "-X github.com/axllent/mailpit/config.Version=${version}"
   ];
 
   preBuild = ''
-    cp -r ${ui} server/ui/dist
+    cp -r ${finalAttrs.passthru.ui} server/ui/dist
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) mailpit;
-    version = testers.testVersion {
-      package = mailpit;
-      command = "mailpit version --no-release-check";
-    };
-  };
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    version="$($out/bin/mailpit version --no-release-check)"
+    echo "$version" | grep -q ${version} || (echo -e "ERROR: Couldn't find version ${version} in\n$version"; exit 1)
+    runHook postInstallCheck
+  '';
 
-  passthru.updateScript = {
-    supportedFeatures = [ "commit" ];
-    command = ./update.sh;
+  passthru = {
+    tests = {
+      inherit (nixosTests) mailpit;
+    };
+
+    updateScript = {
+      supportedFeatures = [ "commit" ];
+      command = ./update.sh;
+    };
+
+    inherit ui;
   };
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "Email and SMTP testing tool with API for developers";
-    homepage = "https://github.com/axllent/mailpit";
     changelog = "https://github.com/axllent/mailpit/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [ stephank ];
+    description = "Email and SMTP testing tool with API for developers";
+    downloadPage = "https://github.com/axllent/mailpit";
+    homepage = "https://mailpit.axllent.org";
     license = lib.licenses.mit;
     mainProgram = "mailpit";
+    maintainers = with lib.maintainers; [ stephank ];
   };
-}
+})
