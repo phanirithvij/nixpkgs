@@ -133,6 +133,7 @@ in
           -F "notes=" \
           -F "tag_string=" \
           -F "description=" \
+          -F "collection=1" \
           -F "use_file_name=on" \
           -F "name=test-upload" \
           -F "file=@{test_pdf};type=application/pdf" \
@@ -148,7 +149,7 @@ in
       """)
 
       # verify pdf in user's dir
-      machine.succeed("test -f ${stateDir}/media/1/pdf/*.pdf")
+      machine.succeed("test -f ${stateDir}/media/1/default/pdf/*.pdf")
 
       # verify one entry exists in sqlite db
       machine.succeed("sqlite3 ${stateDir}/db/db.sqlite3 'SELECT COUNT(*) FROM pdf_pdf' | grep -q '^1$'")
@@ -163,8 +164,8 @@ in
       print(machine.succeed("backup-immediate"))
 
       # verify the backup s3 service has that pdf file
-      machine.wait_until_succeeds("mc stat garage/pdfding-bucket/1/pdf/dummy.pdf", timeout=10)
-      print(machine.succeed("mc stat garage/pdfding-bucket/1/pdf/dummy.pdf"))
+      machine.wait_until_succeeds("mc stat garage/pdfding-bucket/1/default/pdf/dummy.pdf", timeout=10)
+      print(machine.succeed("mc stat garage/pdfding-bucket/1/default/pdf/dummy.pdf"))
     '';
 
   # Debug interactively with:

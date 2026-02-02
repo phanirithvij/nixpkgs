@@ -60,8 +60,8 @@
       print(machine.succeed("consume-immediate"))
 
       # verify pdf is in user's dir, and removed from consume dir
-      machine.wait_for_file("${stateDir}/media/1/pdf/dummy.pdf")
-      machine.fail("test -f ${stateDir}/consume/1/pdf/dummy.pdf")
+      machine.wait_for_file("${stateDir}/media/1/default/pdf/dummy.pdf")
+      machine.fail("test -f ${stateDir}/consume/1/default/pdf/dummy.pdf")
 
       # verify pdf is also in postgres db
       machine.succeed("sudo -u pdfding psql -tAc 'SELECT COUNT(*) FROM pdf_pdf' | grep -q '^1$'")

@@ -85,6 +85,7 @@
             -F "notes=" \
             -F "tag_string=" \
             -F "description=" \
+            -F "collection=1" \
             -F "use_file_name=on" \
             -F "name=test-upload" \
             -F "file=@{test_pdf};type=application/pdf" \
@@ -100,7 +101,7 @@
         """)
 
         # verify pdf in user's dir
-        machine.succeed("test -f ${stateDir}/media/1/pdf/*.pdf")
+        machine.succeed("test -f ${stateDir}/media/1/default/pdf/*.pdf")
 
         # verify one entry exists in sqlite db
         machine.succeed("sqlite3 ${stateDir}/db/db.sqlite3 'SELECT COUNT(*) FROM pdf_pdf' | grep -q '^1$'")

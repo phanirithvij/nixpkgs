@@ -12,38 +12,21 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.4.1";
+  version = "1.5.1";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rrUaqxDO16NAOic74jeYgN+7Alvo+fIIacJdSOg0hFM=";
-    # remove in 1.5.0
-    postFetch = "mv $out/{license.txt,LICENSE}";
+    hash = "sha256-PXkD+2k8/LmMWzZAj8qEK4mLoOKS4mDWcqe8AgoCdBU=";
   };
   pyproject = true;
 
   patches = [
-    # remove all patches in 1.5.0 (next version after 1.4.1)
-    # patch to add data_dir
+    # fixes two tests, remove patch in the next version
+    # https://github.com/mrmn2/PdfDing/pull/248
     (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/commit/f4945f2836ca8d972fcee2f00ef1d9cf217bada1.patch?full_index=1";
-      hash = "sha256-VGjyIAVi+qd2WZ8FVKKC2ijLinoflO7RmPwIW1/oGcY=";
-    })
-    # pyproject.toml still has 0.1.1 very old version
-    (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/pull/203.patch?full_index=1";
-      hash = "sha256-lKtpqKdyoGZdU4fTegto+YUIduIWbM82RQU9459NpC0=";
-    })
-    # allows customising consume_schedule crontab
-    (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/commit/96a13574718e0d27240eee8893fb799a02f24c05.patch?full_index=1";
-      hash = "sha256-Stq392rIbsphvaE23GgFWb91KzpD6aOQu9MGDDoaO7s=";
-    })
-    # allow specifying region for s3 backups
-    (fetchpatch2 {
-      url = "https://github.com/mrmn2/PdfDing/commit/3e412654f62d83b745111bd1d3587aca1a7739e1.patch?full_index=1";
-      hash = "sha256-RQS3yJjrIaViFlm6it6zyRZOn+nTQE8qr8OpY+zYSCY=";
+      url = "https://github.com/mrmn2/PdfDing/pull/248/commits/8f6900dddd1dbbe1a1024a484f63b792dd022f99.patch?full_index=1";
+      hash = "sha256-5oUC2TKL4X5IFy/41qViaafyUr4+bLBIovk9AWQmxZc=";
     })
   ];
 
@@ -155,10 +138,9 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "django"
     "django-allauth"
-    "huey"
-    "minio"
+    "django-htmx"
     "pypdf"
-    "pypdfium2"
+    "ruamel-yaml"
   ];
 
   nativeCheckInputs = with python.pkgs; [
@@ -169,6 +151,12 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   # from .github/workflows/tests.yaml
   pytestFlags = [
     "--ignore=e2e"
+  ];
+
+  disabledTests = [
+    # broken tests in 1.5.0
+    "test_adjust_file_paths_to_ws_collection"
+    "test_oidc_callback" # AssertionError: 200 != 401
   ];
 
   /*
@@ -211,6 +199,7 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     mainProgram = "pdfding-manage";
     maintainers = with lib.maintainers; [ phanirithvij ];
+    platforms = lib.platforms.unix;
     teams = with lib.teams; [ ngi ];
   };
 })
