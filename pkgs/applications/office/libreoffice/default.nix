@@ -1,5 +1,7 @@
 {
   ccacheStdenv,
+  #writableTmpDirAsHomeHook,
+  breakpointHook,
   runCommand,
   fetchurl,
   fetchgit,
@@ -357,6 +359,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (variant == "collabora") [
     ./fix-unpack-collabora.patch
+    ./0001-WIP-fix-tests.patch
   ];
 
   postPatch = ''
@@ -372,9 +375,22 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix for Python 3.12
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
+
+    # TODO remove in final commit
+    export CCACHE_COMPRESS=1
+    export CCACHE_SLOPPINESS=random_seed
+    export CCACHE_DIR=/var/cache/ccache
+    export CCACHE_UMASK=007
   '';
 
   nativeBuildInputs = [
+    breakpointHook
+    /*
+      NOTE: had to use breakpointHook then `CCACHE_LOGFILE=... CCACHE_DEBUG=1 gcc -c test.c`
+      and see ccache logs, to find that it was trying to write to ~/.cache/ccache
+      meaning CCACHE_DIR is empty
+    */
+    #writableTmpDirAsHomeHook
     autoconf
     automake
     bison
@@ -653,29 +669,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    export HOME=$(pwd)
-    export XDG_RUNTIME_DIR=$(mktemp -d)
-    make $checkTarget
-    exit 1
-  '';
+  buildTargets = [ "build-nocheck" ];
 
   doCheck = true;
 
   preCheck = ''
     export HOME=$(pwd)
     export XDG_RUNTIME_DIR=$(mktemp -d)
+
+    # tests try to access x11 and fail
+    export GST_GL_WINDOW=dummy
+    export GST_VIDEOSINK=fakesink
+    export GST_AUDIOSINK=fakesink
   '';
 
   checkTarget = concatStringsSep " " [
-    "CppunitTest_slideshow_engine"
-    "CppunitTest_svx_unit"
-    "CppunitTest_xmloff_draw"
-    "CppunitTest_sd_export_tests-ooxml2"
-    "CppunitTest_sd_filter_eppt"
-    "CppunitTest_vcl_pdfexport"
-    "CppunitTest_sc_subsequent_filters_test3"
-    "CppunitTest_sc_subsequent_filters_test4"
+    "unitcheck"
+    "slowcheck"
     "--keep-going" # easier to debug test failures
   ];
 
