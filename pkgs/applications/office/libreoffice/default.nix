@@ -1,6 +1,7 @@
 {
   ccacheStdenv,
   #writableTmpDirAsHomeHook,
+  autoPatchelfHook,
   breakpointHook,
   runCommand,
   fetchurl,
@@ -385,6 +386,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     breakpointHook
+    autoPatchelfHook
     /*
       NOTE: had to use breakpointHook then `CCACHE_LOGFILE=... CCACHE_DEBUG=1 gcc -c test.c`
       and see ccache logs, to find that it was trying to write to ~/.cache/ccache
@@ -710,6 +712,13 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-warn "Icon=libreoffice$PRODUCTVERSION" "Icon=libreoffice" \
         --replace-fail "Exec=libreoffice$PRODUCTVERSION" "Exec=libreoffice"
     done
+  '';
+
+  # fix references to /build in $out/lib/collaboraoffice/program/liborcus-0.18.so.0
+  # should be preFixup because auditTmpdir is a fixupOutputHook which runs right after preFixup hook
+  preFixup = lib.optionalString (variant == "collabora") ''
+    addAutoPatchelfSearchPath $out/lib/collaboraoffice/program
+    autoPatchelf $out/lib/collaboraoffice/program/liborcus-*.so.0
   '';
 
   # Wrapping is done in ./wrapper.nix
