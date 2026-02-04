@@ -21,6 +21,7 @@
   stdenv,
   zstd,
   kdePackages,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    perl
     nodejs
     npmHooks.npmConfigHook
     pkg-config
@@ -78,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--disable-setcap"
     "--disable-werror"
     "--enable-silent-rules"
     "--with-lo-path=${libreoffice-collabora}/lib/collaboraoffice"
@@ -88,16 +89,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-ssl"
     #"--with-poco-includes=/app/include"
     #"--with-poco-libs=/app/lib"
-    "--with-vendor=Collabora Productivity Limited"
-    "--with-app-name=Collabora Office"
+    #"--with-vendor=Collabora Productivity Limited"
+    #"--with-app-name=Collabora Office"
     "--with-info-url=https://collaboraoffice.com/"
   ];
 
   enableParallelBuilding = true;
 
-  # Copy dummy self-signed certificates provided for testing.
   postInstall = ''
-    cp etc/ca-chain.cert.pem etc/cert.pem etc/key.pem $out/etc/coolwsd
+    cp --no-preserve=mode ${libreoffice-collabora}/lib/collaboraoffice/LICENSE.html $out/LICENSE.html
+    python3 scripts/insert-coda-license.py $out/LICENSE.html CODA-THIRDPARTYLICENSES.html
   '';
 
   npmDeps = fetchNpmDeps {
@@ -120,8 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Collaborative office suite based on LibreOffice technology";
     license = lib.licenses.mpl20;
-    maintainers = [ lib.maintainers.xzfc ];
     homepage = "https://www.collaboraonline.com";
     platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.xzfc ];
+    teams = [ lib.teams.ngi ];
   };
 })
