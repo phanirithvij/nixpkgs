@@ -1,11 +1,11 @@
 {
+  lib,
+  cypress,
   autoreconfHook,
   cairo,
   cppunit,
   fetchFromGitHub,
-  fetchpatch,
   fetchNpmDeps,
-  lib,
   libcap,
   libpng,
   libreoffice-collabora,
@@ -22,6 +22,9 @@
   zstd,
   kdePackages,
   perl,
+  chromium,
+  runCommand,
+  zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json
+    cp ${./package.json} package.json
+    cp ${./package-lock.json} package-lock.json
 
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
@@ -65,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtbase
     kdePackages.qtwebengine
     kdePackages.wrapQtAppsHook
+    chromium
   ];
 
   buildInputs = [
@@ -85,10 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lo-path=${libreoffice-collabora}/lib/collaboraoffice"
     "--with-lokit-path=${libreoffice-collabora.src}/include"
     "--enable-qtapp"
+    "--enable-cypress" # TODO option to disable tests as a top level arg, depending on how long the tests take
     "--enable-silent-rules"
     "--disable-ssl"
     #"--with-poco-includes=/app/include"
     #"--with-poco-libs=/app/lib"
+    # TODO says Development Edition in the title, figure out how to make it the same as the flatpak
+    # Doing this is giving errors
     #"--with-vendor=Collabora Productivity Limited"
     #"--with-app-name=Collabora Office"
     "--with-info-url=https://collaboraoffice.com/"
@@ -108,14 +116,28 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-xS1vBfsG8PYsfiLlhehaddIuyiv4vlG7v2mHihuMROc=";
+    hash = "sha256-Yum6qWpL3kkb/XIBtkAJ+J/Hop2W/v2NP6S6oK5pUI0=";
   };
 
-  npmRoot = "browser";
+  # Needs a zip file
+  # TODO expose this from cypress derivation itself
+  #env.CYPRESS_INSTALL_BINARY = 0;
+  env.CYPRESS_RUN_BINARY = lib.getExe cypress;
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    pushd cypress_test
+    make check-desktop
+    make check
+    popd
+    runHook postCheck
+  '';
 
   passthru = {
     libreoffice = libreoffice-collabora; # Used by NixOS module.
     updateScript = ./update.sh;
+    inherit (finalAttrs) npmDeps;
   };
 
   meta = {
