@@ -3,7 +3,6 @@
   cairo,
   cppunit,
   fetchFromGitHub,
-  fetchpatch,
   fetchNpmDeps,
   lib,
   libcap,
@@ -33,6 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "coda-${finalAttrs.version}";
     hash = "sha256-CwafnJiGjOnzA0yMIXlJU/jYnZlZFw0ulK76nZWWmhw=";
   };
+
+  patches = [
+    # permissions fix for templates
+    ./0001-template-copy-permissions-fix.patch
+  ];
 
   postPatch = ''
     cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json
@@ -79,26 +83,33 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
+  # handle flags with spaces safely
+  preConfigure = ''
+    configureFlagsArray+=(
+      "--with-vendor=Collabora Productivity Limited"
+      "--with-app-name=Collabora Office"
+    )
+  '';
+
   configureFlags = [
+    "--enable-qtapp"
     "--disable-werror"
     "--enable-silent-rules"
-    "--with-lo-path=${libreoffice-collabora}/lib/collaboraoffice"
-    "--with-lokit-path=${libreoffice-collabora.src}/include"
-    "--enable-qtapp"
+    "--with-lo-path=${finalAttrs.passthru.libreoffice}/lib/collaboraoffice"
+    "--with-lokit-path=${finalAttrs.passthru.libreoffice.src}/include"
     "--enable-silent-rules"
     "--disable-ssl"
-    #"--with-poco-includes=/app/include"
-    #"--with-poco-libs=/app/lib"
-    #"--with-vendor=Collabora Productivity Limited"
-    #"--with-app-name=Collabora Office"
     "--with-info-url=https://collaboraoffice.com/"
   ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    cp --no-preserve=mode ${libreoffice-collabora}/lib/collaboraoffice/LICENSE.html $out/LICENSE.html
+    cp --no-preserve=mode ${finalAttrs.passthru.libreoffice}/lib/collaboraoffice/LICENSE.html $out/LICENSE.html
     python3 scripts/insert-coda-license.py $out/LICENSE.html CODA-THIRDPARTYLICENSES.html
+
+    mkdir -p $out/share/applications
+    cp qt/com.collaboraoffice.Office.desktop $out/share/applications
   '';
 
   npmDeps = fetchNpmDeps {
@@ -108,22 +119,23 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-xS1vBfsG8PYsfiLlhehaddIuyiv4vlG7v2mHihuMROc=";
+    hash = "sha256-Vdd1sMDjraJSVP+SzItp6X0PbH6Z+iHdX5N70hYVSrk=";
   };
 
   npmRoot = "browser";
 
   passthru = {
-    libreoffice = libreoffice-collabora; # Used by NixOS module.
+    libreoffice = libreoffice-collabora;
     updateScript = ./update.sh;
   };
 
   meta = {
-    description = "Collaborative office suite based on LibreOffice technology";
+    changelog = "https://www.collaboraonline.com/blog/";
+    description = "Collaborative Office for desktop, based on LibreOffice technology";
+    homepage = "https://www.collaboraonline.com/collabora-office/";
     license = lib.licenses.mpl20;
-    homepage = "https://www.collaboraonline.com";
+    mainProgram = "coda-qt";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.xzfc ];
     teams = [ lib.teams.ngi ];
   };
 })
