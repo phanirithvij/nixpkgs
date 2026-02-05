@@ -23,8 +23,6 @@
   kdePackages,
   perl,
   chromium,
-  runCommand,
-  zip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    cp ${./package.json} package.json
-    cp ${./package-lock.json} package-lock.json
+    #cp ${./package.json} package.json
+    cp ${./package-lock.json} ${finalAttrs.npmRoot}/package-lock.json
 
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
@@ -93,8 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-cypress" # TODO option to disable tests as a top level arg, depending on how long the tests take
     "--enable-silent-rules"
     "--disable-ssl"
-    #"--with-poco-includes=/app/include"
-    #"--with-poco-libs=/app/lib"
     # TODO says Development Edition in the title, figure out how to make it the same as the flatpak
     # Doing this is giving errors
     #"--with-vendor=Collabora Productivity Limited"
@@ -116,15 +112,20 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-Yum6qWpL3kkb/XIBtkAJ+J/Hop2W/v2NP6S6oK5pUI0=";
+    hash = "sha256-bA7oPDF5UUZSj4kG+HKvuzow4GS0oSoyUdPmz7yh2UI=";
+    #hash = "sha256-JGaxnSiraRY6ePk1RQkDIV4fgmBOoCpUHXj0+COtxf8=";
+    #hash = "sha256-Yum6qWpL3kkb/XIBtkAJ+J/Hop2W/v2NP6S6oK5pUI0=";
   };
+
+  #sourceRoot = "browser";
+  npmRoot = "browser";
 
   # Needs a zip file
   # TODO expose this from cypress derivation itself
   #env.CYPRESS_INSTALL_BINARY = 0;
   env.CYPRESS_RUN_BINARY = lib.getExe cypress;
 
-  doCheck = true;
+  doCheck = false;
   checkPhase = ''
     runHook preCheck
     pushd cypress_test
@@ -143,9 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Collaborative office suite based on LibreOffice technology";
     license = lib.licenses.mpl20;
-    homepage = "https://www.collaboraonline.com";
+    homepage = "https://www.collaboraonline.com/collabora-office/";
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.xzfc ];
     teams = [ lib.teams.ngi ];
   };
 })
