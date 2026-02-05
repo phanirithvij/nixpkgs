@@ -1,6 +1,5 @@
 {
-  #ccacheStdenv,
-  stdenv,
+  ccacheStdenv,
   #writableTmpDirAsHomeHook,
   autoPatchelfHook,
   breakpointHook,
@@ -276,7 +275,7 @@ let
 
   tarballPath = "external/tarballs";
 
-  #stdenv = ccacheStdenv;
+  stdenv = ccacheStdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
@@ -379,10 +378,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
 
     # TODO remove in final commit
-    #export CCACHE_COMPRESS=1
-    #export CCACHE_SLOPPINESS=random_seed
-    #export CCACHE_DIR=/var/cache/ccache
-    #export CCACHE_UMASK=007
+    export CCACHE_COMPRESS=1
+    export CCACHE_SLOPPINESS=random_seed
+    export CCACHE_DIR=/var/cache/ccache
+    export CCACHE_UMASK=007
   '';
 
   nativeBuildInputs = [
