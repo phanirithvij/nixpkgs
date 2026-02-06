@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtbase
     kdePackages.qtwebengine
     kdePackages.wrapQtAppsHook
-    chromium
+    #chromium
   ];
 
   buildInputs = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-lo-path=${libreoffice-collabora}/lib/collaboraoffice"
     "--with-lokit-path=${libreoffice-collabora.src}/include"
     "--enable-qtapp"
-    "--enable-cypress" # TODO option to disable tests as a top level arg, depending on how long the tests take
+    #"--enable-cypress" # TODO option to disable tests as a top level arg, depending on how long the tests take
     "--enable-silent-rules"
     "--disable-ssl"
     # TODO says Development Edition in the title, figure out how to make it the same as the flatpak
@@ -101,8 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postInstall = ''
-    cp --no-preserve=mode ${libreoffice-collabora}/lib/collaboraoffice/LICENSE.html $out/LICENSE.html
-    python3 scripts/insert-coda-license.py $out/LICENSE.html CODA-THIRDPARTYLICENSES.html
+    #cp --no-preserve=mode ${libreoffice-collabora}/lib/collaboraoffice/LICENSE.html $out/LICENSE.html
+    #python3 scripts/insert-coda-license.py $out/LICENSE.html CODA-THIRDPARTYLICENSES.html
   '';
 
   npmDeps = fetchNpmDeps {
@@ -112,10 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    hash = "sha256-bA7oPDF5UUZSj4kG+HKvuzow4GS0oSoyUdPmz7yh2UI=";
+    hash = "sha256-U7k4lP0wYlm0YY1y3meZSCuPjSpmoVgJCW6ICvPkmfw=";
     #hash = "sha256-JGaxnSiraRY6ePk1RQkDIV4fgmBOoCpUHXj0+COtxf8=";
     #hash = "sha256-Yum6qWpL3kkb/XIBtkAJ+J/Hop2W/v2NP6S6oK5pUI0=";
   };
+
+  # TEMP remove
+  #makeCacheWritable = true;
+  #npmFlags = [ "--legacy-peer-deps" ];
 
   #sourceRoot = "browser";
   npmRoot = "browser";
@@ -123,17 +127,19 @@ stdenv.mkDerivation (finalAttrs: {
   # Needs a zip file
   # TODO expose this from cypress derivation itself
   #env.CYPRESS_INSTALL_BINARY = 0;
-  env.CYPRESS_RUN_BINARY = lib.getExe cypress;
+  #env.CYPRESS_RUN_BINARY = lib.getExe cypress;
 
   doCheck = false;
-  checkPhase = ''
-    runHook preCheck
-    pushd cypress_test
-    make check-desktop
-    make check
-    popd
-    runHook postCheck
-  '';
+  /*
+    checkPhase = ''
+      runHook preCheck
+      pushd cypress_test
+      make check-desktop
+      make check
+      popd
+      runHook postCheck
+    '';
+  */
 
   passthru = {
     libreoffice = libreoffice-collabora; # Used by NixOS module.
