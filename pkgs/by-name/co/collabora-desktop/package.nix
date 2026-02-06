@@ -115,8 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
     '';
-    #hash = "sha256-U7k4lP0wYlm0YY1y3meZSCuPjSpmoVgJCW6ICvPkmfw=";
-    hash = "sha256-JGaxnSiraRY6ePk1RQkDIV4fgmBOoCpUHXj0+COtxf8="; # workspace
+    fetcherVersion = 2; # https://github.com/NixOS/nixpkgs/pull/470517
+    hash = "sha256-GfEcNGTMoTGTtp4AAURt5aroQ/VUb+WJSUf311c6HP8="; # workspace staging
+    #hash = "sha256-JGaxnSiraRY6ePk1RQkDIV4fgmBOoCpUHXj0+COtxf8="; # workspace master
+    #hash = "sha256-U7k4lP0wYlm0YY1y3meZSCuPjSpmoVgJCW6ICvPkmfw="; # before workspace
     #hash = "sha256-Yum6qWpL3kkb/XIBtkAJ+J/Hop2W/v2NP6S6oK5pUI0=";
   };
 
