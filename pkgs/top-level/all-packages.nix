@@ -2967,12 +2967,19 @@ with pkgs;
   nodejs-slim_latest = nodejs-slim_25;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
+  buildNpmPackageV2 = callPackage ../build-support/node/build-npm-package-v2 { };
 
   npmHooks = recurseIntoAttrs (callPackage ../build-support/node/build-npm-package/hooks { });
+  npmHooksV2 = recurseIntoAttrs (callPackage ../build-support/node/build-npm-package-v2/hooks { });
 
   inherit (callPackages ../build-support/node/prefetch-npm-deps { })
     fetchNpmDeps
     prefetch-npm-deps
+    ;
+
+  inherit (callPackages ../build-support/node/prefetch-npm-deps-v2 { })
+    fetchNpmDepsV2
+    prefetch-npm-deps-v2
     ;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };

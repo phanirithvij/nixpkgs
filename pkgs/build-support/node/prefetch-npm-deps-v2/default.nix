@@ -10,13 +10,13 @@
   testers,
   fetchurl,
   cacert,
-  prefetch-npm-deps,
-  fetchNpmDeps,
+  prefetch-npm-deps-v2,
+  fetchNpmDepsV2,
   config,
 }:
 
 {
-  prefetch-npm-deps = rustPlatform.buildRustPackage {
+  prefetch-npm-deps-v2 = rustPlatform.buildRustPackage {
     pname = "prefetch-npm-deps";
     version = (lib.importTOML ./Cargo.toml).package.version;
 
@@ -71,7 +71,7 @@
             forceEmptyCache ? false,
             npmRegistryOverridesString ? "{}",
           }:
-          testers.invalidateFetcherByDrvHash fetchNpmDeps {
+          testers.invalidateFetcherByDrvHash fetchNpmDepsV2 {
             inherit
               name
               hash
@@ -198,14 +198,14 @@
       };
 
     meta = {
-      description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
+      description = "Prefetch dependencies from npm (for use with `fetchNpmDepsV2`)";
       mainProgram = "prefetch-npm-deps";
       maintainers = with lib.maintainers; [ winter ];
       license = lib.licenses.mit;
     };
   };
 
-  fetchNpmDeps =
+  fetchNpmDepsV2 =
     {
       name ? "npm-deps",
       hash ? "",
@@ -241,7 +241,7 @@
       // {
         inherit name;
 
-        nativeBuildInputs = nativeBuildInputs ++ [ prefetch-npm-deps ];
+        nativeBuildInputs = nativeBuildInputs ++ [ prefetch-npm-deps-v2 ];
 
         buildPhase = ''
           runHook preBuild
