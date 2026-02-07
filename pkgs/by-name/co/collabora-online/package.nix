@@ -70,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     patchShebangs browser/util/*.py coolwsd-systemplate-setup scripts/*
     substituteInPlace configure.ac --replace-fail '/usr/bin/env python3' python3
-    substituteInPlace coolwsd-systemplate-setup --replace-fail /bin/pwd pwd
   '';
 
   # Copy dummy self-signed certificates provided for testing.
