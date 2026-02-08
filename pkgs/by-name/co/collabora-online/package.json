@@ -1,0 +1,4 @@
+{
+  "name": "collabora-desktop",
+  "workspaces": [ "browser", "cypress_test" ]
+}
