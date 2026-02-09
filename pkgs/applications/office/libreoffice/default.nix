@@ -356,6 +356,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (variant == "collabora") [
     ./fix-unpack-collabora.patch
+    ./0001-WIP-fix-tests.patch
   ];
 
   postPatch = ''
@@ -658,6 +659,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export HOME=$(pwd)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+
+    # tests try to access x11 and fail
+    export GST_GL_WINDOW=dummy
+    export GST_VIDEOSINK=fakesink
+    export GST_AUDIOSINK=fakesink
   '';
 
   checkTarget = concatStringsSep " " [
@@ -687,6 +694,13 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-warn "Icon=libreoffice$PRODUCTVERSION" "Icon=libreoffice" \
         --replace-fail "Exec=libreoffice$PRODUCTVERSION" "Exec=libreoffice"
     done
+  '';
+
+  # fix references to /build in $out/lib/collaboraoffice/program/liborcus-0.18.so.0
+  # should be preFixup because auditTmpdir is a fixupOutputHook which runs right after preFixup hook
+  preFixup = lib.optionalString (variant == "collabora") ''
+    addAutoPatchelfSearchPath $out/lib/collaboraoffice/program
+    autoPatchelf $out/lib/collaboraoffice/program/liborcus-*.so.0
   '';
 
   # Wrapping is done in ./wrapper.nix
