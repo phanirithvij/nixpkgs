@@ -13,6 +13,7 @@
   box2d_2,
   gettext,
   zlib,
+  md4c,
   libjpeg,
   liblangtag,
   expat,
@@ -309,12 +310,20 @@ stdenv.mkDerivation (finalAttrs: {
     # - tdf160386 does not fall back to a CJK font properly for some reason
     # - the remaining tests have notes in the patches
     # FIXME: get rid of this ASAP
-    ./skip-broken-tests.patch
+    (
+      if variant == "collabora" then
+        # For collabora this was fixed upstream in 25.04.8.1-1
+        ./skip-broken-tests-without-tdf160386.patch
+      else
+        ./skip-broken-tests.patch
+    )
     (./skip-broken-tests- + variant + ".patch")
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
-
+  ]
+  ++ lib.optionals (variant != "collabora") [
+    # Patch doesn't apply for collabora after 25.04.8.1-1
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
   ]
@@ -340,11 +349,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.05
-    (fetchpatch2 {
-      url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
-      includes = [ "sdext/*" ];
-      hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
-    })
+    #(fetchpatch2 {
+    #url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+    #includes = [ "sdext/*" ];
+    #hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+    #})
     # Currently included in the condition above
     # Uncomment if Collabora is again the only version needing it
     # Remove if Collabora is updated far enough not to need it anymore
@@ -505,6 +514,9 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ optionals withJava [
       jre'
+    ]
+    ++ optionals (variant == "collabora") [
+      md4c
     ];
 
   preConfigure = ''
@@ -634,6 +646,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-beanshell"
     "--with-ant-home=${ant.home}"
     "--with-beanshell-jar=${bsh}"
+  ]
+  ++ optionals (variant == "collabora") [
+    "--without-system-fast_float"
   ];
 
   env = {
@@ -657,6 +672,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export HOME=$(pwd)
+  ''
+  + lib.optionalString (variant == "collabora") ''
+    export XDG_RUNTIME_DIR=$(mktemp -d)
+
+    # tests try to access x11 and fail
+    export GST_GL_WINDOW=dummy
+    export GST_VIDEOSINK=fakesink
+    export GST_AUDIOSINK=fakesink
   '';
 
   checkTarget = concatStringsSep " " [
@@ -686,6 +709,13 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-warn "Icon=libreoffice$PRODUCTVERSION" "Icon=libreoffice" \
         --replace-fail "Exec=libreoffice$PRODUCTVERSION" "Exec=libreoffice"
     done
+  '';
+
+  # fix references to /build in $out/lib/collaboraoffice/program/liborcus-0.18.so.0
+  # should be preFixup because auditTmpdir is a fixupOutputHook which runs right after preFixup hook
+  preFixup = lib.optionalString (variant == "collabora") ''
+    addAutoPatchelfSearchPath $out/lib/collaboraoffice/program
+    autoPatchelf $out/lib/collaboraoffice/program/liborcus-*.so.0
   '';
 
   # Wrapping is done in ./wrapper.nix
