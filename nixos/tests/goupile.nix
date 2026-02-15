@@ -12,11 +12,9 @@
     {
       services.goupile = {
         enable = true;
-        # TODO fails in vm if sandbox is enabled
-        enableSandbox = false;
+        enableSandbox = true;
         settings.HTTP.Port = 8889;
       };
-      #environment.variables.SYSTEMD_SECCOMP = "0";
       networking = {
         firewall.allowedTCPPorts = [ config.services.nginx.defaultHTTPListenPort ];
         hostName = "goupile"; # ??
