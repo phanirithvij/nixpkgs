@@ -2,6 +2,7 @@
   buildGoModule,
   fetchFromGitHub,
   gzip,
+  fetchurl,
   iana-etc,
   lib,
   libredirect,
@@ -14,6 +15,8 @@
   util-linux,
   makeBinaryWrapper,
   versionCheckHook,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 let
   pnpm = pnpm_11;
@@ -34,6 +37,12 @@ let
     '';
   };
 
+  # we need to pin the inlang plugins to specific versions because
+  # the remote ones are not pinned and we can't fetch them in the sandbox.
+  inlang-plugins = lib.mapAttrs (remote: info: fetchurl { inherit (info) url hash; }) (
+    lib.importJSON ./inlang-plugins.json
+  );
+
   frontend = stdenv.mkDerivation (finalAttrs: {
     inherit version src;
     pname = "backrest-webui";
@@ -48,9 +57,20 @@ let
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       inherit pnpm;
+      sourceRoot = "${finalAttrs.src.name}/webui";
       fetcherVersion = 4;
       hash = "sha256-xPZg7kYRlqdO/EfZr+m+IVhDcyYegQ6v8ZAF2EjrKjU=";
     };
+
+    postPatch = ''
+      # Replace remote inlang plugins with local ones
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (remote: local: ''
+          substituteInPlace project.inlang/settings.json \
+            --replace-fail "${remote}" "${local}"
+        '') inlang-plugins
+      )}
+    '';
 
     buildPhase = ''
       runHook preBuild
@@ -105,6 +125,16 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    })
+    ./update-inlang-plugins.sh
+  ];
+
   checkFlags =
     let
       skippedTests = [
@@ -141,7 +171,7 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    inherit frontend;
+    inherit frontend inlang-plugins;
   };
 
   meta = {
