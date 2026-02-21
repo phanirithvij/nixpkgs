@@ -384,6 +384,10 @@ in
   cockroachdb = runTestOn [ "x86_64-linux" ] ./cockroachdb.nix;
   code-server = runTest ./code-server.nix;
   coder = runTest ./coder.nix;
+  collabora = import ./web-apps/collabora {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   collectd = runTest ./collectd.nix;
   commafeed = runTest ./commafeed.nix;
   connman = runTest ./connman.nix;
