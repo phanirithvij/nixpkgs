@@ -20,24 +20,33 @@
   pytestCheckHook,
   ddt,
   cryptography,
-  schedula,
+  python-dateutil,
+  pytest,
+  httpx,
+  mongomock,
+  pymongo,
+  testcontainers,
+  pymysql,
+  numpy,
+  pymoo,
+  schemathesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "schedula";
-  version = "1.5.78";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vinci1it2000";
     repo = "schedula";
-    tag = "v${version}";
-    hash = "sha256-fhcG2N524KlwaG+inOyQJaXKoMhmR6Yddff8CDi8lhk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zddn3Z26UrCxMKx3kvYHLMj9Ye7QvaOpzdCZVfcQdbA=";
   };
 
   build-system = [ setuptools ];
 
-  optional-dependencies = rec {
+  optional-dependencies = {
     # dev omitted, we have nativeCheckInputs for this
     # form omitted, as it pulls in a kitchensink of deps, some not even packaged in nixpkgs
     io = [ dill ];
@@ -52,7 +61,7 @@ buildPythonPackage rec {
       sphinx
       sphinx-click
     ]
-    ++ plot;
+    ++ finalAttrs.passthru.optional-dependencies.plot;
     web = [
       requests
       regex
@@ -61,14 +70,29 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    cryptography # doctests
-    ddt
-    sphinx
     pytestCheckHook
+  ];
+
+  checkInputs = [
+    #sphinx
+    ddt
+    #coveralls
+    cryptography # doctests
+    python-dateutil
+    setuptools
+    pytest
+    httpx
+    mongomock
+    pymongo
+    testcontainers
+    pymysql
+    numpy
+    pymoo
+    schemathesis
   ]
-  ++ schedula.optional-dependencies.io
-  ++ schedula.optional-dependencies.parallel
-  ++ schedula.optional-dependencies.plot;
+  ++ finalAttrs.passthru.optional-dependencies.io
+  ++ finalAttrs.passthru.optional-dependencies.parallel
+  ++ finalAttrs.passthru.optional-dependencies.plot;
 
   disabledTests = [
     # FAILED tests/test_setup.py::TestSetup::test_long_description - ModuleNotFoundError: No module named 'sphinxcontrib.writers'
@@ -86,10 +110,10 @@ buildPythonPackage rec {
   meta = {
     description = "Smart function scheduler for dynamic flow-based programming";
     homepage = "https://github.com/vinci1it2000/schedula";
-    changelog = "https://github.com/vinci1it2000/schedula/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/vinci1it2000/schedula/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.eupl11;
     maintainers = with lib.maintainers; [ flokli ];
     # at least some tests fail on Darwin
     platforms = lib.platforms.linux;
   };
-}
+})
