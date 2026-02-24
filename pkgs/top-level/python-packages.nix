@@ -7228,6 +7228,8 @@ self: super: with self; {
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
+  hypothesis-graphql = callPackage ../development/python-modules/hypothesis-graphql { };
+
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
