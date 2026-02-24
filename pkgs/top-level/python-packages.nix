@@ -7230,6 +7230,8 @@ self: super: with self; {
 
   hypothesis-graphql = callPackage ../development/python-modules/hypothesis-graphql { };
 
+  hypothesis-openapi = callPackage ../development/python-modules/hypothesis-openapi { };
+
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
