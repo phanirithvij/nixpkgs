@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+
+  hypothesis,
+  jsonschema,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -19,6 +22,11 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [
     setuptools
+  ];
+
+  dependencies = [
+    hypothesis
+    jsonschema
   ];
 
   pythonImportsCheck = [
