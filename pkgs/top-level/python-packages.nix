@@ -17057,6 +17057,8 @@ self: super: with self; {
 
   schema = callPackage ../development/python-modules/schema { };
 
+  schemathesis = callPackage ../development/python-modules/schemathesis { };
+
   schema-salad = callPackage ../development/python-modules/schema-salad { };
 
   schemdraw = callPackage ../development/python-modules/schemdraw { };
