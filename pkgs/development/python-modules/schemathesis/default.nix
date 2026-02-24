@@ -15,7 +15,6 @@
   junit-xml,
   pyrate-limiter,
   pytest,
-  pytest-subtests,
   pyyaml,
   requests,
   rich,
@@ -75,7 +74,6 @@ buildPythonPackage (finalAttrs: {
     junit-xml
     pyrate-limiter
     pytest
-    pytest-subtests
     pyyaml
     requests
     rich
