@@ -3220,6 +3220,8 @@ self: super: with self; {
 
   coverage = callPackage ../development/python-modules/coverage { };
 
+  coverage-enable-subprocess = callPackage ../development/python-modules/coverage-enable-subprocess { };
+
   coveralls = callPackage ../development/python-modules/coveralls { };
 
   cpe = callPackage ../development/python-modules/cpe { };
