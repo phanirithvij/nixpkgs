@@ -14,16 +14,16 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hypothesis";
-  version = "6.150.2";
+  version = "6.151.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis";
-    tag = "hypothesis-python-${version}";
-    hash = "sha256-5u6/x+sO14N6qiyLcnJbTxqYfoWjpNi/m/lt6PfLFTE=";
+    tag = "hypothesis-python-${finalAttrs.version}";
+    hash = "sha256-zJQkQyKYFLd4DyEhrdys47enJ2hMCh3u7J9RSojRAi8=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -133,11 +133,11 @@ buildPythonPackage rec {
     mainProgram = "hypothesis";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.mpl20;
     maintainers = [
       lib.maintainers.fliegendewurst
     ];
   };
-}
+})
