@@ -39,6 +39,7 @@
   pytest-mock,
   pytest-trio,
   pytest-xdist,
+  pytestCheckHook,
   strawberry-graphql,
   syrupy,
   tomli-w,
@@ -84,6 +85,16 @@ buildPythonPackage (finalAttrs: {
     werkzeug
   ];
 
+  # pytest-subtests is now in pytest 9
+  postPatch = ''
+    sed -i 's|"pytest-subtests.*",||' pyproject.toml
+    sed -i 's|"pytest_subtests",||' pyproject.toml
+    sed -i 's|pytest_subtests.plugin|pytest|' src/schemathesis/pytest/plugin.py
+    sed -i 's|SubTestReport|SubtestReport|g' src/schemathesis/pytest/plugin.py
+    sed -i 's|pytest_subtests|pytest|' src/schemathesis/pytest/lazy.py
+    sed -i 's|SubTests|Subtests|g' src/schemathesis/pytest/lazy.py
+  '';
+
   optional-dependencies = {
     bench = [
       pytest-codspeed
@@ -121,6 +132,14 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "schemathesis"
   ];
+
+  pythonRelaxDeps = [
+    "jsonschema-rs"
+  ];
+
+  doCheck = true;
+  checkInputs = finalAttrs.passthru.optional-dependencies.tests;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Catch API bugs before your users do";
