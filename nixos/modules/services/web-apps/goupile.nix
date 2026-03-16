@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.goupile;
-  goupileWebServiceName = "goupile";
   settingsFormat = pkgs.formats.ini { };
 in
 {
@@ -32,7 +31,7 @@ in
           Data.RootDirectory = lib.mkOption {
             type = lib.types.str;
             default = "/var/lib/goupile";
-            description = "Goupile's data directory";
+            description = "Goupile's data directory.";
           };
         };
       };
@@ -74,27 +73,32 @@ in
           enableACME = true;
         }
       '';
-      description = "nginx virtualHost settings.";
+      description = "Extra configuration for the nginx virtual host of Goupile.";
+    };
+
+    hostName = lib.mkOption {
+      type = lib.types.str;
+      default = "goupile";
+      description = "Nginx service name for goupile service.";
     };
   };
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        services.goupile.configFile = lib.mkOptionDefault (
-          settingsFormat.generate "goupile.ini" cfg.settings
-        );
-      }
-      {
         services.nginx = {
           enable = lib.mkDefault true;
-          virtualHosts.${goupileWebServiceName} = lib.mkMerge [
+          virtualHosts.${cfg.hostName} = lib.mkMerge [
             cfg.nginx
             {
-              locations."/".proxyPass =
-                "http://${goupileWebServiceName}:${builtins.toString cfg.settings.HTTP.Port}";
+              locations."/".proxyPass = "http://${cfg.hostName}:${builtins.toString cfg.settings.HTTP.Port}";
             }
           ];
         };
+      }
+      {
+        services.goupile.configFile = lib.mkOptionDefault (
+          settingsFormat.generate "goupile.ini" cfg.settings
+        );
       }
       {
         systemd.services.goupile = {
