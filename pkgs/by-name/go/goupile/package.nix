@@ -11,8 +11,15 @@
 
   # https://goupile.org/en/build recommends a Paranoid build
   # which is not bit by bit reproducible, whereas others are
-  profile ? "Paranoid", # Debug/Fast
+  profile ? "Paranoid",
 }:
+
+assert lib.assertOneOf "profile" profile [
+  "Fast"
+  "Debug"
+  "Paranoid"
+];
+
 let
   stdenv' = if (profile == "Paranoid") then clangStdenv else stdenv;
 in
@@ -38,13 +45,11 @@ stdenv'.mkDerivation (finalAttrs: {
   # pipe2() is only exposed with _GNU_SOURCE
   NIX_CFLAGS_COMPILE = [ "-D_GNU_SOURCE" ];
 
-  # NOTE: in the next release >3.11.1
-  # --version_file can be removed, and FelixVersions.ini will be used by default
   buildPhase = ''
     runHook preBuild
     ./bootstrap.sh
     echo "goupile = ${finalAttrs.version}" >FelixVersions.ini
-    ./felix -s -p${profile} goupile --version_file FelixVersions.ini
+    ./felix -s -p${profile} goupile
     runHook postBuild
   '';
 
