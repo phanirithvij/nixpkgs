@@ -10,73 +10,71 @@ let
   settingsFormat = pkgs.formats.ini { };
 in
 {
-  options = {
-    services.goupile = {
-      enable = lib.mkEnableOption "Goupile server";
-      package = lib.mkPackageOption pkgs "goupile" { };
+  options.services.goupile = {
+    enable = lib.mkEnableOption "Goupile server";
+    package = lib.mkPackageOption pkgs "goupile" { };
 
-      enableSandbox = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable the sandbox option.";
-      };
+    enableSandbox = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Enable the sandbox option.";
+    };
 
-      settings = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType = settingsFormat.type;
-          options = {
-            HTTP.Port = lib.mkOption {
-              type = lib.types.port;
-              default = 8889;
-              description = "The port goupile runs on";
-            };
-            Data.RootDirectory = lib.mkOption {
-              type = lib.types.str;
-              default = "/var/lib/goupile";
-              description = "Goupile's data directory";
-            };
+    settings = lib.mkOption {
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+        options = {
+          HTTP.Port = lib.mkOption {
+            type = lib.types.port;
+            default = 8889;
+            description = "The port goupile runs on";
+          };
+          Data.RootDirectory = lib.mkOption {
+            type = lib.types.str;
+            default = "/var/lib/goupile";
+            description = "Goupile's data directory";
           };
         };
-        default = { }; # default will be lost for submodules if overriden
-        example = lib.literalExpression ''
-          {
-            HTTP.Port = 8888;
-          }
-        '';
-        description = ''
-          The options for `systemd.services.goupile` in ini format.
-
-          The configuration options available can be found here
-          https://github.com/Koromix/rygel/blob/goupile/3.11.1/src/goupile/server/admin.cc#L41
-        '';
       };
+      default = { }; # default will be lost for submodules if overriden
+      example = lib.literalExpression ''
+        {
+          HTTP.Port = 8888;
+        }
+      '';
+      description = ''
+        The options for `systemd.services.goupile` in ini format.
 
-      configFile = lib.mkOption {
-        type = lib.types.path;
-        description = ''
-          The configuration file to be passed to goupile server.
+        The configuration options available can be found here
+        https://github.com/Koromix/rygel/blob/goupile/3.11.1/src/goupile/server/admin.cc#L41
+      '';
+    };
 
-          By default the configuration file is created from `services.goupile.settings`.
-        '';
-      };
+    configFile = lib.mkOption {
+      type = lib.types.path;
+      description = ''
+        The configuration file to be passed to goupile server.
 
-      nginx = lib.mkOption {
-        type = lib.types.submodule (
-          lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
-        );
-        default = { };
-        example = lib.literalExpression ''
-          {
-            serverAliases = [
-              "goupile.''${config.networking.domain}"
-            ];
-            # To enable encryption and let let's encrypt take care of certificate
-            forceSSL = true;
-            enableACME = true;
-          }
-        '';
-        description = "nginx virtualHost settings.";
-      };
+        By default the configuration file is created from `services.goupile.settings`.
+      '';
+    };
+
+    nginx = lib.mkOption {
+      type = lib.types.submodule (
+        lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
+      );
+      default = { };
+      example = lib.literalExpression ''
+        {
+          serverAliases = [
+            "goupile.''${config.networking.domain}"
+          ];
+          # To enable encryption and let let's encrypt take care of certificate
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
+      description = "nginx virtualHost settings.";
     };
   };
   config = lib.mkIf cfg.enable (

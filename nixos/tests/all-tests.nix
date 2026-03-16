@@ -681,7 +681,7 @@ in
   gotenberg = runTest ./gotenberg.nix;
   gotify-server = runTest ./gotify-server.nix;
   gotosocial = runTest ./web-apps/gotosocial.nix;
-  goupile = runTest ./web-apps/goupile/default.nix;
+  goupile = runTest ./web-apps/goupile;
   grafana = handleTest ./grafana { };
   graphite = runTest ./graphite.nix;
   grav = runTest ./web-apps/grav.nix;
