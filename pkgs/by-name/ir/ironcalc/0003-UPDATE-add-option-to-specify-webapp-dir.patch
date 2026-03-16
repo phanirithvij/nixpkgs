@@ -1,0 +1,39 @@
+From a3915ac392f35d6e44d8425032e15f5f4819e3d7 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Tue, 28 Apr 2026 21:46:24 +0530
+Subject: [PATCH 3/6] UPDATE: add option to specify webapp dir
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+
+Update webapp/app.ironcalc.com/server/src/main.rs
+
+Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+---
+ webapp/app.ironcalc.com/server/src/main.rs | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/webapp/app.ironcalc.com/server/src/main.rs b/webapp/app.ironcalc.com/server/src/main.rs
+index a254d91..12bfe4f 100644
+--- a/webapp/app.ironcalc.com/server/src/main.rs
++++ b/webapp/app.ironcalc.com/server/src/main.rs
+@@ -123,7 +123,15 @@ async fn upload(data: Data<'_>, name: &str) -> io::Result<Vec<u8>> {
+ 
+ #[launch]
+ fn rocket() -> _ {
+-    rocket::build()
++    let mut rocket = rocket::build()
+         .attach(IronCalcDB::init())
+-        .mount("/", routes![upload, download, share, get_model, get_model_list])
++        .mount("/", routes![upload, download, share, get_model, get_model_list]);
++
++    if let Ok(frontend_path) = std::env::var("IRONCALC_WEBAPP_DIR") {
++        if !frontend_path.is_empty() {
++            rocket = rocket.mount("/", rocket::fs::FileServer::from(frontend_path));
++        }
++    }
++
++    rocket
+ }
+-- 
+2.53.0
+
