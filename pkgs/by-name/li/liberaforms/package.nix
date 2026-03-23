@@ -1,8 +1,9 @@
 {
   lib,
-  python3Packages,
+  python3,
   fetchFromGitea,
   fetchFromGitHub,
+  fetchPypi,
 
   postgresql,
   libxml2,
@@ -13,30 +14,68 @@
 }:
 
 let
-  sqlalchemy_1_4 = python3Packages.sqlalchemy_1_4.overridePythonAttrs rec {
-    version = "1.4.42";
-    src = fetchFromGitHub {
-      owner = "sqlalchemy";
-      repo = "sqlalchemy";
-      rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-      hash = "sha256-RVpreszvd5hn9BLzvnfKT4nibUuybtZwBRloe5NaP/E=";
+  python = python3.override {
+    packageOverrides = self: super: {
+      # required 1.8.1 (tests fail otherwise)
+      alembic = super.alembic.overridePythonAttrs rec {
+        pname = "alembic";
+        version = "1.8.1";
+        src = fetchPypi {
+          inherit pname version;
+          sha256 = "sha256-zQteRbFLcGQmuDPwY2m5ptXuA/gm7DI4cjzoyq9uX/o=";
+        };
+        doCheck = false;
+      };
+      # required 3.1.0 (requirements and 3.1.0 works with alembic 1.8.1)
+      flask-migrate = super.flask-migrate.overridePythonAttrs (old: rec {
+        version = "3.1.0";
+        src = fetchFromGitHub {
+          owner = "miguelgrinberg";
+          repo = "Flask-Migrate";
+          tag = "v${version}";
+          hash = "sha256-2P9UfR/1Vv9FSmpSZn0gV4/uuSNdl6sdgRnSbefFR34=";
+        };
+        dependencies = (old.dependencies or [ ]) ++ [ self.alembic ];
+      });
+      # required downgrade to 3.0.2 (from requirements.txt as well as sqlalchemy downgrade)
+      flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (old: rec {
+        version = "3.0.2";
+        src = fetchPypi {
+          pname = "Flask-SQLAlchemy";
+          inherit version;
+          hash = "sha256-FhmfWz3ftp4N8vUq5Mdq7b/sgjRiNJ2rshobLgorZek=";
+        };
+        dependencies = (old.dependencies or [ ]) ++ [ super.pdm-pep517 ];
+      });
+      # required 1.4.42 (from requirements)
+      sqlalchemy = super.sqlalchemy_1_4.overridePythonAttrs rec {
+        version = "1.4.42";
+        src = fetchFromGitHub {
+          owner = "sqlalchemy";
+          repo = "sqlalchemy";
+          rev = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+          hash = "sha256-RVpreszvd5hn9BLzvnfKT4nibUuybtZwBRloe5NaP/E=";
+        };
+        env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+        disabledTestPaths = [
+          # typing correctness, not interesting
+          "test/ext/mypy"
+          # slow and high memory usage, not interesting
+          "test/aaa_profiling"
+          # fetching and key slice failures, probably network related
+          "test/base/test_result.py"
+          "test/dialect/test_sqlite.py"
+          "test/ext/test_baked.py"
+          "test/ext/test_horizontal_shard.py"
+          "test/ext/test_hybrid.py"
+          "test/orm/"
+          "test/sql/test_resultset.py"
+        ];
+      };
+
     };
-    env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    disabledTestPaths = [
-      # typing correctness, not interesting
-      "test/ext/mypy"
-      # slow and high memory usage, not interesting
-      "test/aaa_profiling"
-      # fetching and key slice failures, probably network related
-      "test/base/test_result.py"
-      "test/dialect/test_sqlite.py"
-      "test/ext/test_baked.py"
-      "test/ext/test_horizontal_shard.py"
-      "test/ext/test_hybrid.py"
-      "test/orm/"
-      "test/sql/test_resultset.py"
-    ];
   };
+  python3Packages = python.pkgs;
 in
 
 python3Packages.buildPythonPackage (finalAttrs: {
@@ -131,7 +170,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
     smtpdfix
     snowballstemmer
     soupsieve
-    sqlalchemy_1_4
+    sqlalchemy
     sqlalchemy-json
     toml
     unicodecsv
@@ -162,6 +201,8 @@ python3Packages.buildPythonPackage (finalAttrs: {
 
     cp -R ${finalAttrs.src}/. $out
 
+    # TODO sass generate via gulp
+
     runHook postInstall
   '';
 
@@ -189,8 +230,12 @@ python3Packages.buildPythonPackage (finalAttrs: {
     runHook preCheck
 
     # Run pytest on the installed version. A running postgres database server is needed.
-    (cd tests && cp test.ini.example test.ini && pytest -k "not test_save_smtp_config and not test/ext/test_horizontal_shard.py\
-      and not TestE2EEDisabledFeatures") #TODO why does this break?
+    pushd tests
+    cp test.ini.example test.ini
+    # TODO why does this break?
+    pytest -k "not test_save_smtp_config\
+      and not test/ext/test_horizontal_shard.py\
+      and not TestE2EEDisabledFeatures"
 
     runHook postCheck
   '';
