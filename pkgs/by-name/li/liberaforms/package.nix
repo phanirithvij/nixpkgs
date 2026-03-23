@@ -26,39 +26,6 @@ let
         };
         doCheck = false;
       };
-      # required when downgrading flask-migrate to 3.1.0
-      flask_2_2_2 = super.flask.overridePythonAttrs rec {
-        version = "2.2.2";
-        pyproject = null;
-        format = "setuptools";
-        src = fetchPypi {
-          pname = "Flask";
-          inherit version;
-          hash = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
-        };
-        dependencies =
-          with super;
-          [
-            click
-            blinker
-            itsdangerous
-            jinja2
-          ]
-          ++ [ self.werkzeug_2_2_2 ];
-        nativeCheckInputs = [ ];
-      };
-      # required when downgrading flask-migrate to 3.1.0
-      werkzeug_2_2_2 = super.werkzeug.overridePythonAttrs rec {
-        version = "2.2.2";
-        pyproject = null;
-        format = "setuptools";
-        src = fetchPypi {
-          pname = "Werkzeug";
-          inherit version;
-          hash = "sha256-fqLUgyLMfA+LOiFe1z6r17XXXQtQ4xqwBihsz/ngC48=";
-        };
-        nativeCheckInputs = [ ];
-      };
       # required 3.1.0 (requirements and 3.1.0 works with alembic 1.8.1)
       flask-migrate = super.flask-migrate.overridePythonAttrs (old: rec {
         version = "3.1.0";
@@ -70,7 +37,7 @@ let
         };
         dependencies = [
           self.alembic
-          self.flask_2_2_2
+          super.flask
           self.flask-sqlalchemy
         ];
         nativeCheckInputs = [ ];
@@ -84,7 +51,7 @@ let
           hash = "sha256-FhmfWz3ftp4N8vUq5Mdq7b/sgjRiNJ2rshobLgorZek=";
         };
         dependencies = [
-          self.flask_2_2_2
+          super.flask
           self.sqlalchemy
           super.pdm-pep517
         ];
