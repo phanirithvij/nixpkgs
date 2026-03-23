@@ -139,7 +139,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     flask-login
     flask-marshmallow
     flask-migrate
-    flask-session2
     flask-session
     flask-sqlalchemy
     flask-wtf
