@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
 
+  moreutils,
   dart-sass,
   postgresql,
   libxml2,
@@ -198,23 +199,29 @@ python3Packages.buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     dart-sass
+    moreutils # chronic
     postgresql
     libxml2
     libxslt
   ];
 
   dontConfigure = true;
-  dontBuild = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    echo "Compiling sass files"
+    pushd liberaforms/static
+    chronic sass sass:css --style=compressed --no-source-map
+    popd
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    cp -R ${finalAttrs.src}/. $out
-
-    echo "Compiling sass files"
-    pushd $out/liberaforms/static
-    sass sass:css --style=compressed --no-source-map
-    popd
+    cp -R . $out
 
     runHook postInstall
   '';
