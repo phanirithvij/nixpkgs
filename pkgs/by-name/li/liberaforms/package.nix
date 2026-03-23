@@ -152,7 +152,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     minio
     packaging
     passlib
-    password-strength
     password-entropy
     pillow
     platformdirs
