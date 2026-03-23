@@ -27,7 +27,7 @@ let
         doCheck = false;
       };
       # required when downgrading flask-migrate to 3.1.0
-      flask_2_2_2 = python3Packages.flask.overridePythonAttrs rec {
+      flask_2_2_2 = super.flask.overridePythonAttrs rec {
         version = "2.2.2";
         pyproject = null;
         format = "setuptools";
@@ -36,16 +36,15 @@ let
           inherit version;
           hash = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
         };
-        dependencies = (
-          with python3Packages;
+        dependencies =
+          with super;
           [
             click
             blinker
             itsdangerous
             jinja2
           ]
-          ++ [ self.werkzeug_2_2_2 ]
-        );
+          ++ [ self.werkzeug_2_2_2 ];
         nativeCheckInputs = [ ];
       };
       # required when downgrading flask-migrate to 3.1.0
@@ -86,7 +85,7 @@ let
         };
         dependencies = [
           self.flask_2_2_2
-          super.sqlalchemy
+          self.sqlalchemy
           super.pdm-pep517
         ];
       });
