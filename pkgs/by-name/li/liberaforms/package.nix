@@ -199,11 +199,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     zipp
   ];
 
-  pythonRemoveDeps = [
-    # removed
-    "typed-ast"
-  ];
-
   nativeBuildInputs = [
     dart-sass
     moreutils # chronic
