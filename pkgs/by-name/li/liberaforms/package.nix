@@ -240,7 +240,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
     # Run pytest on the installed version. A running postgres database server is needed.
     pushd tests
     cp test.ini.example test.ini
-    # TODO why does this break?
     pytest -k "not test_save_smtp_config\
       and not test/ext/test_horizontal_shard.py\
       and not TestE2EEDisabledFeatures"
