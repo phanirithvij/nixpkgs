@@ -102,6 +102,13 @@ python3Packages.buildPythonPackage (finalAttrs: {
     hash = "sha256-ty2fdp5mueCUZtEvK2EIJ4ot4Zv//dBIBKD5Of2Rrjg=";
   };
 
+  postPatch = ''
+    echo "Compiling sass files"
+    pushd liberaforms/static
+    chronic sass sass:css --style=compressed --no-source-map
+    popd
+  '';
+
   build-system = with python3Packages; [
     setuptools
     setuptools-scm
@@ -206,17 +213,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
   ];
 
   dontConfigure = true;
-
-  buildPhase = ''
-    runHook preBuild
-
-    echo "Compiling sass files"
-    pushd liberaforms/static
-    chronic sass sass:css --style=compressed --no-source-map
-    popd
-
-    runHook postBuild
-  '';
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
