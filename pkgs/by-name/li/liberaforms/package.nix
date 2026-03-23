@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchPypi,
 
+  dart-sass,
   postgresql,
   libxml2,
   libxslt,
@@ -196,6 +197,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    dart-sass
     postgresql
     libxml2
     libxslt
@@ -209,7 +211,10 @@ python3Packages.buildPythonPackage (finalAttrs: {
 
     cp -R ${finalAttrs.src}/. $out
 
-    # TODO sass generate via gulp
+    echo "Compiling sass files"
+    pushd $out/liberaforms/static
+    sass sass:css --style=compressed --no-source-map
+    popd
 
     runHook postInstall
   '';
