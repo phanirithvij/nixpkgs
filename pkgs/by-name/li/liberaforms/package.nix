@@ -2,9 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitea,
-  fetchPypi,
   fetchFromGitHub,
-  callPackage,
 
   postgresql,
   libxml2,
@@ -15,57 +13,6 @@
 }:
 
 let
-  # liberaforms requires a very specific version of flask-babel
-  flask-babel = python3Packages.flask-babel.overridePythonAttrs rec {
-    version = "2.0.0";
-    format = "setuptools";
-    src = fetchPypi {
-      pname = "Flask-Babel";
-      inherit version;
-      hash = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
-    };
-    nativeBuildInputs = [ ];
-    propagatedBuildInputs = [ ];
-    outputs = [ "out" ];
-    dependencies = with python3Packages; [
-      babel
-      flask
-      jinja2
-      pytz
-    ];
-    pythonImportsCheck = [ ];
-    checkInputs = [ ];
-  };
-  # same with flask
-  flask = python3Packages.flask.overridePythonAttrs rec {
-    version = "2.2.2";
-    pyproject = null;
-    format = "setuptools";
-    src = fetchPypi {
-      pname = "Flask";
-      inherit version;
-      hash = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
-    };
-    dependencies = (with python3Packages; [
-      click
-      blinker
-      itsdangerous
-      jinja2
-    ] ++ [ werkzeug ]);
-    nativeCheckInputs = [ ];
-  };
-  # same with werkzeug
-  werkzeug = python3Packages.werkzeug.overridePythonAttrs rec {
-    version = "2.2.2";
-    pyproject = null;
-    format = "setuptools";
-    src = fetchPypi {
-      pname = "Werkzeug";
-      inherit version;
-      hash = "sha256-fqLUgyLMfA+LOiFe1z6r17XXXQtQ4xqwBihsz/ngC48=";
-    };
-    nativeCheckInputs = [ ];
-  };
   sqlalchemy_1_4 = python3Packages.sqlalchemy_1_4.overridePythonAttrs rec {
     version = "1.4.42";
     src = fetchFromGitHub {
@@ -92,17 +39,17 @@ let
   };
 in
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "liberaforms";
-  version = "4.1.2";
+  version = "4.8.0";
   format = "other";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "LiberaForms";
     repo = "server";
-    tag = "v${version}";
-    hash = "sha256-OALAoaIbUPD9qrtxraoG50/lkUvShHq0n5d8etkSliI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ty2fdp5mueCUZtEvK2EIJ4ot4Zv//dBIBKD5Of2Rrjg=";
   };
 
   build-system = with python3Packages; [
@@ -130,6 +77,7 @@ python3Packages.buildPythonPackage rec {
     email-validator
     feedgen
     flask
+    flask-assets
     flask-babel
     flask-login
     flask-marshmallow
@@ -212,25 +160,24 @@ python3Packages.buildPythonPackage rec {
   installPhase = ''
     runHook preInstall
 
-    cp -R ${src}/. $out
+    cp -R ${finalAttrs.src}/. $out
 
     runHook postInstall
   '';
 
   doCheck = true;
 
-  nativeCheckInputs =
-    [
-      postgresql
-      postgresqlTestHook
-    ]
-    ++ (with python3Packages; [
-      faker
-      pytestCheckHook
-      pytest-dotenv
-      factory-boy
-      polib
-    ]);
+  nativeCheckInputs = [
+    postgresql
+    postgresqlTestHook
+  ]
+  ++ (with python3Packages; [
+    faker
+    pytestCheckHook
+    pytest-dotenv
+    factory-boy
+    polib
+  ]);
 
   preCheck = ''
     export LANG=C.UTF-8
@@ -257,9 +204,10 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Free form software";
-    homepage = "https://gitlab.com/liberaforms/liberaforms";
+    description = "Ethical form software";
+    homepage = "https://liberaforms.org";
+    downloadPage = "https://codeberg.org/LiberaForms/server";
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})
