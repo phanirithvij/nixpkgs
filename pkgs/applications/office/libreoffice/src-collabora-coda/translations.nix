@@ -1,6 +1,6 @@
 { fetchgit, ... }:
 fetchgit {
   url = "https://gerrit.libreoffice.org/translations";
-  rev = "ee0e6d09ac4fdb0888b9a5b773e8eea95da916b5";
-  hash = "sha256-lnlAEXdhyZV1GEiBwo8/3QdON47QluJ+L1Ioheb5LLc=";
+  rev = "f79264e77284c75907b4ecedcbb910c5ad0bb2c4";
+  hash = "sha256-Axjw2uB3dCboOEUW7cLt8CQKjRC4sA2x+QOtgwD3aPU=";
 }
