@@ -73,7 +73,7 @@ in
       #systemd.services.goupile.environment.DEFAULT_SECCOMP_ACTION = "Log"; # Block|Log|Kill
       networking = {
         firewall.allowedTCPPorts = [ config.services.nginx.defaultHTTPListenPort ];
-        hostName = "goupile";
+        hostName = "goupilex";
         domain = "local";
       };
 
@@ -108,12 +108,14 @@ in
       machine.wait_for_open_port(${port})
 
       machine.succeed("curl -q http://localhost:${port}")
-      machine.succeed("curl -q http://goupile.local")
+      machine.succeed("curl -q http://goupilex.local")
       machine.succeed("curl -q http://localhost")
 
-      machine.succeed("run-goupile-test")
-      out_dir = os.environ.get("out", os.getcwd())
-      machine.copy_from_vm("/tmp/videos", out_dir)
+      try:
+          machine.succeed("run-goupile-test")
+      finally:
+          out_dir = os.environ.get("out", os.getcwd())
+          machine.copy_from_vm("/tmp/videos", out_dir)
     '';
 
   # Debug interactively with:
