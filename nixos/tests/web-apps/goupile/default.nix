@@ -73,7 +73,6 @@ in
       #systemd.services.goupile.environment.DEFAULT_SECCOMP_ACTION = "Log"; # Block|Log|Kill
       networking = {
         firewall.allowedTCPPorts = [ config.services.nginx.defaultHTTPListenPort ];
-        hostName = "goupilex";
         domain = "local";
       };
 
@@ -108,7 +107,7 @@ in
       machine.wait_for_open_port(${port})
 
       machine.succeed("curl -q http://localhost:${port}")
-      machine.succeed("curl -q http://goupilex.local")
+      machine.succeed("curl -q http://machine.local")
       machine.succeed("curl -q http://localhost")
 
       try:
