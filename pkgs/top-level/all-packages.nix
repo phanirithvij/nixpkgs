@@ -9807,6 +9807,11 @@ with pkgs;
     withFonts = true;
   };
 
+  libreoffice-collabora-coda = callPackage ../applications/office/libreoffice {
+    variant = "collabora-coda";
+    withFonts = true;
+  };
+
   luddite = with python3Packages; toPythonApplication luddite;
 
   lyx = libsForQt5.callPackage ../applications/misc/lyx { };
