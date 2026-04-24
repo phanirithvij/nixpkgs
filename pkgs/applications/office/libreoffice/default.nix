@@ -775,6 +775,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Wrapping is done in ./wrapper.nix
   dontWrapQtApps = true;
 
+  __structuredAttrs = true;
+
   strictDeps = true;
 
   passthru = {
