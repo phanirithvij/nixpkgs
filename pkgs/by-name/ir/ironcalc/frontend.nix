@@ -89,17 +89,16 @@ let
     };
   };
 
-  workbook = buildNpmPackage {
-    pname = "ironcalc-workbook";
+  widget = buildNpmPackage {
+    pname = "ironcalc-widget";
     inherit version src;
     sourceRoot = "${src.name}/webapp/IronCalc";
-    npmDepsHash = "sha256-Yhf+TJ4ihskGVepXm4FRastzM1ruIjrEQighY0MGHtc=";
+    npmDepsHash = "sha256-jPnUUEOjW9WHVjpBH/qKB4P5RuMI0uvjog8C41cPQdY=";
 
     postPatch = ''
       chmod -R u+w ../../..
       mkdir -p ../../bindings/wasm/pkg
       echo '{"name": "@ironcalc/wasm", "version": "${ironcalc.version}"}' > ../../bindings/wasm/pkg/package.json
-      cp ${./workbook/package-lock.json} package-lock.json
     '';
 
     preConfigure = ''
@@ -119,7 +118,7 @@ let
     strictDeps = true;
 
     meta = ironcalc.meta // {
-      description = "Ironcalc frontend workbook package";
+      description = "Ironcalc frontend widget package";
     };
   };
 
@@ -127,7 +126,7 @@ let
     pname = "ironcalc-frontend";
     inherit version src;
     sourceRoot = "${src.name}/webapp/app.ironcalc.com/frontend";
-    npmDepsHash = "sha256-sqAAfIxwhMF5u0prXXLhpnmbUVh+VJ6A+Jq/Rzg9CfM=";
+    npmDepsHash = "sha256-QVpUV3dxaqiWCF8RC1MR2ylYC500Lbp5pJgzzOrF20c=";
 
     postPatch = ''
       chmod -R u+w ../../..
@@ -137,10 +136,8 @@ let
       cp -rv ${wasm}/. ../../../bindings/wasm/pkg/
 
       rm -rf ../../IronCalc
-      cp -r ${workbook} ../../IronCalc
+      cp -r ${widget} ../../IronCalc
       chmod -R u+w ../../IronCalc
-
-      cp ${./app/package-lock.json} package-lock.json
 
       substituteInPlace src/components/WorkbookTitle.tsx \
         --replace-warn 'onInput={handleChange}' 'onChange={handleChange}'

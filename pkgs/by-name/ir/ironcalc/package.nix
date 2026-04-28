@@ -17,25 +17,19 @@
 }:
 
 let
-  version = "0.7.1";
+  version = "0.7.1-unstable-2026-04-29";
 
+  # using applyPatches because sourceRoot is different for the server package
   src = applyPatches {
     src = fetchFromGitHub {
       owner = "ironcalc";
       repo = "ironcalc";
-      tag = "v${version}";
-      hash = "sha256-P2o/rft5wDOvnjsGV69kaf7L4WObwCGt+aPgzFqqdio=";
+      rev = "8461ff71347ab19145cd7ad50ef829181ba765c2";
+      hash = "sha256-vjI3M+hS9bXK8QQlopAy6f4dCISfQHGMvN9sMNKp88Q=";
     };
     patches = [
-      # remove once https://github.com/ironcalc/IronCalc/pull/896 is merged
-      ./0001-FIX-handle-en-GB-client-side-model-loading.patch
-      ./0002-FIX-handle-missing-models-as-404.patch
-      ./0003-UPDATE-add-option-to-specify-webapp-dir.patch
-      ./0004-FIX-update-incorrect-dependencies-in-cargo-lock.patch
-      ./0005-FIX-add-missing-t-dependency-to-App.tsx-useEffect.patch
-
       # nix specific issue, can't reproduce without nix, not upstreaming
-      ./0006-FIX-test-message.patch
+      ./0001-FIX-test-message.patch
     ];
   };
 
@@ -59,8 +53,7 @@ let
     sourceRoot = "${src.name}/webapp/app.ironcalc.com/server";
 
     # cargoPatches not required as we use applyPatches
-
-    cargoHash = "sha256-0Zns6Hp0IfGEzm+50B2GlxuIJt14kXv7iaN37b+GG/g=";
+    cargoHash = "sha256-46IwZJI9AOs+IQFbfz89A2yIi5db7rVMVNsO9W+tn+c=";
 
     __structedAttrs = true;
     strictDeps = true;
