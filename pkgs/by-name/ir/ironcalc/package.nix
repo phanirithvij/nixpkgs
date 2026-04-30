@@ -127,6 +127,7 @@ let
   '';
 
   python = python3Packages.ironcalc;
+  nodejs = callPackage ./nodejs.nix { };
 in
 symlinkJoin {
   pname = "ironcalc";
@@ -151,6 +152,7 @@ symlinkJoin {
       server
       tools
       wasm
+      nodejs
       python
       ;
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
