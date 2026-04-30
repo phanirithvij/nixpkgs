@@ -8,30 +8,31 @@
 
   pkg-config,
   python3,
+  python3Packages,
   bzip2,
   zstd,
 
   sqlite,
   writeShellScriptBin,
   symlinkJoin,
+  nix-update-script,
 }:
 
 let
   version = "0.7.1-unstable-2026-04-29";
 
   # using applyPatches because sourceRoot is different for the server package
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "ironcalc";
-      repo = "ironcalc";
-      rev = "8461ff71347ab19145cd7ad50ef829181ba765c2";
-      hash = "sha256-vjI3M+hS9bXK8QQlopAy6f4dCISfQHGMvN9sMNKp88Q=";
-    };
-    patches = [
-      # nix specific issue, can't reproduce without nix, not upstreaming
-      ./0001-FIX-test-message.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "ironcalc";
+    repo = "ironcalc";
+    rev = "8461ff71347ab19145cd7ad50ef829181ba765c2";
+    hash = "sha256-vjI3M+hS9bXK8QQlopAy6f4dCISfQHGMvN9sMNKp88Q=";
   };
+
+  patches = [
+    # nix specific issue, can't reproduce without nix, not upstreaming
+    ./0001-FIX-test-message.patch
+  ];
 
   cargoHash = "sha256-q5DnqhIYKUUqfJ4/TNHYF1QgTbH198QtgirQ+lP30wk=";
 
@@ -49,10 +50,11 @@ let
 
   server = rustPlatform.buildRustPackage {
     pname = "ironcalc-server";
-    inherit version src;
-    sourceRoot = "${src.name}/webapp/app.ironcalc.com/server";
+    inherit version src patches;
 
-    # cargoPatches not required as we use applyPatches
+    buildAndTestSubdir = "webapp/app.ironcalc.com/server";
+    cargoRoot = "webapp/app.ironcalc.com/server";
+
     cargoHash = "sha256-46IwZJI9AOs+IQFbfz89A2yIi5db7rVMVNsO9W+tn+c=";
 
     __structedAttrs = true;
@@ -65,7 +67,7 @@ let
     ];
 
     postInstall = ''
-      install -Dm644 init_db.sql $out/share/ironcalc/init_db.sql
+      install -Dm644 webapp/app.ironcalc.com/server/init_db.sql $out/share/ironcalc/init_db.sql
     '';
 
     meta = meta // {
@@ -74,20 +76,22 @@ let
     };
   };
 
-  frontend = callPackage ./frontend.nix {
-    ironcalc = {
-      inherit
-        src
-        version
-        cargoHash
-        meta
-        ;
-    };
-  };
+  frontend_packages = callPackage ./frontend.nix { };
+
+  inherit (frontend_packages)
+    frontend
+    wasm
+    widget
+    ;
 
   tools = rustPlatform.buildRustPackage {
     pname = "ironcalc-tools";
-    inherit version src cargoHash;
+    inherit
+      version
+      src
+      patches
+      cargoHash
+      ;
 
     __structedAttrs = true;
     strictDeps = true;
@@ -121,9 +125,12 @@ let
     export IRONCALC_WEBAPP_DIR="''${IRONCALC_WEBAPP_DIR:-${frontend}}"
     exec ${server}/bin/ironcalc_server "$@"
   '';
+
+  python = python3Packages.ironcalc;
 in
 symlinkJoin {
-  name = "ironcalc-${version}";
+  pname = "ironcalc";
+  inherit version;
   paths = [
     tools
     wrapper
@@ -132,14 +139,24 @@ symlinkJoin {
   __structedAttrs = true;
   strictDeps = true;
 
-  inherit meta;
-
   passthru = {
     inherit
+      src
+      cargoHash
+      ;
+    inherit
+      wrapper
       frontend
+      widget
       server
       tools
-      wrapper
+      wasm
+      python
       ;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
+
+  meta = meta // {
+    description = "TODO IronCalc main package";
   };
 }

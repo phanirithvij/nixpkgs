@@ -17,11 +17,21 @@
   ironcalc,
 }:
 let
-  inherit (ironcalc) version src cargoHash;
+  inherit (ironcalc)
+    version
+    src
+    cargoHash
+    patches
+    ;
 
   wasm = rustPlatform.buildRustPackage {
     pname = "ironcalc-wasm";
-    inherit version src cargoHash;
+    inherit
+      version
+      src
+      cargoHash
+      patches
+      ;
 
     nativeBuildInputs = [
       binaryen
@@ -91,15 +101,17 @@ let
 
   widget = buildNpmPackage {
     pname = "ironcalc-widget";
-    inherit version src;
-    sourceRoot = "${src.name}/webapp/IronCalc";
-    npmDepsHash = "sha256-jPnUUEOjW9WHVjpBH/qKB4P5RuMI0uvjog8C41cPQdY=";
+    inherit version src patches;
+    sourceRoot = "source";
 
     postPatch = ''
+      cd webapp/IronCalc
       chmod -R u+w ../../..
       mkdir -p ../../bindings/wasm/pkg
       echo '{"name": "@ironcalc/wasm", "version": "${ironcalc.version}"}' > ../../bindings/wasm/pkg/package.json
     '';
+
+    npmDepsHash = "sha256-jPnUUEOjW9WHVjpBH/qKB4P5RuMI0uvjog8C41cPQdY=";
 
     preConfigure = ''
       cp -rv ${wasm}/. ../../bindings/wasm/pkg/
@@ -124,11 +136,11 @@ let
 
   frontend = buildNpmPackage {
     pname = "ironcalc-frontend";
-    inherit version src;
-    sourceRoot = "${src.name}/webapp/app.ironcalc.com/frontend";
-    npmDepsHash = "sha256-QVpUV3dxaqiWCF8RC1MR2ylYC500Lbp5pJgzzOrF20c=";
+    inherit version src patches;
+    sourceRoot = "source";
 
     postPatch = ''
+      cd webapp/app.ironcalc.com/frontend
       chmod -R u+w ../../..
 
       # wasm location fix
@@ -142,6 +154,8 @@ let
       substituteInPlace src/components/WorkbookTitle.tsx \
         --replace-warn 'onInput={handleChange}' 'onChange={handleChange}'
     '';
+
+    npmDepsHash = "sha256-QVpUV3dxaqiWCF8RC1MR2ylYC500Lbp5pJgzzOrF20c=";
 
     preBuild = ''
       # wasm resolution fix
@@ -162,4 +176,10 @@ let
     };
   };
 in
-frontend
+{
+  inherit
+    wasm
+    widget
+    frontend
+    ;
+}
