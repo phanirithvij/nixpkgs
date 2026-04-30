@@ -63,6 +63,14 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    pnpm run test
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/lib/node_modules/@ironcalc/nodejs

@@ -1,6 +1,5 @@
 {
   lib,
-  applyPatches,
   callPackage,
   fetchFromGitHub,
 
@@ -50,7 +49,7 @@ let
 
   server = rustPlatform.buildRustPackage {
     pname = "ironcalc-server";
-    inherit version src patches;
+    inherit patches src version;
 
     buildAndTestSubdir = "webapp/app.ironcalc.com/server";
     cargoRoot = "webapp/app.ironcalc.com/server";
@@ -86,12 +85,8 @@ let
 
   tools = rustPlatform.buildRustPackage {
     pname = "ironcalc-tools";
-    inherit
-      version
-      src
-      patches
-      cargoHash
-      ;
+    inherit patches src version;
+    inherit cargoHash;
 
     __structedAttrs = true;
     strictDeps = true;
@@ -105,6 +100,18 @@ let
       bzip2
       zstd
     ];
+
+    doCheck = true;
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      $out/bin/xlsx_2_icalc 2>&1 | grep "Usage:" || true
+
+      $out/bin/xlsx_2_icalc xlsx/tests/docs/CHOOSE.xlsx test.ic
+      test -f test.ic
+      runHook postInstallCheck
+    '';
 
     meta = meta // {
       description = "IronCalc helper tools";
@@ -141,26 +148,31 @@ symlinkJoin {
   __structedAttrs = true;
   strictDeps = true;
 
-  passthru = {
-    inherit
-      src
-      cargoHash
-      ;
-    inherit
-      wrapper
-      frontend
-      widget
-      server
-      tools
-      docs
-      wasm
-      nodejs
-      python
-      ;
-    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
-  };
+  passthru =
+    let
+      exports = {
+        inherit
+          frontend
+          widget
+          server
+          tools
+          docs
+          wasm
+          nodejs
+          python
+          wrapper
+          ;
+      };
+    in
+    {
+      inherit
+        src
+        cargoHash
+        ;
+      updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+      tests = exports;
+    }
+    // exports;
 
-  meta = meta // {
-    description = "TODO IronCalc main package";
-  };
+  inherit meta;
 }

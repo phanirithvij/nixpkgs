@@ -7,7 +7,7 @@
 
 buildNpmPackage {
   pname = "ironcalc-docs";
-  inherit (ironcalc) version src patches;
+  inherit (ironcalc) version src;
 
   postPatch = ''
     cd docs

@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   rustPlatform,
   pkg-config,
@@ -12,7 +11,7 @@
 
 buildPythonPackage {
   pname = "ironcalc";
-  inherit (ironcalc) version src patches;
+  inherit (ironcalc) src version;
   pyproject = true;
 
   postPatch = ''
