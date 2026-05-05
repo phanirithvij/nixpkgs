@@ -721,6 +721,7 @@ in
   };
   headscale = runTest ./headscale.nix;
   healthchecks = runTest ./web-apps/healthchecks.nix;
+  liberaforms = runTest ./web-apps/liberaforms.nix;
   hedgedoc = runTest ./hedgedoc.nix;
   herbstluftwm = runTest ./herbstluftwm.nix;
   # 9pnet_virtio used to mount /nix partition doesn't support
