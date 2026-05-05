@@ -10,6 +10,7 @@
   postgresql,
   libxml2,
   libxslt,
+  makeWrapper,
 
   # tests
   postgresqlTestHook,
@@ -86,34 +87,11 @@ let
     };
   };
   python3Packages = python.pkgs;
-in
 
-python3Packages.buildPythonPackage (finalAttrs: {
-  pname = "liberaforms";
-  version = "4.8.0";
-  format = "other";
-
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "LiberaForms";
-    repo = "server";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-F8vs62CiOC5e8rCxoFLfQfPGH6f/sfUFyyXCmkO6hsU=";
-  };
-
-  postPatch = ''
-    echo "Compiling sass files"
-    pushd liberaforms/static
-    chronic sass sass:css --style=compressed --no-source-map
-    popd
-  '';
-
-  build-system = with python3Packages; [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = with python3Packages; [
+  propagatedBuildInputs = with python3Packages; [
+    aiohappyeyeballs
+    aiohttp
+    aiosignal
     aiosmtpd
     alembic
     atpublic
@@ -121,6 +99,8 @@ python3Packages.buildPythonPackage (finalAttrs: {
     babel
     beautifulsoup4
     bleach
+    blinker
+    cairocffi
     cairosvg
     cachelib
     certifi
@@ -128,7 +108,9 @@ python3Packages.buildPythonPackage (finalAttrs: {
     charset-normalizer
     click
     cryptography
+    cssselect2
     deepdiff
+    defusedxml
     dnspython
     email-validator
     feedgen
@@ -141,6 +123,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
     flask-session2
     flask-sqlalchemy
     flask-wtf
+    frozenlist
     greenlet
     gunicorn
     idna
@@ -149,6 +132,7 @@ python3Packages.buildPythonPackage (finalAttrs: {
     iniconfig
     itsdangerous
     jinja2
+    jsonpickle
     ldap3
     lxml
     mako
@@ -157,14 +141,18 @@ python3Packages.buildPythonPackage (finalAttrs: {
     marshmallow
     marshmallow-sqlalchemy
     minio
+    msgspec
+    multidict
+    orderly-set
     packaging
     passlib
-    password-entropy
+    python3Packages."password-entropy"
     pillow
     platformdirs
     pluggy
     portpicker
     prometheus-client
+    propcache
     psutil
     psycopg2
     py
@@ -180,43 +168,28 @@ python3Packages.buildPythonPackage (finalAttrs: {
     python-dotenv
     python-magic
     pytz
+    pyyaml
     requests
     six
-    smtpdfix
     snowballstemmer
     soupsieve
     sqlalchemy
     sqlalchemy-json
+    tinycss2
     toml
+    tomlkit
     unicodecsv
     unidecode
     urllib3
+    webassets
     webencodings
     werkzeug
     wtforms
+    yarl
     zipp
+    zope-dottedname
+    zxcvbn
   ];
-
-  nativeBuildInputs = [
-    dart-sass
-    moreutils # chronic
-    postgresql
-    libxml2
-    libxslt
-  ];
-
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    cp -R . $out
-
-    runHook postInstall
-  '';
-
-  doCheck = true;
 
   nativeCheckInputs = [
     postgresql
@@ -228,7 +201,64 @@ python3Packages.buildPythonPackage (finalAttrs: {
     pytest-dotenv
     factory-boy
     polib
+    smtpdfix
   ]);
+in
+
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "liberaforms";
+  version = "4.8.1";
+  pyproject = false;
+
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "LiberaForms";
+    repo = "server";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rXQxDSMh15CicePCA+nOERE+EBE4SQR0gsUacu1jV98=";
+  };
+
+  postPatch = ''
+    echo "Compiling sass files"
+    pushd liberaforms/static
+    chronic sass sass:css --style=compressed --no-source-map
+    popd
+  '';
+
+  nativeBuildInputs = [
+    dart-sass
+    moreutils # chronic
+    postgresql
+    libxml2
+    libxslt
+    makeWrapper
+  ];
+
+  inherit propagatedBuildInputs nativeCheckInputs;
+
+
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/liberaforms
+    cp -R . $out/lib/liberaforms
+
+    # Create wrappers
+    makeWrapper ${python3Packages.gunicorn}/bin/gunicorn $out/bin/liberaforms-gunicorn \
+      --prefix PYTHONPATH : "$out/lib/liberaforms:$PYTHONPATH" \
+      --add-flags "--chdir $out/lib/liberaforms"
+
+    makeWrapper ${python3Packages.flask}/bin/flask $out/bin/liberaforms-flask \
+      --prefix PYTHONPATH : "$out/lib/liberaforms:$PYTHONPATH" \
+      --set FLASK_APP "$out/lib/liberaforms/wsgi.py"
+
+    runHook postInstall
+  '';
+
+  doCheck = true;
 
   # Run pytest on the installed version. A running postgres database server is needed.
   preCheck = ''
@@ -241,11 +271,17 @@ python3Packages.buildPythonPackage (finalAttrs: {
 
   # avoid writing in the migration process
   postFixup = ''
-    cp $out/assets/brand/logo-default.png $out/assets/brand/logo.png
-    cp $out/assets/brand/favicon-default.ico $out/assets/brand/favicon.ico
-    sed -i "/shutil.copyfile/d" $out/liberaforms/models/site.py
-    sed -i "/brand_dir/d" $out/migrations/versions/6f0e2b9e9db3_.py
+    cp $out/lib/liberaforms/assets/brand/logo-default.png $out/lib/liberaforms/assets/brand/logo.png
+    cp $out/lib/liberaforms/assets/brand/favicon-default.ico $out/lib/liberaforms/assets/brand/favicon.ico
+    sed -i "/shutil.copyfile/d" $out/lib/liberaforms/liberaforms/models/site.py
+    sed -i "/brand_dir/d" $out/lib/liberaforms/migrations/versions/6f0e2b9e9db3_.py
   '';
+
+  passthru = {
+    # PYTHONPATH of all dependencies used by the package
+    pythonPath = python3Packages.makePythonPath propagatedBuildInputs;
+  };
+
 
   meta = {
     description = "Ethical form software";
