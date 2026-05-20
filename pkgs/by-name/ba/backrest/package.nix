@@ -13,6 +13,7 @@
   stdenv,
   util-linux,
   makeBinaryWrapper,
+  nixosTests,
 }:
 let
   pname = "backrest";
@@ -58,7 +59,7 @@ let
     '';
   });
 in
-buildGoModule {
+buildGoModule (finalAttrs: {
   inherit pname src version;
 
   postPatch = ''
@@ -77,7 +78,7 @@ buildGoModule {
 
   preBuild = ''
     mkdir -p ./webui/dist
-    cp -r ${frontend}/* ./webui/dist
+    cp -r ${finalAttrs.passthru.frontend}/* ./webui/dist
 
     go generate -skip="npm" ./...
   '';
@@ -118,6 +119,17 @@ buildGoModule {
       --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
   '';
 
+  passthru.tests = {
+    nixos-modular = nixosTests.backrest-modular;
+  };
+
+  passthru.services.default = {
+    imports = [ (lib.modules.importApply ./service.nix { }) ];
+    backrest.package = finalAttrs.finalPackage;
+  };
+
+  passthru.frontend = frontend;
+
   meta = {
     description = "Web UI and orchestrator for restic backup";
     homepage = "https://github.com/garethgeorge/backrest";
@@ -127,4 +139,4 @@ buildGoModule {
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };
-}
+})
