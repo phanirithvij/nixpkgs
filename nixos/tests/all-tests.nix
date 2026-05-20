@@ -1392,6 +1392,7 @@ in
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
   perses = runTest ./perses.nix;
   pgadmin4 = runTest ./pgadmin4.nix;
+  backrest-modular = runTest ./backrest-modular.nix;
   pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = runTest ./pgbouncer.nix;
   pghero = runTest ./pghero.nix;
