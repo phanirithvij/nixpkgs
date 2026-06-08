@@ -6,7 +6,7 @@
   lib,
   libredirect,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   restic,
@@ -15,14 +15,16 @@
   makeBinaryWrapper,
 }:
 let
+  pnpm = pnpm_11;
+
   pname = "backrest";
-  version = "1.10.1";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-8WWs7XEVKAc/XmeL+dsw25azfLjUbHKp2MsB6Be14VE=";
+    hash = "sha256-E4LhBJU2KWpgKWMRCQRSzMoeeiDShgqyGMTgZDT6D5Y=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -33,14 +35,14 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm
     ];
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-9wzPNZxLE0l/AJ8SyE0SkhkBImiibhqJgsG3UrGj3aA=";
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-xPZg7kYRlqdO/EfZr+m+IVhDcyYegQ6v8ZAF2EjrKjU=";
     };
 
     buildPhase = ''
@@ -68,7 +70,10 @@ buildGoModule {
       internal/resticinstaller/resticinstaller.go
   '';
 
-  vendorHash = "sha256-cYqK/sddLI38K9bzCpnomcZOYbSRDBOEru4Y26rBLFw=";
+  proxyVendor = true;
+  vendorHash = "sha256-1PecXGXdSu4FzOKVZ15lTLLPy3VlLiGvGeTUDzqe9sc=";
+
+  subPackages = [ "cmd/backrest" ];
 
   nativeBuildInputs = [
     gzip
@@ -102,8 +107,8 @@ buildGoModule {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  # Use restic from nixpkgs, otherwise download fails in sandbox
   preCheck = ''
-    # Use restic from nixpkgs, otherwise download fails in sandbox
     export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
     export HOME=$(pwd)
   ''
