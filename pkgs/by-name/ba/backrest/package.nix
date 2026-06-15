@@ -13,6 +13,7 @@
   stdenv,
   util-linux,
   makeBinaryWrapper,
+  versionCheckHook,
 }:
 let
   pnpm = pnpm_11;
@@ -24,13 +25,19 @@ let
     owner = "garethgeorge";
     repo = "backrest";
     tag = "v${version}";
-    hash = "sha256-E4LhBJU2KWpgKWMRCQRSzMoeeiDShgqyGMTgZDT6D5Y=";
+    hash = "sha256-JcrHQDjoaaK6BONEcn6XKsjhGlth4SaZKqfxa3cD0gY=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
-    inherit version;
-    pname = "${pname}-webui";
-    src = "${src}/webui";
+    inherit version src;
+    pname = "backrest-webui";
+    sourceRoot = "${finalAttrs.src.name}/webui";
 
     nativeBuildInputs = [
       nodejs
@@ -54,13 +61,12 @@ let
 
     installPhase = ''
       runHook preInstall
-      mkdir $out
-      cp -r dist/* $out
+      mv dist $out
       runHook postInstall
     '';
   });
 in
-buildGoModule {
+buildGoModule (finalAttrs: {
   inherit pname src version;
 
   postPatch = ''
@@ -80,9 +86,16 @@ buildGoModule {
     makeBinaryWrapper
   ];
 
+  ldflags = [
+    "-s"
+    "-X main.version=${finalAttrs.version}"
+  ];
+
   preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
+
     mkdir -p ./webui/dist
-    cp -r ${frontend}/* ./webui/dist
+    cp -r ${finalAttrs.passthru.frontend}/* ./webui/dist
 
     go generate -skip="npm" ./...
   '';
@@ -109,7 +122,7 @@ buildGoModule {
 
   # Use restic from nixpkgs, otherwise download fails in sandbox
   preCheck = ''
-    export BACKREST_RESTIC_COMMAND="${restic}/bin/restic"
+    export BACKREST_RESTIC_COMMAND="${lib.getExe restic}"
     export HOME=$(pwd)
   ''
   + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
@@ -123,13 +136,21 @@ buildGoModule {
       --set-default BACKREST_RESTIC_COMMAND "${lib.getExe restic}"
   '';
 
+  doInstallCheck = true;
+  versionCheckProgramArg = "-version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    inherit frontend;
+  };
+
   meta = {
+    changelog = "https://github.com/garethgeorge/backrest/releases/tag/${finalAttrs.src.rev}";
     description = "Web UI and orchestrator for restic backup";
     homepage = "https://github.com/garethgeorge/backrest";
-    changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };
-}
+})
