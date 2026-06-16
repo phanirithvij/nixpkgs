@@ -23,6 +23,7 @@
   quickder,
   quickmem,
   unbound,
+  nixosTests,
   nix-update-script,
 }:
 let
@@ -87,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) kip; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Keyful Identity Protocol — symmetric-key encryption and signing via an online KIP Service";

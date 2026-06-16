@@ -856,6 +856,7 @@ in
   keyd = handleTest ./keyd.nix { };
   keymap = handleTest ./keymap.nix { };
   kimai = runTest ./kimai.nix;
+  kip = runTest ./kip.nix;
   kismet = runTest ./kismet.nix;
   kiwix-serve = runTest ./kiwix-serve;
   kmonad = runTest ./kmonad.nix;
