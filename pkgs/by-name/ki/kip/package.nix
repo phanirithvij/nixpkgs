@@ -51,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
+  patches = [
+    ./0001-fix-Avoid-side-effects-in-asserts.patch
+    ./0003-fix-Refine-SASL-logic-anonymous-ACLs-and-process-iso.patch
+  ];
+
   nativeBuildInputs = [
     bison
     cacert

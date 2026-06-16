@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kMKZRromm/hb9PZwvWAzmJorSqTB8xMIbWASfSjajiQ=";
   };
 
+  patches = [
+    ./fix-canon-user.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [

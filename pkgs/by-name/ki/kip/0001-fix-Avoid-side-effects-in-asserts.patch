@@ -1,0 +1,215 @@
+From 3ec738de461d7baa47c12f1a28cfd73ca9f4e0f2 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 17 Jun 2026 18:39:38 +0530
+Subject: [PATCH] fix: Avoid side-effects in asserts
+
+---
+ lib/core.c      |  9 ++++++---
+ lib/daemon.c    | 18 +++++++++++++-----
+ lib/service.c   |  6 ++++--
+ lib/xoversasl.c | 14 ++++++++------
+ src/cmdline.c   | 19 +++++++++++--------
+ src/server.c    |  4 ++--
+ 6 files changed, 44 insertions(+), 26 deletions(-)
+
+diff --git a/lib/core.c b/lib/core.c
+index 707dbe2..cfde94f 100644
+--- a/lib/core.c
++++ b/lib/core.c
+@@ -1318,7 +1318,8 @@ bool kipsum_merge (kipt_ctx ctx, kipt_sumid accumulator, kipt_sumid addend) {
+ 	// Compute the checksum from the addend
+ 	uint8_t rawhash [KIPSUM_MAXSIZE];
+ 	assert (hashsz <= sizeof (rawhash));
+-	assert (_hash_final (cs_addend, NULL, rawhash));
++	bool ok_hash1 = _hash_final (cs_addend, NULL, rawhash);
++	assert (ok_hash1);
+ 	//
+ 	// Update the checksum of the accumulator
+ 	if (!_hash_update (cs_accu, rawhash, hashsz)) {
+@@ -1388,7 +1389,8 @@ bool kipsum_sign (kipt_ctx ctx, kipt_sumid sumid_or_keyid, uint32_t max_siglen,
+ 	// Determine the hash -- this should not fail anymore
+ 	uint8_t rawhash [KIPSUM_MAXSIZE];
+ 	assert (hashsz <= sizeof (rawhash));
+-	assert (_hash_final (cs, NULL, rawhash));
++	bool ok_hash2 = _hash_final (cs, NULL, rawhash);
++	assert (ok_hash2);
+ 	//
+ 	// Encrypt the hash -- this should not fail anymore
+ 	krb5_data     plain;
+@@ -1482,7 +1484,8 @@ bool kipsum_verify (kipt_ctx ctx, kipt_sumid sumid_or_keyid,
+ 	// Determine the hash from the context
+ 	uint8_t rawhash [KIPSUM_MAXSIZE];
+ 	assert (hashsz <= sizeof (rawhash));
+-	assert (_hash_final (cs, NULL, rawhash));
++	bool ok_hash3 = _hash_final (cs, NULL, rawhash);
++	assert (ok_hash3);
+ 	if (memcmp (sighash, rawhash, hashsz) != 0) {
+ 		errno = KIPERR_CHECKSUM_INVALID;
+ 		goto fail;
+diff --git a/lib/daemon.c b/lib/daemon.c
+index faa7b2f..87d8f3c 100644
+--- a/lib/daemon.c
++++ b/lib/daemon.c
+@@ -115,11 +115,15 @@ static bool _put_opaque_data (kipt_dctx clises, dercursor pre_encrypt, KIP_Opaqu
+ 	//
+ 	// Encrypt the input data structure with the active keytab key
+ 	uint32_t mudlen;
+-	assert (!kipdata_up (clises->kipctx, clises->keytab_keyid,
++	if (kipdata_up (clises->kipctx, clises->keytab_keyid,
+ 			pre_encrypt.derptr, pre_encrypt.derlen,
+-			NULL, 0, &mudlen));
++			NULL, 0, &mudlen)) {
++		goto fail;
++	}
+ 	//TODO// key not found!
+-	assert (errno == KIPERR_OUTPUT_SIZE);
++	if (errno != KIPERR_OUTPUT_SIZE) {
++		goto fail;
++	}
+ 	errno = 0;
+ 	uint8_t *mud = NULL;
+ 	if (!dermem_alloc (clises->reqpool, mudlen, (void **) &mud)) {
+@@ -1024,12 +1028,16 @@ bool kipdaemon_handle (kipt_dctx kipd, int sox) {
+ 	kipd->sox = sox;
+ 	//
+ 	// Secure the connection -- TODO: Probably take it out
+-	except_ifnot (fail, _secure_kip_server (kipd));
++	if (!_secure_kip_server (kipd)) {
++		goto fail;
++	}
+ 	//
+ 	// Load the key for "kip/MASTER@srealm" key from the keytab
+ 	assertxt (kipd->srealm.derptr != NULL, "No KIP Service realm");
+ 	assertxt (kipd->srealm.derptr [kipd->srealm.derlen] == '\0', "Empty KIP Service realm");
+-	except_ifnot (fail, kipkey_fromvhosttab (kipd->kipctx, "kip", (char*)kipd->srealm.derptr, &kipd->keytab_keyid));
++	if (!kipkey_fromvhosttab (kipd->kipctx, "kip", (char*)kipd->srealm.derptr, &kipd->keytab_keyid)) {
++		goto fail;
++	}
+ 	kipd->keytab_keyno = (uint32_t) kipd->keytab_keyid;	/* trim to wire size */
+ 	kipd->keytab_keyno_dercrs  = der_put_uint32 (kipd->keytab_keyno_derbuf,  kipd->keytab_keyno );
+ 	kipd->keytab_encalg_dercrs = der_put_int32  (kipd->keytab_encalg_derbuf, kipd->keytab_encalg);
+diff --git a/lib/service.c b/lib/service.c
+index a01273f..68ace08 100644
+--- a/lib/service.c
++++ b/lib/service.c
+@@ -1284,7 +1284,8 @@ bool kipservice_sign (kipt_ctx ctx,
+ 		}
+ 		//
+ 		// Harvest the hash output and move on
+-		assert (_hash_final (cs, salt.derptr, iterhash));
++		bool ok_hash4 = _hash_final (cs, salt.derptr, iterhash);
++		assert (ok_hash4);
+ 		iterhash += hashsz;
+ 	}
+ 	//
+@@ -1584,7 +1585,8 @@ bool kipservice_verify (kipt_ctx ctx,
+ 		}
+ 		uint8_t rawhash [KIPSUM_MAXSIZE];
+ 		assert (hashsz <= sizeof (rawhash));
+-		assert (_hash_final (cs, rep.salt.derptr, rawhash));
++		bool ok_hash5 = _hash_final (cs, rep.salt.derptr, rawhash);
++		assert (ok_hash5);
+ 		bool found = false;
+ 		while (vfy_pos + vfy_skip < vfy_num) {
+ 			log_debug ("Comparing %02x %02x...%02x to %02x %02x...%02x", rawhash[0], rawhash[1], rawhash[hashsz-1], hashes [hashsz*(vfy_pos+vfy_skip)], hashes [hashsz*(vfy_pos+vfy_skip)+1], hashes [hashsz*(vfy_pos+vfy_skip+1)-1]);
+diff --git a/lib/xoversasl.c b/lib/xoversasl.c
+index 9cf5541..61d7a87 100644
+--- a/lib/xoversasl.c
++++ b/lib/xoversasl.c
+@@ -382,9 +382,10 @@ static bool extra_decrypt (XoverSASL xs, kipt_keyid kid, const dercursor crypt,
+ 	plain->derlen = decrypt_len;
+ 	print_block ("decrypt from", crypt.derptr, crypt.derlen, false);
+ 	log_debug ("kipdata_down (ctx=%p, keyid=%lx, crypt=%p, cryptlen=%d, plain=%p, plainmaxlen=%d, &plainlen=%p)", extra->kip, (long) kid, crypt.derptr, crypt.derlen, plain->derptr, decrypt_len, &decrypt_len);
+-	assert (kipdata_down (extra->kip, kid,
+-				crypt.derptr, crypt.derlen,
+-				plain->derptr, decrypt_len, &decrypt_len));
++	bool ok_down = kipdata_down (extra->kip, kid,
++			crypt.derptr, crypt.derlen,
++			plain->derptr, decrypt_len, &decrypt_len);
++	assert (ok_down);
+ 	plain->derlen = decrypt_len;
+ 	log_debug ("decrypted to %zd == %d bytes", plain->derlen, decrypt_len);
+ 	print_block ("decrypted to", plain->derptr, plain->derlen, false);
+@@ -414,9 +415,10 @@ static bool extra_encrypt (XoverSASL xs, kipt_keyid kid, const dercursor plain,
+ 	log_debug ("encrypt from %zd bytes", plain.derlen);
+ 	print_block ("encrypt from", plain.derptr, plain.derlen, false);
+ 	log_debug ("kipdata_up(ctx=%p, keyid=%lx, plain=%p, plainlen=%zd, crypt=%p, &cryptlen=%p)", extra->kip, (long) kid, plain.derptr, plain.derlen, crypt->derptr, crypt->derlen);
+-	assert (kipdata_up (extra->kip, kid,
+-				plain.derptr, plain.derlen,
+-				crypt->derptr, out_len, &out_len));
++	bool ok_up = kipdata_up (extra->kip, kid,
++			plain.derptr, plain.derlen,
++			crypt->derptr, out_len, &out_len);
++	assert (ok_up);
+ 	print_block ("encrypted to", crypt->derptr, crypt->derlen, false);
+ 	assert (crypt->derlen == out_len);
+ 	return true;
+diff --git a/src/cmdline.c b/src/cmdline.c
+index 6f38c99..7edff0d 100644
+--- a/src/cmdline.c
++++ b/src/cmdline.c
+@@ -41,6 +41,9 @@
+ 
+ #include "../lib/kip-dbg.h"
+ 
++#undef assert
++#define assert(x) assertxt(x, "Assertion failed")
++
+ 
+ /* CBOR, quick index; major type in 3 MSB; minor in 5 LSB, possibly indicating follow-up
+  *
+@@ -227,9 +230,9 @@ bool pump_up (char *progname, FILE *infile, FILE *outfile) {
+ 	char *str_login = getenv ("KIPSERVICE_CLIENTUSER_LOGIN");
+ 	char *str_acl   = getenv ("KIPSERVICE_CLIENTUSER_ACL"  );
+ 	char *str_realm = getenv ("KIPSERVICE_CLIENT_REALM"    );
+-	assert (kipservice_set_clientuser_login (kip, str_login));
+-	assert (kipservice_set_clientuser_acl   (kip, str_acl  ));
+-	assert (kipservice_set_client_realm     (kip, str_realm));
++	if (!kipservice_set_clientuser_login (kip, str_login)) { exit(1); }
++	if (!kipservice_set_clientuser_acl   (kip, str_acl  )) { exit(1); }
++	if (!kipservice_set_client_realm     (kip, str_realm)) { exit(1); }
+ 	//
+ 	// Create a session key
+ 	kipt_keyid seskeyid;
+@@ -327,9 +330,9 @@ bool pump_down (char *progname, FILE *infile, FILE *outfile) {
+ 	char *str_login = getenv ("KIPSERVICE_CLIENTUSER_LOGIN");
+ 	char *str_acl   = getenv ("KIPSERVICE_CLIENTUSER_ACL"  );
+ 	char *str_realm = getenv ("KIPSERVICE_CLIENT_REALM"    );
+-	assert (kipservice_set_clientuser_login (kip, str_login));
+-	assert (kipservice_set_clientuser_acl   (kip, str_acl  ));
+-	assert (kipservice_set_client_realm     (kip, str_realm));
++	if (!kipservice_set_clientuser_login (kip, str_login)) { exit(1); }
++	if (!kipservice_set_clientuser_acl   (kip, str_acl  )) { exit(1); }
++	if (!kipservice_set_client_realm     (kip, str_realm)) { exit(1); }
+ 	//
+ 	// Use a shared buffer -- and load the mudkey into it
+ 	uint8_t crypt [65536];
+@@ -452,8 +455,8 @@ int main (int argc, char *argv []) {
+ 	argv += 1;
+ 	//
+ 	// Initialise the KIP, KIP Service and QuickSASL modules
+-	kip_init ();
+-	kipservice_init (NULL, NULL);
++	if (!kip_init ()) { exit(1); }
++	if (!kipservice_init (NULL, NULL)) { exit(1); }
+ 	assertxt (qsasl_init (NULL, "Hosted_Identity"),
+ 		"Failed to initialise Quick-SASL for Hosted_Identity");
+ 	//
+diff --git a/src/server.c b/src/server.c
+index 257c16f..1fe1fae 100644
+--- a/src/server.c
++++ b/src/server.c
+@@ -75,8 +75,8 @@ int main (int argc, char *argv []) {
+ 	signal (stopsignal, please_stop);
+ 	//
+ 	// Initialias KIP and KIP Daemon libraries
+-	assert (kip_init  ());
+-	assert (kipdaemon_init ());
++	if (!kip_init()) { exit(1); }
++	if (!kipdaemon_init()) { exit(1); }
+ 	//
+ 	// Initialise Quick-SASL
+ 	assert (qsasl_init (NULL, "Hosted_Identity"));
+-- 
+2.54.0
+

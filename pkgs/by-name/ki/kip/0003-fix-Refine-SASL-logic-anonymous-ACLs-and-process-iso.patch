@@ -1,0 +1,87 @@
+From 14a1fd5ae133bc93c4fa7d6995531253203992f3 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 17 Jun 2026 18:39:38 +0530
+Subject: [PATCH] fix: Refine SASL logic, anonymous ACLs, and process isolation
+
+---
+ lib/daemon.c  |  7 ++++++-
+ lib/service.c | 12 +++++++++++-
+ src/server.c  |  7 ++++++-
+ 3 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/lib/daemon.c b/lib/daemon.c
+index f5d8614..75c4d14 100644
+--- a/lib/daemon.c
++++ b/lib/daemon.c
+@@ -824,7 +824,12 @@ bool process_sasl_req (kipt_dctx clises, dercursor raw_req, dercursor *dercrs_sa
+ 		}
+ 		ok = ok && qsasl_set_mech (qs, crs2buf (req->mech));
+ 	}
+-	ok = ok && qsasl_step_server (qs, crs2buf (req->c2s.token), crs2bufp (&rep->s2c.token));
++	bool qsasl_ret = qsasl_step_server (qs, crs2buf (req->c2s.token), crs2bufp (&rep->s2c.token));
++	ok = ok && qsasl_ret;
++	if (!ok) {
++		clises->auth_failure = true;
++		return false;
++	}
+ 	/* Note that sasl_callback() may have set rep->success */
+ 	if (ok && (rep->s2c.token.derptr == NULL)) {
+ 		if (rep->success.derptr != NULL) {
+diff --git a/lib/service.c b/lib/service.c
+index 68ace08..fe5e31f 100644
+--- a/lib/service.c
++++ b/lib/service.c
+@@ -195,6 +195,9 @@ static bool _secure_kip_client (kipt_ctx ctx, int sox_plain, char *domain_name,
+ 				qsasl_set_clientuser_acl (qs, crs2buf (clid));
+ 			}
+ 		}
++	} else {
++		dercursor anon_acl = { .derptr = (uint8_t*)"anonymous", .derlen = 9 };
++		qsasl_set_clientuser_acl (qs, crs2buf (anon_acl));
+ 	}
+ 	//
+ 	// Setup a callback that will set failure or success when QuickSASL decides
+@@ -308,7 +311,14 @@ static bool _secure_kip_client (kipt_ctx ctx, int sox_plain, char *domain_name,
+ 		KIP_SASL_REQ sasl_req;
+ 		KIP_SASL_REP sasl_rep;
+ 		memset (&sasl_req, 0, sizeof (sasl_req));
+-		failure = failure || !qsasl_step_client (qs, crs2buf (s2c), crs2bufp (&sasl_req.mech), crs2bufp (&sasl_req.c2s.token));
++		memset (&sasl_rep, 0, sizeof (sasl_rep));
++		if (!rep_success || (s2c.derlen > 0)) {
++			bool qsasl_ret = qsasl_step_client (qs, crs2buf (s2c), crs2bufp (&sasl_req.mech), crs2bufp (&sasl_req.c2s.token));
++			if (!qsasl_ret) {
++				failure = true;
++				break;
++			}
++		}
+ 		if (sasl_req.c2s.token.derptr == NULL) {
+ 			/* avoid Quick DER issue #76 */
+ 			sasl_req.c2s.no_token.derptr = (uint8_t*)"";
+diff --git a/src/server.c b/src/server.c
+index 1fe1fae..16c173f 100644
+--- a/src/server.c
++++ b/src/server.c
+@@ -79,7 +79,7 @@ int main (int argc, char *argv []) {
+ 	if (!kipdaemon_init()) { exit(1); }
+ 	//
+ 	// Initialise Quick-SASL
+-	assert (qsasl_init (NULL, "Hosted_Identity"));
++
+ 	//
+ 	// Get a server socket
+ 	struct sockaddr_storage sa;
+@@ -140,6 +140,11 @@ reconnect:
+ 		// Child continues and will exit
+ 		int exitval = 0;
+ 		//
++		// Initialise Quick-SASL in the child
++		if (!qsasl_init(NULL, "Hosted_Identity")) {
++			exit(1);
++		}
++		//
+ 		// Have a kipservice structure with builtin memory pools
+ 		kipt_ctx  kip;
+ 		kipt_dctx kipsvc;
+-- 
+2.54.0
+

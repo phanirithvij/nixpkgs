@@ -1,0 +1,131 @@
+From 1822b49d2cb281632ff52cb3e7a37eeb117dba06 Mon Sep 17 00:00:00 2001
+From: test <test@example.com>
+Date: Wed, 17 Jun 2026 11:59:53 +0530
+Subject: [PATCH] fix: canon user
+
+---
+ lib/quick-cyrus.c    | 33 ++++++++++++++++++++++++++++-----
+ lib/quick-external.c | 32 +++++++++++++++++++++++++++-----
+ 2 files changed, 55 insertions(+), 10 deletions(-)
+
+diff --git a/lib/quick-cyrus.c b/lib/quick-cyrus.c
+index 35dd581..a488067 100644
+--- a/lib/quick-cyrus.c
++++ b/lib/quick-cyrus.c
+@@ -15,6 +15,7 @@
+ #include <errno.h>
+ 
+ #include <sasl/sasl.h>
++#include <syslog.h>
+ #include <sasl/saslplug.h>
+ 
+ #include <arpa2/identity.h>
+@@ -161,23 +162,45 @@ int arpa2_canon_user (sasl_conn_t *conn,
+                               const char *user_realm,
+                               char *out,
+                               unsigned out_max, unsigned *out_len) {
+-	char fulluser [inlen + 1 + strlen (user_realm) + 1];
+-	memcpy (fulluser, in, inlen);
++	if (in != NULL && inlen == 0) {
++		inlen = strlen(in);
++	}
++	size_t realm_len = user_realm ? strlen (user_realm) : 0;
++	char fulluser [inlen + 1 + realm_len + 1];
++	if (in != NULL && inlen > 0) {
++		memcpy (fulluser, in, inlen);
++	}
+ 	fulluser [inlen] = '\0';
+-	if (memchr (fulluser, '@', inlen) == NULL) {
++	if (memchr (fulluser, '@', inlen) == NULL && user_realm != NULL) {
+ 		fulluser [inlen] = '@';
+ 		strcpy (fulluser + inlen + 1, user_realm);
+ 	}
+ 	a2id_t canonuser;
+ 	if (!a2id_parse (&canonuser, fulluser, 0)) {
+-		return SASL_BADPROT;
++		if (strcmp(fulluser, "anonymous") == 0) {
++			if (inlen + 1 > out_max) return SASL_NOMEM;
++			memcpy(out, fulluser, inlen);
++			out[inlen] = '\0';
++			*out_len = inlen;
++			return SASL_OK;
++		} else {
++			return SASL_BADPROT;
++		}
+ 	}
+ 	int canonlen = canonuser.ofs [A2ID_OFS_END];
+-	if (canonlen > out_max) {
++	if (user_realm != NULL) {
++		char *at = memchr(canonuser.txt, '@', canonlen);
++		if (at != NULL && strcasecmp(at + 1, user_realm) == 0) {
++			canonlen = at - canonuser.txt;
++		}
++	}
++	if (canonlen + 1 > out_max) {
+ 		return SASL_NOMEM;
+ 	}
+ 	memcpy (out, canonuser.txt, canonlen);
++	out[canonlen] = '\0';
+ 	*out_len = canonlen;
++	syslog(3, "arpa2_canon_user returning: %s", out);
+ 	return SASL_OK;
+ }
+ 
+diff --git a/lib/quick-external.c b/lib/quick-external.c
+index 5781804..71df2a6 100644
+--- a/lib/quick-external.c
++++ b/lib/quick-external.c
+@@ -165,23 +165,45 @@ int arpa2_canon_user (sasl_conn_t *conn,
+                               const char *user_realm,
+                               char *out,
+                               unsigned out_max, unsigned *out_len) {
+-	char fulluser [inlen + 1 + strlen (user_realm) + 1];
+-	memcpy (fulluser, in, inlen);
++	if (in != NULL && inlen == 0) {
++		inlen = strlen(in);
++	}
++	size_t realm_len = user_realm ? strlen (user_realm) : 0;
++	char fulluser [inlen + 1 + realm_len + 1];
++	if (in != NULL && inlen > 0) {
++		memcpy (fulluser, in, inlen);
++	}
+ 	fulluser [inlen] = '\0';
+-	if (memchr (fulluser, '@', inlen) == NULL) {
++	if (memchr (fulluser, '@', inlen) == NULL && user_realm != NULL) {
+ 		fulluser [inlen] = '@';
+ 		strcpy (fulluser + inlen + 1, user_realm);
+ 	}
+ 	a2id_t canonuser;
+ 	if (!a2id_parse (&canonuser, fulluser, 0)) {
+-		return SASL_BADPROT;
++		if (strcmp(fulluser, "anonymous") == 0) {
++			if (inlen + 1 > out_max) return SASL_NOMEM;
++			memcpy(out, fulluser, inlen);
++			out[inlen] = '\0';
++			*out_len = inlen;
++			return SASL_OK;
++		} else {
++			return SASL_BADPROT;
++		}
+ 	}
+ 	int canonlen = canonuser.ofs [A2ID_OFS_END];
+-	if (canonlen > out_max) {
++	if (user_realm != NULL) {
++		char *at = memchr(canonuser.txt, '@', canonlen);
++		if (at != NULL && strcasecmp(at + 1, user_realm) == 0) {
++			canonlen = at - canonuser.txt;
++		}
++	}
++	if (canonlen + 1 > out_max) {
+ 		return SASL_NOMEM;
+ 	}
+ 	memcpy (out, canonuser.txt, canonlen);
++	out[canonlen] = '\0';
+ 	*out_len = canonlen;
++	syslog(3, "arpa2_canon_user returning: %s", out);
+ 	return SASL_OK;
+ }
+ #endif
+-- 
+2.54.0
+
