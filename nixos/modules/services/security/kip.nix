@@ -57,6 +57,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.etc."sasl2/Hosted_Identity.conf".text = ''
+      mech_list: DIGEST-MD5 ANONYMOUS
+      sasldb_path: ${cfg.stateDir}/sasldb2
+    '';
+
     systemd.services.kipd = {
       description = "Keyful Identity Protocol Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -65,6 +70,7 @@ in
       environment = {
         KIP_VARDIR = cfg.stateDir;
         KIP_KEYTAB = "FILE:${cfg.stateDir}/master.keytab";
+        SASL_CONF_PATH = "/etc/sasl2";
       };
 
       serviceConfig = {
@@ -73,6 +79,9 @@ in
             ${pkgs.kip}/bin/a2kip master create service kip vardir ${cfg.stateDir}
             ${pkgs.kip}/bin/a2kip virtual add domain ${cfg.realm} service kip vardir ${cfg.stateDir}
           fi
+          echo 'testPassword' | ${pkgs.cyrus_sasl}/bin/saslpasswd2 -p -f ${cfg.stateDir}/sasldb2 -u ${cfg.realm} demo
+          echo 'testPassword' | ${pkgs.cyrus_sasl}/bin/saslpasswd2 -p -f ${cfg.stateDir}/sasldb2 demo
+          chmod 644 ${cfg.stateDir}/sasldb2
         '';
         ExecStart = "${pkgs.kip}/bin/kipd ${cfg.address} ${toString cfg.port} ${toString cfg.keepalive}";
         StateDirectory = lib.mkIf (cfg.stateDir == "/var/lib/kip") "kip";
