@@ -1310,6 +1310,10 @@ with pkgs;
 
   crystfel-headless = crystfel.override { withGui = false; };
 
+  bigbluebutton = recurseIntoAttrs (
+    lib.makeScope newScope (self: callPackage ../servers/bigbluebutton { })
+  );
+
   inherit (callPackages ../tools/security/bitwarden-directory-connector { })
     bitwarden-directory-connector-cli
     bitwarden-directory-connector
