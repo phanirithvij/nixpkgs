@@ -18,19 +18,12 @@ buildNpmPackage {
     '';
   };
 
-  npmDepsHash = "sha256-8Z1+IeMOsf+7el9RAuXsged+5/TKuEeDdf4TKuJG7bg=";
-  npmDepsFetcherVersion = 2;
-
-  # We want it to build, so no dontNpmBuild
-  # dontNpmBuild = true;
+  npmDepsHash = "sha256-ecbQ4CIEBzbgcxjNQgaXYSrHHE0m5fsDo37Evwf9tNg=";
 
   npmFlags = [ "--legacy-peer-deps" ];
 
-  strictDeps = true;
-
   installPhase = ''
     runHook preInstall
-
     mkdir -p $out/share/bbb-learning-dashboard
     cp -r build/* $out/share/bbb-learning-dashboard/
 

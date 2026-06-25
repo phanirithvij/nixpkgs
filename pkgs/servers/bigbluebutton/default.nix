@@ -55,6 +55,8 @@ let
 
       bbb-common-message = callPackage ./bbb-common-message { };
 
+      bbb-common-web = callPackage ./bbb-common-web { };
+
       bbb-config = callPackage ./bbb-config { };
 
       bbb-etherpad = callPackage ./bbb-etherpad { };
@@ -70,6 +72,8 @@ let
       bbb-graphql-middleware = callPackage ./bbb-graphql-middleware { };
 
       bbb-html5 = callPackage ./bbb-html5 { };
+
+      bbb-learning-dashboard = callPackage ./bbb-learning-dashboard { };
 
       bbb-webhooks = callPackage ./bbb-webhooks { };
 
