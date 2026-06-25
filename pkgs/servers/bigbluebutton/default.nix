@@ -14,9 +14,7 @@ let
         sbt = sbt.override { jre = jdk17; };
       };
       mkSbtDerivation = sbtNix.mkSbtDerivation;
-      callPackage = self.newScope {
-        inherit mkSbtDerivation;
-      };
+      callPackage = self.newScope { inherit mkSbtDerivation; };
     in
     {
       ### Things shared between multiple components
@@ -42,9 +40,7 @@ let
           description = "Complete web conferencing system for virtual classes and more";
           homepage = "https://bigbluebutton.org";
           license = lib.licenses.lgpl3Only;
-          teams = [
-            lib.teams.ngi
-          ];
+          teams = [ lib.teams.ngi ];
           platforms = lib.platforms.linux;
         };
       };

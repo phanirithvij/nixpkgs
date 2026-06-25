@@ -36,6 +36,9 @@ buildNpmPackage {
       --set NODE_ENV "production"
   '';
 
+  # TODO move to pkgs/by-name
+  passthru = { inherit mediasoup-worker; };
+
   meta = bbb-shared-utils.meta // {
     description = "BigBlueButton WebRTC SFU";
   };
