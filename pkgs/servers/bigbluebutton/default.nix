@@ -3,7 +3,7 @@
   lib,
   sbt,
   jdk17,
-  pkgs,
+  stdenvNoCC,
 }:
 
 let
@@ -88,4 +88,32 @@ let
       bbb-record-core = callPackage ./bbb-record-core { };
     };
 in
-lib.makeScope newScope packages
+lib.makeScope newScope (
+  self:
+  let
+    pkgsSet = packages self;
+  in
+  pkgsSet
+  // {
+    all = stdenvNoCC.mkDerivation {
+      name = "bigbluebutton-all";
+      phases = [ "installPhase" ];
+      installPhase = ''
+        mkdir -p $out
+        ${lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (
+            n: v:
+            if lib.isDerivation v then
+              ''
+                if [ -d "${v}" ]; then
+                  ln -s ${v} $out/${n}
+                fi
+              ''
+            else
+              ""
+          ) pkgsSet
+        )}
+      '';
+    };
+  }
+)
