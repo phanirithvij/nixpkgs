@@ -27,6 +27,9 @@ mkSbtDerivation {
     makeWrapper
   ];
 
+  # TODO where is the warmup phase or something?
+  # I didn't notice deps being compiled either unlike the ngipkgs build
+
   buildPhase = ''
     runHook preBuild
 

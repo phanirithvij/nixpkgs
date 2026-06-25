@@ -95,6 +95,8 @@ lib.makeScope newScope (
   in
   pkgsSet
   // {
+    # TODO make it a simple linkFarm or symlinkJoin
+    # is this even useful? the only useful thing would be a nixos module
     all = stdenvNoCC.mkDerivation {
       name = "bigbluebutton-all";
       phases = [ "installPhase" ];

@@ -17,6 +17,7 @@ let
         dep:
         fetchurl {
           url = dep.url;
+          # TODO hash? good idea? is sha256 easily obtainable?
           sha256 = dep.sha256;
         };
     in
