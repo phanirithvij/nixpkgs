@@ -102,7 +102,7 @@ let
       hash = "sha256-hIkZ/NH3vjLZF3i1MGvFZGXV6d5wpydO964tMvkvWCQ=";
     };
 
-    postPatch = oa.postPatch or "" + ''
+    postPatch = ''
       substituteInPlace CMakeLists.txt \
         --replace-fail \
           "cmake_minimum_required(VERSION 2.8.9)" \
