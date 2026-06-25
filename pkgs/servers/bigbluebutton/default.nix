@@ -85,6 +85,7 @@ let
 
       bbb-fsesl-akka = callPackage ./bbb-fsesl-akka { };
 
+      bbb-record-core = callPackage ./bbb-record-core { };
     };
 in
 lib.makeScope newScope packages
