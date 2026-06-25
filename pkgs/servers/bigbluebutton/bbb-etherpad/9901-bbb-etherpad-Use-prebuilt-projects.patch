@@ -1,6 +1,5 @@
-diff '--color=auto' -ruN a/build/packages-template/bbb-etherpad/build.sh b/build/packages-template/bbb-etherpad/build.sh
---- a/build/packages-template/bbb-etherpad/build.sh	2025-09-18 16:23:17.100775344 +0200
-+++ b/build/packages-template/bbb-etherpad/build.sh	2025-09-18 16:32:40.273908402 +0200
+--- a/build/packages-template/bbb-etherpad/build.sh
++++ b/build/packages-template/bbb-etherpad/build.sh
 @@ -22,45 +22,37 @@
  # however, it seems bbb-etherpad has troubles building with npm as high.
  # Setting npm to 6.14.11 which was used successfully for building in BigBlueButton 2.4.x
@@ -36,7 +35,7 @@ diff '--color=auto' -ruN a/build/packages-template/bbb-etherpad/build.sh b/build
 +ln -vs @ep_redis_publisher@/lib/node_modules/@epRedisPublisherPackageName@ src/node_modules/@epRedisPublisherPackageName@
  
  rm -rf ep_cursortrace
--git clone https://github.com/mconf/ep_cursortrace.git
+-git clone --branch v3.1.20-2 --depth 1 https://github.com/mconf/ep_cursortrace.git
 -npm pack ./ep_cursortrace
 -npm install ./ep_cursortrace-*.tgz
 +ln -vs @ep_cursortrace@/lib/node_modules/@epCursortracePackageName@ src/node_modules/@epCursortracePackageName@

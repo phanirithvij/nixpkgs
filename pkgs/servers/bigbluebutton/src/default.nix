@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "3.0.10";
+  version = "3.0.31";
 
   # Defined as git clone commands in the *.placeholder.sh files in BBB root
   externalDeps = [
@@ -23,8 +23,8 @@ let
       src = fetchFromGitHub {
         owner = "bigbluebutton";
         repo = "bbb-pads";
-        tag = "v1.5.3";
-        hash = "sha256-9WFDk+a6oSr9kDsqTVWdLuz1PpkHIOeThnfcnvsUgFs=";
+        tag = "v1.5.11";
+        hash = "sha256-a6bCSvrfrfzems5Vzb9P2M9Lb67rUyahL3iTNKKZdDw=";
       };
     }
     {
@@ -32,8 +32,8 @@ let
       src = fetchFromGitHub {
         owner = "bigbluebutton";
         repo = "bbb-playback";
-        tag = "v5.3.5";
-        hash = "sha256-XoRQhw8dTRS0C5ZA8lUt6Xk63+h8BtzTPD3fKxriSbM=";
+        tag = "v5.4.7";
+        hash = "sha256-XL6NwNla+91nzWtmCpS+t0O/npNBEl4XtQAo1jlEe5k=";
       };
     }
     # This is being fetched pre-built, prolly needs extra treatment for our from-source build
@@ -42,8 +42,8 @@ let
       src = fetchFromGitHub {
         owner = "bigbluebutton";
         repo = "bbb-presentation-video";
-        tag = "5.0.0-rc.1";
-        hash = "sha256-iGB8GIIvBYgKl87pQq6Dm7/r1jLN32EntiCBdKPXJ2Q=";
+        tag = "5.1.0-rc.3";
+        hash = "sha256-y15VuLW5HrYBu5TQd7PinC+3Xdyi7HePyD5OfOvh+cE=";
       };
     }
     {
@@ -60,8 +60,8 @@ let
       src = fetchFromGitHub {
         owner = "bigbluebutton";
         repo = "bbb-webhooks";
-        tag = "v3.3.1";
-        hash = "sha256-ggHBaT93wqf9TvofM+sQKospIJ+1vgiUjgRTBLXAS2U=";
+        tag = "v3.6.0";
+        hash = "sha256-VePGB9/JFxArt+ZusA3bBGt2TWdFsTplZ1ttuLQF3Wo=";
       };
     }
     {
@@ -69,8 +69,8 @@ let
       src = fetchFromGitHub {
         owner = "bigbluebutton";
         repo = "bbb-webrtc-recorder";
-        tag = "v0.9.4";
-        hash = "sha256-J1OxsWiVa1lRvTyhHDluM6RYZ9zHFNkNLGeDJe1BH6Y=";
+        tag = "v0.14.0";
+        hash = "sha256-KVUFoFvuPhgVAmuFgJU4DnBDiplokfNEj70YM6cOWMQ=";
       };
     }
     {
@@ -78,8 +78,8 @@ let
       src = fetchFromGitHub {
         owner = "bigbluebutton";
         repo = "bbb-webrtc-sfu";
-        tag = "v2.19.0-beta.2";
-        hash = "sha256-4GHbbSE7Sa9FsBpumlX4Xj3ls/cL1XZvUgKTzF3ifW8=";
+        tag = "v2.22.2";
+        hash = "sha256-YUxSNf10otrfJkJhmQ7Fg2gvbk4QyIN0vELhBHl6JMU=";
       };
     }
     {
@@ -96,7 +96,7 @@ let
     owner = "bigbluebutton";
     repo = "bigbluebutton";
     tag = "v${version}";
-    hash = "sha256-r1s+5AFwBrbIUOC+zuWPWNWqiuzHWgBDrWV8JN5bNGM=";
+    hash = "sha256-FYMWHXQNxU8J9FqYpSXaO8VkVGZvvus75LFbhfXqR2k=";
   };
 in
 runCommand "bigbluebutton-src"

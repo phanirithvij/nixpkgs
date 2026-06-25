@@ -3,6 +3,7 @@
   lib,
   sbt,
   jdk17,
+  pkgs,
 }:
 
 let
@@ -58,13 +59,32 @@ let
 
       bbb-etherpad = callPackage ./bbb-etherpad { };
 
+      bbb-pads = callPackage ./bbb-pads { };
+
+      bbb-webrtc-recorder = callPackage ./bbb-webrtc-recorder { };
+
+      bbb-webrtc-sfu = callPackage ./bbb-webrtc-sfu { };
+
+      bbb-graphql-server = callPackage ./bbb-graphql-server { };
+
+      bbb-graphql-middleware = callPackage ./bbb-graphql-middleware { };
+
+      bbb-html5 = callPackage ./bbb-html5 { };
+
+      bbb-webhooks = callPackage ./bbb-webhooks { };
+
+      bbb-transcription-controller = callPackage ./bbb-transcription-controller { };
+
+      bbb-playback = callPackage ./bbb-playback { };
+
       bbb-freeswitch-core = callPackage ./bbb-freeswitch-core { };
 
       bbb-freeswitch-sounds = callPackage ./bbb-freeswitch-sounds { };
 
+      bbb-fsesl-client = callPackage ./bbb-fsesl-client { };
+
       bbb-fsesl-akka = callPackage ./bbb-fsesl-akka { };
 
-      bbb-fsesl-client = callPackage ./bbb-fsesl-client { };
     };
 in
 lib.makeScope newScope packages
