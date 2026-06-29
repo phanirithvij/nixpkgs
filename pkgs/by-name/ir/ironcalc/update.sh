@@ -17,8 +17,8 @@ new_version="$base_version-unstable-$date"
 echo "Updating ironcalc to $new_version ($commit)"
 
 if [ "$current_version" = "$new_version" ]; then
-    echo "Already up to date: $current_version"
-    exit 0
+  echo "Already up to date: $current_version"
+  exit 0
 fi
 
 update-source-version ironcalc "$new_version" --rev="$commit"
@@ -27,6 +27,6 @@ echo "Updating hashes..."
 
 nix-update ironcalc.tools --version=skip
 nix-update ironcalc.server --version=skip
-nix-update ironcalc.widget --version=skip
+nix-update ironcalc.workbook --version=skip
 nix-update ironcalc.frontend --version=skip
 nix-update ironcalc.nodejs --version=skip
