@@ -17,6 +17,7 @@
   versionCheckHook,
   nix-update-script,
   _experimental-update-script-combinators,
+  nixosTests,
 }:
 let
   pnpm = pnpm_11;
@@ -181,6 +182,9 @@ buildGoModule (finalAttrs: {
       })
       ./update-inlang-plugins.sh
     ];
+    tests = {
+      inherit (nixosTests) backrest-modular;
+    };
     services.default = {
       imports = [ (lib.modules.importApply ./service.nix { }) ];
       backrest.package = finalAttrs.finalPackage;
