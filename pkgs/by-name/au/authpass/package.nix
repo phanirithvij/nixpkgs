@@ -77,16 +77,6 @@ flutter344.buildFlutterApplication (
       fetchSubmodules = true;
     };
 
-    patches = [
-      ./authpass-cloud-bloc.patch
-    ];
-
-    # Handle missing default DBus collection gracefully
-    postPatch = ''
-      chmod u+w -R ../deps/biometric_storage
-      sed -i "s/message.contains('AppArmor')) {/message.contains('AppArmor') || message.contains('No such object path')) {/" ../deps/biometric_storage/lib/src/biometric_storage.dart
-    '';
-
     sourceRoot = "${src.name}/authpass";
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
