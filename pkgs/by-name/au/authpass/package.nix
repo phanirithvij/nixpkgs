@@ -120,6 +120,15 @@ flutter344.buildFlutterApplication (
       runHook postBuild
     '';
 
+    # Handle missing default DBus collection gracefully by correctly mapping the DBus exception
+    postPatch = ''
+      chmod u+w -R ../deps/biometric_storage
+      sed -i "s/if (error.details is Map) {/if (error.details is Map) { final details = error.details as Map; /" ../deps/biometric_storage/lib/src/biometric_storage.dart
+      sed -i "s/error.details\['message'\]/details\['message'\]/" ../deps/biometric_storage/lib/src/biometric_storage.dart
+      sed -i "s/message.contains('AppArmor')) {/message.contains('AppArmor') || message.contains('No such object path')) {/" ../deps/biometric_storage/lib/src/biometric_storage.dart
+      sed -i "s/SECRET_COLLECTION_DEFAULT/NULL/" ../deps/biometric_storage/linux/biometric_storage_plugin.cc
+    '';
+
     nativeBuildInputs = [ pkg-config ];
 
     buildInputs = [
