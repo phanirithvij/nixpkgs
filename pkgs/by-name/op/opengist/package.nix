@@ -88,7 +88,7 @@ buildGoModule (finalAttrs: {
   passthru = {
     inherit (finalAttrs) frontend;
     updateScript = ./update.sh;
-    tests = nixosTests.opengist;
+    tests = nixosTests.opengist-modular;
     services.default = {
       imports = [
         (lib.modules.importApply ./service.nix { inherit pkgs; })
