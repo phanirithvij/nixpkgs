@@ -8,7 +8,7 @@
   ...
 }:
 let
-  cfg = config.services.opengist;
+  cfg = config.opengist;
   settingsFormat = pkgs.formats.yaml { };
   settingsFile = settingsFormat.generate "opengist-settings" cfg.settings;
 
@@ -57,7 +57,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = {
     systemd.services.opengist = {
       description = "Self-hosted pastebin powered by Git";
       after = [ "network-online.target" ];

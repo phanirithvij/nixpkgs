@@ -7,7 +7,7 @@
   nodes.machine = { pkgs, ... }: {
     system.services.opengist = {
       imports = [ pkgs.opengist.services.default ];
-      settings = {
+      opengist.settings = {
         opengist-home = "/tmp/test";
       };
     };
