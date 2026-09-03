@@ -1,5 +1,5 @@
 # Non-module dependencies (`importApply`)
-{ pkgs }:
+{ formats }:
 
 # Service module
 {
@@ -9,7 +9,7 @@
 }:
 let
   cfg = config.opengist;
-  settingsFormat = pkgs.formats.yaml { };
+  settingsFormat = formats.yaml { };
   settingsFile = settingsFormat.generate "opengist-settings" cfg.settings;
 
   inherit (lib)
@@ -17,21 +17,21 @@ let
     mkIf
     mkOption
     mkPackageOption
-    ;
-  inherit (lib.types)
-    nullOr
-    path
-    submodule
+    types
     ;
 in
 {
   _class = "service";
   options = {
     opengist = {
-      package = mkPackageOption pkgs "opengist" { };
+      package = mkOption {
+        description = "Package to use for opengist";
+        defaultText = "The opengist package that provided this module.";
+        type = types.package;
+      };
 
       environmentFile = mkOption {
-        type = nullOr path;
+        type = types.nullOr types.path;
         default = null;
         description = ''
           File to load as environment file.
@@ -41,7 +41,7 @@ in
       };
 
       settings = mkOption {
-        type = submodule {
+        type = types.submodule {
           freeformType = settingsFormat.type;
           options = {
           };

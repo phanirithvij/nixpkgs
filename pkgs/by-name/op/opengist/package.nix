@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
   makeWrapper,
   nixosTests,
-  pkgs,
+  formats,
 }:
 
 buildGoModule (finalAttrs: {
@@ -91,7 +91,7 @@ buildGoModule (finalAttrs: {
     tests = nixosTests.opengist-modular;
     services.default = {
       imports = [
-        (lib.modules.importApply ./service.nix { inherit pkgs; })
+        (lib.modules.importApply ./service.nix { inherit formats; })
       ];
       opengist.package = lib.mkDefault finalAttrs.finalPackage;
     };
