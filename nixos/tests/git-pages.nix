@@ -3,7 +3,10 @@
   name = "git-pages-modular-service";
 
   nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.curl ];
+    environment.systemPackages = [
+      pkgs.curl
+      pkgs.git-pages
+    ];
 
     system.services.git-pages = {
       imports = [ pkgs.git-pages.services.default ];
@@ -76,5 +79,19 @@
       machine.succeed("test -f /var/lib/git-pages/data/site/localhost/testsite")
       machine.succeed("systemctl start git-pages-expire.service")
       machine.fail("test -f /var/lib/git-pages/data/site/localhost/testsite")
+
+      # Test retroactive-expire script
+      machine.succeed("curl -f http://localhost/site1 -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar'")
+      machine.succeed("curl -f http://localhost/site2 -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar'")
+      machine.succeed("curl -f http://localhost/site3 -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar'")
+
+      machine.succeed("curl -f http://localhost/site4 -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar' --header 'Expires: Wed, 01 Jan 2030 00:00:00 GMT'")
+      machine.succeed("curl -f http://localhost/site5 -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar' --header 'Expires: Wed, 01 Jan 2030 00:00:00 GMT'")
+      machine.succeed("curl -f http://localhost/site6 -X PUT --data-binary @${testSite} --header 'Content-Type: application/x-tar' --header 'Expires: Wed, 01 Jan 2030 00:00:00 GMT'")
+
+      # Run retroactive-expire tool
+      output = machine.succeed("${pkgs.git-pages}/bin/retroactive-expire --dry-run=false --data-dir=/var/lib/git-pages/data 2>&1")
+      print(output)
+      assert "Processed 7 sites, updated 4 sites." in output, f"Expected 4 sites updated, got: {output}"
     '';
 }

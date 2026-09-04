@@ -27,12 +27,16 @@ buildGoModule (finalAttrs: {
     };
 
   patches = [
+    ./retroactive-expire.patch
     # bugfix to allow expiring existing routes
     # remove when https://codeberg.org/git-pages/git-pages/pulls/259 is available in the release
     ./0001-feat-add-allow-retroactive-expiration-limit-config.patch
   ];
 
-  subPackages = [ "." ];
+  subPackages = [
+    "."
+    "cmd/retroactive-expire"
+  ];
 
   vendorHash = "sha256-RKn3DxX/cJoR6cXkmR9UzwF9k67NZiGt9MKba178jBU=";
 

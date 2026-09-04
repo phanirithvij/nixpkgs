@@ -1,0 +1,82 @@
+diff --git a/cmd/retroactive-expire/main.go b/cmd/retroactive-expire/main.go
+new file mode 100644
+index 0000000..b63225f
+--- /dev/null
++++ b/cmd/retroactive-expire/main.go
+@@ -0,0 +1,76 @@
++package main
++
++import (
++	"context"
++	"flag"
++	"log"
++	"time"
++
++	"google.golang.org/protobuf/types/known/timestamppb"
++
++	git_pages "codeberg.org/git-pages/git-pages/src"
++)
++
++func main() {
++	dryRun := flag.Bool("dry-run", true, "run without making actual changes")
++	dataDir := flag.String("data-dir", "/var/lib/git-pages/data", "path to git-pages data directory")
++	flag.Parse()
++
++	log.Printf("Starting retroactive expiry script (dry-run: %v, data-dir: %s)", *dryRun, *dataDir)
++
++	config := &git_pages.FSConfig{
++		Root: *dataDir,
++	}
++
++	ctx := context.Background()
++	backend, err := git_pages.NewFSBackend(ctx, config)
++	if err != nil {
++		log.Fatalf("Failed to initialize FS backend: %v", err)
++	}
++
++	count := 0
++	modifiedCount := 0
++
++	for metadata, err := range backend.EnumerateManifests(ctx) {
++		if err != nil {
++			log.Printf("Error iterating manifests: %v", err)
++			continue
++		}
++
++		manifest, _, err := backend.GetManifest(ctx, metadata.Name, git_pages.GetManifestOptions{})
++		if err != nil {
++			log.Printf("Error getting manifest for %s: %v", metadata.Name, err)
++			continue
++		}
++
++		count++
++
++		if manifest.ExpiresAt != nil {
++			log.Printf("Site %s already has expiry set to %s, skipping", metadata.Name, manifest.ExpiresAt.AsTime().Format(time.RFC3339))
++			continue
++		}
++
++		// Calculate 100 days from creation (LastModified of the manifest file)
++		newExpiry := metadata.LastModified.Add(100 * 24 * time.Hour)
++
++		log.Printf("Site %s (created: %s): Setting expiry to %s", metadata.Name, metadata.LastModified.Format(time.RFC3339), newExpiry.Format(time.RFC3339))
++
++		if !*dryRun {
++			manifest.ExpiresAt = timestamppb.New(newExpiry)
++			err = backend.StageManifest(ctx, manifest)
++			if err != nil {
++				log.Printf("Failed to stage manifest for %s: %v", metadata.Name, err)
++				continue
++			}
++			err = backend.CommitManifest(ctx, metadata.Name, manifest, git_pages.ModifyManifestOptions{})
++			if err != nil {
++				log.Printf("Failed to commit manifest for %s: %v", metadata.Name, err)
++				continue
++			}
++			log.Printf("Successfully updated %s", metadata.Name)
++		}
++		modifiedCount++
++	}
++
++	log.Printf("Finished! Processed %d sites, updated %d sites.", count, modifiedCount)
++}
