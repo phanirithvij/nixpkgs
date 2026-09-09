@@ -19,7 +19,7 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "funkwhale";
-  version = "2.0.2";
+  version = "2.0.10";
   pyproject = true;
 
   strictDeps = true;
@@ -30,7 +30,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     owner = "funkwhale";
     repo = "funkwhale";
     tag = finalAttrs.version;
-    hash = "sha256-VTY9t+K3ne44rTDTctHMJALFpakdl+pld3t4/qHJm5Q=";
+    hash = "sha256-nAOsPBWhp3Fb/p5dSCLnnovsLwr54kUZy8lzsyWLPA8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/api";
@@ -71,6 +71,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       django-filter
       django-oauth-toolkit
       django-redis
+      django-silk
       django-storages
       django-versatileimagefield
       djangorestframework
@@ -167,6 +168,9 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
     runHook postCheck
   '';
+
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for funkwhale
+  dontCheckPythonMetadata = true;
 
   passthru = {
     inherit python;

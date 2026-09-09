@@ -1,12 +1,12 @@
 --- a/src/components/auth/SignupForm.vue
 +++ b/src/components/auth/SignupForm.vue
-@@ -195,7 +195,7 @@
+@@ -213,7 +213,7 @@ const terms = useMarkdown(() => nodeinfo.value?.metadata?.terms ?? '')
      />
-     <div
-       v-for="(field, idx) in
--      ( formCustomization && (formCustomization.fields.length ?? 0) > 0
-+      ( formCustomization && (formCustomization.fields?.length ?? 0) > 0
-         ? formCustomization.fields
-         : []
-       )"
+
+     <!-- Additional custom fields -->
+-    <template v-if="formCustomization && formCustomization.fields.length>0">
++    <template v-if="formCustomization && formCustomization.fields?.length>0">
+       <div
+         v-for="(field, key) in formCustomization.fields"
+         :key
 
