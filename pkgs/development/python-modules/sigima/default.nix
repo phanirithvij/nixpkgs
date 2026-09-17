@@ -114,6 +114,8 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
