@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "collabora-desktop";
-  version = "26.04.2.4-3";
+  version = "26.04.3.3-1";
   src = fetchFromGitHub {
     owner = "CollaboraOnline";
     repo = "online.mirror";
     rev = "coda-${finalAttrs.version}";
-    hash = "sha256-PbtFJnA51rogdmqXgTwOn/FXDcUJ1FhhhNkNDf+CtiE=";
+    hash = "sha256-UGhTMDqwv3+10vQ62jY7Oh0oeTouzxPxGDknvRjC8t4=";
   };
 
   __structuredAttrs = true;
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       postPatch = ''
         cp ${./package-lock.json} package-lock.json
       '';
-      hash = "sha256-yQYS/Cm3mq20RDBQGSdpnp+OKdttBul2+95WqH+6W4k=";
+      hash = "sha256-vHWIQ1TUmoJy/dIt6NF6rMTyGvQbhDBtNVfUcNLiv6c=";
     };
 
     npmRoot = "browser";
