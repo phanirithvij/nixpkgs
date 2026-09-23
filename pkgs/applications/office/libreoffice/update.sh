@@ -79,12 +79,12 @@ case $variant in
     ;;
 
 (collabora|collabora-coda)
-    all_tags=$(git ls-remote --tags --sort -v:refname https://gerrit.libreoffice.org/core)
+    all_tags=$(git ls-remote --tags --sort -v:refname https://github.com/CollaboraOnline/online.mirror)
     prefix="cp"
     tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+-\d+$'
     if [[ "$variant" == "collabora-coda" ]]; then
         prefix="coda"
-        tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+.\d+-\d+$'
+        tag_prefix='\Krefs/tags/'$prefix'-\d+\.\d+\.\d+\.\d+-\d+$'
     fi
     rev=$(grep --perl-regexp --only-matching --max-count=1 \
         "$tag_prefix" <<< "$all_tags")
@@ -97,20 +97,34 @@ case $variant in
     # submodules separately.
     declare -A dirnames=([help]=helpcontent2 [translations]=translations)
     for t in help translations; do
-        sub_rev=$(curl --silent "https://git.libreoffice.org/core/+/$rev/${dirnames[$t]}" |\
-            pup '.gitlink-detail text{}' |\
-            sed -n 's/^Submodule link to \([0-9a-f]\{40\}\) of .*/\1/p')
-        echoerr got rev $sub_rev for $t
-        prefetch_output=$(nix-prefetch-git "https://gerrit.libreoffice.org/$t" --rev "$sub_rev")
-        echo "{ fetchgit, ... }:" > $t.nix
-        echo "fetchgit {" >> $t.nix
-        echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
-        echo "  rev = \"$sub_rev\";" >> $t.nix
-        echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
-        echo "}" >> "$t.nix"
+        # Try finding the exact tag in gerrit.collaboraoffice.com first
+        sub_rev=$(git ls-remote --tags "https://gerrit.collaboraoffice.com/$t" 2>/dev/null | grep -E "refs/tags/$clean_rev(\^\{\})?\$" | head -n 1 | awk '{print $1}' || true)
+
+        # If not found, try the old method (falling back to libreoffice core submodules)
+        if [[ -z "$sub_rev" ]]; then
+            sub_rev=$(curl --silent "https://git.libreoffice.org/core/+/$rev/${dirnames[$t]}" |\
+                pup '.gitlink-detail text{}' |\
+                sed -n 's/^Submodule link to \([0-9a-f]\{40\}\) of .*/\1/p')
+            sub_url="https://gerrit.libreoffice.org/$t"
+        else
+            sub_url="https://gerrit.collaboraoffice.com/$t"
+        fi
+
+        if [[ -n "$sub_rev" ]]; then
+            echoerr got rev $sub_rev for $t from $sub_url
+            prefetch_output=$(nix-prefetch-git "$sub_url" --rev "$sub_rev")
+            echo "{ fetchgit, ... }:" > $t.nix
+            echo "fetchgit {" >> $t.nix
+            echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> $t.nix
+            echo "  rev = \"$sub_rev\";" >> $t.nix
+            echo "  hash = \"$(jq -r '.hash' <<< "$prefetch_output")\";" >> $t.nix
+            echo "}" >> "$t.nix"
+        else
+            echoerr "could not find submodule link for $t, skipping"
+        fi
     done
 
-    prefetch_output=$(nix-prefetch-git "https://gerrit.libreoffice.org/core" --rev "$rev")
+    prefetch_output=$(nix-prefetch-git "https://github.com/CollaboraOnline/online.mirror" --rev "$clean_rev")
     echo "{ fetchgit, ... }:" > main.nix
     echo "fetchgit {" >> main.nix
     echo "  url = \"$(jq -r '.url' <<< "$prefetch_output")\";" >> main.nix
@@ -120,7 +134,9 @@ case $variant in
     echo "}" >> main.nix
 
     # Environment variable required by ../generate-libreoffice-srcs.py
-    export downloadList=$(jq -r '.path' <<< "$prefetch_output")/download.lst
+    export downloadList=$(jq -r '.path' <<< "$prefetch_output")/engine/download.lst
+    ;;
+
 esac
 
 cd ..
