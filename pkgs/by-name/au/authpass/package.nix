@@ -19,6 +19,8 @@
   googleClientSecret ? null,
   microsoftClientId ? null,
   microsoftClientSecret ? null,
+  targetFlutterPlatform ? "linux",
+  pname ? "authpass",
 }:
 
 let
@@ -62,120 +64,124 @@ let
     }
   '';
 in
-flutter344.buildFlutterApplication (
-  rec {
-    pname = "authpass";
-    # The latest tagged release (v1.9.11) predates the current Flutter tooling
-    # in Nixpkgs and no longer builds; upstream development continues on main.
-    version = "${appVersion}-unstable-2026-07-27";
+flutter344.buildFlutterApplication (rec {
+  inherit pname;
+  # The latest tagged release (v1.9.11) predates the current Flutter tooling
+  # in Nixpkgs and no longer builds; upstream development continues on main.
+  version = "${appVersion}-unstable-2026-07-27";
 
-    src = fetchFromGitHub {
-      owner = "authpass";
-      repo = "authpass";
-      rev = "d72e563543326b0f50a6b2246299c270d2816f52";
-      hash = "sha256-9DJqeb6qi2vPnrSG9MQkG3iFJ1lq/pfEVmB2uK7rv4k=";
-      fetchSubmodules = true;
-    };
+  src = fetchFromGitHub {
+    owner = "authpass";
+    repo = "authpass";
+    rev = "d72e563543326b0f50a6b2246299c270d2816f52";
+    hash = "sha256-9DJqeb6qi2vPnrSG9MQkG3iFJ1lq/pfEVmB2uK7rv4k=";
+    fetchSubmodules = true;
+  };
 
-    sourceRoot = "${src.name}/authpass";
+  sourceRoot = "${src.name}/authpass";
 
-    pubspecLock = lib.importJSON ./pubspec.lock.json;
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-    gitHashes = lib.importJSON ./git-hashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
-    # The production entrypoint is only available GPG-encrypted (it contains
-    # upstream's service credentials). Build the F-Droid flavor instead, which
-    # is the upstream-supported entrypoint for third-party distribution:
-    # analytics and proprietary cloud integrations are disabled.
-    flutterBuildFlags = [
-      "-t"
-      (if withCloudSecrets then "lib/env/nixpkgs.dart" else "lib/env/fdroid.dart")
-      "--dart-define=AUTHPASS_VERSION=${appVersion}"
-      "--dart-define=AUTHPASS_BUILD_NUMBER=${buildNumber}"
-      "--dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass"
-    ];
+  # The production entrypoint is only available GPG-encrypted (it contains
+  # upstream's service credentials). Build the F-Droid flavor instead, which
+  # is the upstream-supported entrypoint for third-party distribution:
+  # analytics and proprietary cloud integrations are disabled.
+  flutterBuildFlags = [
+    "-t"
+    (
+      if withCloudSecrets then
+        "lib/env/nixpkgs.dart"
+      else if targetFlutterPlatform == "web" then
+        "lib/env/web.dart"
+      else
+        "lib/env/fdroid.dart"
+    )
+    "--dart-define=AUTHPASS_VERSION=${appVersion}"
+    "--dart-define=AUTHPASS_BUILD_NUMBER=${buildNumber}"
+    "--dart-define=AUTHPASS_PACKAGE_NAME=design.codeux.authpass"
+  ];
 
-    __structuredAttrs = true;
-    strictDeps = true;
+  __structuredAttrs = true;
+  strictDeps = true;
 
-    # buildDartApplication passes the pubspec lock via passAsFile, which Nix
-    # ignores under structured attrs, leaving $pubspecLockFilePath empty.
-    # Materialize it from .attrs.json instead; this runs before the
-    # `ln -sf "$pubspecLockFilePath" pubspec.lock` appended by the builder.
-    preConfigure = ''
-      jq -r '.pubspecLockFile' "$NIX_ATTRS_JSON_FILE" > "$NIX_BUILD_TOP/pubspec-lock.json"
-      pubspecLockFilePath="$NIX_BUILD_TOP/pubspec-lock.json"
+  # buildDartApplication passes the pubspec lock via passAsFile, which Nix
+  # ignores under structured attrs, leaving $pubspecLockFilePath empty.
+  # Materialize it from .attrs.json instead; this runs before the
+  # `ln -sf "$pubspecLockFilePath" pubspec.lock` appended by the builder.
+  preConfigure = ''
+    jq -r '.pubspecLockFile' "$NIX_ATTRS_JSON_FILE" > "$NIX_BUILD_TOP/pubspec-lock.json"
+    pubspecLockFilePath="$NIX_BUILD_TOP/pubspec-lock.json"
+  '';
+
+  # buildFlutterApplication's default buildPhase expands $flutterBuildFlags
+  # unquoted, which under structured attrs yields only the first list
+  # element and would silently drop the -t entrypoint flag above.
+  buildPhase = ''
+    runHook preBuild
+
+    mkdir -p build/flutter_assets/fonts
+
+    flutter build ${targetFlutterPlatform} -v ${
+      lib.optionalString (targetFlutterPlatform == "linux") ''--split-debug-info="$debug"''
+    } "''${flutterBuildFlags[@]}"
+
+    runHook postBuild
+  '';
+
+  # Handle missing default DBus collection gracefully by correctly mapping the DBus exception
+  postPatch = lib.optionalString (targetFlutterPlatform == "linux") ''
+    chmod u+w -R ../deps/biometric_storage
+    sed -i "s/if (error.details is Map) {/if (error.details is Map) { final details = error.details as Map; /" ../deps/biometric_storage/lib/src/biometric_storage.dart
+    sed -i "s/error.details\['message'\]/details\['message'\]/" ../deps/biometric_storage/lib/src/biometric_storage.dart
+    sed -i "s/message.contains('AppArmor')) {/message.contains('AppArmor') || message.contains('No such object path')) {/" ../deps/biometric_storage/lib/src/biometric_storage.dart
+    sed -i "s/SECRET_COLLECTION_DEFAULT/NULL/" ../deps/biometric_storage/linux/biometric_storage_plugin.cc
+  '';
+
+  nativeBuildInputs = lib.optionals (targetFlutterPlatform == "linux") [ pkg-config ];
+
+  buildInputs = lib.optionals (targetFlutterPlatform == "linux") [
+    # biometric_storage
+    libsecret
+    # hotkey_manager_linux
+    keybinder3
+    # jni
+    jdk
+  ];
+
+  env = lib.optionalAttrs (targetFlutterPlatform == "linux") { JAVA_HOME = "${jdk}/lib/openjdk"; };
+
+  # The window's app id / WM_CLASS is the program name "authpass", so the
+  # desktop file must be installed under that name for window-to-launcher
+  # matching (upstream's app.authpass.AuthPass name is for the Flatpak;
+  # their .deb also installs it as authpass.desktop).
+  postInstall = lib.optionalString (targetFlutterPlatform == "linux") ''
+    install -Dm644 ../metadata/linux/app.authpass.AuthPass.desktop \
+      $out/share/applications/authpass.desktop
+    install -Dm644 ../metadata/linux/app.authpass.AuthPass.png \
+      $out/share/icons/hicolor/512x512/apps/app.authpass.AuthPass.png
+  '';
+
+  meta = {
+    description = "Password manager based on Flutter, compatible with KeePass (kdbx 3.x/4.x)";
+    longDescription = ''
+      Password manager based on Flutter, compatible with KeePass
+      (kdbx 3.x/4.x). Local files, WebDAV and AuthPass Cloud work out of
+      the box. The proprietary cloud storage integrations (Dropbox,
+      Google Drive, OneDrive) are disabled by default because upstream
+      does not publish its OAuth application credentials; register your
+      own and enable them via the override arguments of this package
+      (e.g. `authpass.override { dropboxKey = ...; dropboxSecret = ...; }`),
+      see the Nixpkgs manual section on AuthPass.
     '';
+    homepage = "https://authpass.app/";
+    changelog = "https://github.com/authpass/authpass/blob/main/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ koppor ];
+    mainProgram = "authpass";
+    platforms = if targetFlutterPlatform == "web" then lib.platforms.all else lib.platforms.linux;
+  };
+}
 
-    # buildFlutterApplication's default buildPhase expands $flutterBuildFlags
-    # unquoted, which under structured attrs yields only the first list
-    # element and would silently drop the -t entrypoint flag above.
-    buildPhase = ''
-      runHook preBuild
-
-      mkdir -p build/flutter_assets/fonts
-
-      flutter build linux -v --split-debug-info="$debug" "''${flutterBuildFlags[@]}"
-
-      runHook postBuild
-    '';
-
-    # Handle missing default DBus collection gracefully by correctly mapping the DBus exception
-    postPatch = ''
-      chmod u+w -R ../deps/biometric_storage
-      sed -i "s/if (error.details is Map) {/if (error.details is Map) { final details = error.details as Map; /" ../deps/biometric_storage/lib/src/biometric_storage.dart
-      sed -i "s/error.details\['message'\]/details\['message'\]/" ../deps/biometric_storage/lib/src/biometric_storage.dart
-      sed -i "s/message.contains('AppArmor')) {/message.contains('AppArmor') || message.contains('No such object path')) {/" ../deps/biometric_storage/lib/src/biometric_storage.dart
-      sed -i "s/SECRET_COLLECTION_DEFAULT/NULL/" ../deps/biometric_storage/linux/biometric_storage_plugin.cc
-    '';
-
-    nativeBuildInputs = [ pkg-config ];
-
-    buildInputs = [
-      # biometric_storage
-      libsecret
-      # hotkey_manager_linux
-      keybinder3
-      # jni
-      jdk
-    ];
-
-    env.JAVA_HOME = "${jdk}/lib/openjdk";
-
-    # The window's app id / WM_CLASS is the program name "authpass", so the
-    # desktop file must be installed under that name for window-to-launcher
-    # matching (upstream's app.authpass.AuthPass name is for the Flatpak;
-    # their .deb also installs it as authpass.desktop).
-    postInstall = ''
-      install -Dm644 ../metadata/linux/app.authpass.AuthPass.desktop \
-        $out/share/applications/authpass.desktop
-      install -Dm644 ../metadata/linux/app.authpass.AuthPass.png \
-        $out/share/icons/hicolor/512x512/apps/app.authpass.AuthPass.png
-    '';
-
-    meta = {
-      description = "Password manager based on Flutter, compatible with KeePass (kdbx 3.x/4.x)";
-      longDescription = ''
-        Password manager based on Flutter, compatible with KeePass
-        (kdbx 3.x/4.x). Local files, WebDAV and AuthPass Cloud work out of
-        the box. The proprietary cloud storage integrations (Dropbox,
-        Google Drive, OneDrive) are disabled by default because upstream
-        does not publish its OAuth application credentials; register your
-        own and enable them via the override arguments of this package
-        (e.g. `authpass.override { dropboxKey = ...; dropboxSecret = ...; }`),
-        see the Nixpkgs manual section on AuthPass.
-      '';
-      homepage = "https://authpass.app/";
-      changelog = "https://github.com/authpass/authpass/blob/main/CHANGELOG.md";
-      license = lib.licenses.gpl3Only;
-      maintainers = with lib.maintainers; [ koppor ];
-      mainProgram = "authpass";
-      platforms = lib.platforms.linux;
-    };
-  }
-  // lib.optionalAttrs withCloudSecrets {
-    postPatch = ''
-      install -Dm644 ${nixpkgsEnv} lib/env/nixpkgs.dart
-    '';
-  }
 )
