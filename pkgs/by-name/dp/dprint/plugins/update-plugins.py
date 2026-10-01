@@ -82,22 +82,17 @@ def get_cargo_hash(pname, plugins):
             print(f"Found cargoHash for {pname}: {m.group(1)}")
             return m.group(1)
         else:
-            print(f"Could not find cargoHash in output for {pname}:\n{output}")
+            print(f"Build failed for {pname} and no cargoHash found in output:\n{output}")
             return None
 
 
 def update_plugin(plugins, pname, e):
     if "repoUrl" not in e:
-        print(f"Skipping {pname} (no repoUrl)")
+        print(f"Skipping {pname} (no repoUrl, cannot build from source)")
         return
 
     p = plugins.get(pname, {})
-    if "g-plane" in pname:
-        p.pop("cargoHash", None)
-        p.pop("version", None)
-    if p.get("version") == e["version"] and (
-        "cargoHash" in p or pname == "dprint-plugin-biome"
-    ):
+    if p.get("version") == e["version"] and "cargoHash" in p:
         print(f"Skipping {pname} (already at {e['version']})")
         return
 
@@ -120,10 +115,6 @@ def update_plugin(plugins, pname, e):
     p["hash"] = src_hash
     p["version"] = e["version"]
     p["updateUrl"] = get_update_url(e["url"])
-    # We only set url if it's NOT a source build.
-    # But wait, we don't know if it's a source build until we fetch cargoHash.
-    # So let's just set it, and if it succeeds as a source build, delete it!
-    p["url"] = e["url"]
     p["description"] = e["description"].rstrip(".")
     p["initConfig"] = {
         "configKey": e.get("configKey", ""),
@@ -134,12 +125,11 @@ def update_plugin(plugins, pname, e):
     c_hash = get_cargo_hash(pname, plugins)
     if c_hash:
         p["cargoHash"] = c_hash
-        # Since this is a source build, we don't need the binary url
-        p.pop("url", None)
     else:
-        # If we failed to get cargoHash, it falls back to binary.
-        # We need to fetch the binary hash since src_hash is useless for the binary url!
-        pass
+        print(f"WARNING: Could not fetch cargoHash for {pname}. Source build broken.")
+        # We purposefully do not fallback to binary here.
+        # This will leave cargoHash as sha256-AAAA... and the build will be broken
+        # which will correctly fail the nixpkgs-update PR, indicating upstream breakage!
 
 
 def update_plugin_by_name(name):

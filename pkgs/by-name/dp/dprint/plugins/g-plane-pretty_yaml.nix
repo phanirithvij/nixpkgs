@@ -1,4 +1,6 @@
-{
+{ mkDprintRustPlugin }:
+
+mkDprintRustPlugin {
   pname = "g-plane-pretty_yaml";
   cargoBuildFlags = [
     "-p"

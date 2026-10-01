@@ -1,74 +1,52 @@
 {
   lib,
-  fetchurl,
   fetchFromGitHub,
   rustPlatform,
-  rustc,
-  stdenv,
   dprint,
   writableTmpDirAsHomeHook,
   callPackage,
+  lld,
 }:
 let
-  mkDprintPlugin =
+  pluginsData = builtins.fromJSON (builtins.readFile ./plugins.json);
+
+  mkDprintRustPlugin =
     {
       pname,
-      version,
-      description,
-      initConfig,
-      updateUrl,
-      license ? lib.licenses.mit,
-      maintainers ? [ lib.maintainers.phanirithvij ],
-
-      # Optional source build info
-      owner ? null,
-      repo ? null,
-      rev ? null,
-      hash ? null,
-      cargoHash ? null,
-
-      # Optional binary info
-      url ? null,
-      pos ? null,
-
-      cargoBuildFlags ? [
-        "--target"
-        "wasm32-unknown-unknown"
-        "--features"
-        "wasm"
-      ],
-
+      cargoBuildFlags ? [ ],
       ...
-    }:
-    if cargoHash != null && owner != null then
-      rustPlatform.buildRustPackage {
-        inherit pos;
-        inherit pname version cargoHash;
+    }@args:
+    let
+      data = pluginsData.${pname} or (throw "Plugin ${pname} not found in plugins.json");
+      pos = builtins.unsafeGetAttrPos "pname" args;
+    in
+    rustPlatform.buildRustPackage (
+      {
+        inherit pname cargoBuildFlags pos;
+        version = data.version;
+
         src = fetchFromGitHub {
-          inherit
-            owner
-            repo
-            rev
-            hash
-            ;
+          owner = data.owner;
+          repo = data.repo;
+          rev = data.rev;
+          hash = data.hash;
         };
+        cargoHash = data.cargoHash;
 
-        nativeBuildInputs = [
-          rustc.llvmPackages.lld
-        ];
-
-        inherit cargoBuildFlags;
-
-        meta = {
-          inherit description license maintainers;
-        };
+        buildPhase = ''
+          runHook preBuild
+          cargo build --release --target wasm32-unknown-unknown ${builtins.concatStringsSep " " cargoBuildFlags}
+          runHook postBuild
+        '';
 
         installPhase = ''
+          runHook preInstall
           mkdir -p $out
-          WASM_PATH=$(find target/wasm32-unknown-unknown/release -maxdepth 1 -name "*.wasm" | head -n 1)
-          cp "$WASM_PATH" $out/plugin.wasm
+          cp target/wasm32-unknown-unknown/release/*.wasm $out/plugin.wasm
+          runHook postInstall
         '';
 
+        nativeBuildInputs = [ lld ];
         doInstallCheck = true;
         nativeInstallCheckInputs = [
           dprint
@@ -82,61 +60,37 @@ let
 
           runHook postInstallCheck
         '';
-        passthru = {
-          updateScript = ./update-plugins.py;
-          inherit initConfig updateUrl;
-        };
-      }
-    else
-      stdenv.mkDerivation (finalAttrs: {
-        inherit pos;
-        inherit pname version;
-        src = fetchurl { inherit url hash; };
-        dontUnpack = true;
+
         meta = {
-          inherit description license maintainers;
+          description = data.description;
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.phanirithvij ];
         };
-        buildPhase = ''
-          mkdir -p $out
-          cp $src $out/plugin.wasm
-        '';
-        doInstallCheck = true;
-        nativeInstallCheckInputs = [
-          dprint
-          writableTmpDirAsHomeHook
-        ];
-        installCheckPhase = ''
-          runHook preInstallCheck
 
-          mkdir empty && cd empty
-          dprint check --allow-no-files --config-discovery=false --plugins "$out/plugin.wasm"
-
-          runHook postInstallCheck
-        '';
         passthru = {
           updateScript = ./update-plugins.py;
-          inherit initConfig updateUrl;
+          initConfig = data.initConfig;
+          updateUrl = data.updateUrl;
         };
-      });
-
-  pluginsJson = builtins.fromJSON (builtins.readFile ./plugins.json);
-
-  # For each plugin in plugins.json, load its manual overrides from the respective .nix file
-  plugins = lib.mapAttrs (
-    pname: data:
-    let
-      overrides = import (./. + "/${pname}.nix");
-    in
-    mkDprintPlugin (
-      data
-      // overrides
-      // {
-        pos = builtins.unsafeGetAttrPos "pname" overrides;
-        maintainers = map (m: lib.maintainers.${m}) (data.maintainers or [ "phanirithvij" ]);
       }
+      // removeAttrs args [
+        "pname"
+        "cargoBuildFlags"
+      ]
+    );
+
+  files = lib.filterAttrs (
+    name: type:
+    type == "regular" && name != "default.nix" && name != "plugins.json" && lib.hasSuffix ".nix" name
+  ) (builtins.readDir ./.);
+
+  plugins = lib.mapAttrs' (
+    name: _:
+    lib.nameValuePair (lib.removeSuffix ".nix" name) (
+      callPackage (./. + "/${name}") { inherit mkDprintRustPlugin; }
     )
-  ) pluginsJson;
+  ) files;
 
   getPluginList = cb: map (p: "${p}/plugin.wasm") (cb plugins);
 in
-plugins // { inherit mkDprintPlugin getPluginList; }
+plugins // { inherit mkDprintRustPlugin getPluginList; }

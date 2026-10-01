@@ -1,4 +1,6 @@
-{
+{ mkDprintRustPlugin }:
+
+mkDprintRustPlugin {
   pname = "g-plane-markup_fmt";
   cargoBuildFlags = [
     "-p"
