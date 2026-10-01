@@ -179,8 +179,9 @@
     "version": "0.8.0"
   },
   "dprint-plugin-typescript": {
+    "cargoHash": "sha256-FgfAgCbRezJ6lHsfV/tBi1nqMVfXRyKd2XvuEjrmniY=",
     "description": "TypeScript/JavaScript code formatter",
-    "hash": "sha256-01MkexYMHoHrBDkw3m+UCtzT1xNlEiHToChNTDDqQ8Q=",
+    "hash": "sha256-U3GQOsiPhDT6We6lVjjD95KAaWD05JMTzFJw3ZRimOc=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -189,15 +190,19 @@
       "fileExtensions": [
         "ts",
         "tsx",
+        "mts",
+        "cts",
         "js",
         "jsx",
         "cjs",
         "mjs"
       ]
     },
+    "owner": "dprint",
+    "repo": "dprint-plugin-typescript",
+    "rev": "f7dd1f3768da3aa97982d68cad62f720130d812a",
     "updateUrl": "https://plugins.dprint.dev/dprint/typescript/latest.json",
-    "url": "https://plugins.dprint.dev/typescript-0.95.13.wasm",
-    "version": "0.95.13"
+    "version": "0.96.1"
   },
   "g-plane-malva": {
     "description": "CSS, SCSS, Sass and Less formatter",
