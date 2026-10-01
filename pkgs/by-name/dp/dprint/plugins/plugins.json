@@ -1,7 +1,7 @@
 {
   "dprint-plugin-biome": {
     "description": "Biome (JS/TS/JSON) wrapper plugin",
-    "hash": "sha256-HX4IOjLOGiqacEPdoaGy6QWq7Va1SEOk0J7+U5Rz2QM=",
+    "hash": "sha256-ftJjvr9oIBFhudbayLNM5Ta/7GncW2y9XtU41e/9Tac=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -10,16 +10,19 @@
       "fileExtensions": [
         "ts",
         "tsx",
+        "mts",
+        "cts",
         "js",
         "jsx",
         "cjs",
         "mjs",
-        "json"
+        "json",
+        "jsonc"
       ]
     },
     "updateUrl": "https://plugins.dprint.dev/dprint/biome/latest.json",
-    "url": "https://plugins.dprint.dev/biome-0.13.0.wasm",
-    "version": "0.13.0"
+    "url": "https://plugins.dprint.dev/biome-0.13.12.wasm",
+    "version": "0.13.12"
   },
   "dprint-plugin-dockerfile": {
     "description": "Dockerfile code formatter",
