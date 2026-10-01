@@ -62,8 +62,9 @@
     "version": "0.25.0"
   },
   "dprint-plugin-jupyter": {
+    "cargoHash": "sha256-M6zOgKEUew+liKIdG9mQiDw5DOy23qVqiw5quHxZ46U=",
     "description": "Jupyter notebook code block formatter",
-    "hash": "sha256-7qM9MTTvvuPfx3WScO3jR0GEb8L0kHg24BJLsJYBiZg=",
+    "hash": "sha256-Pn4HqGks1uP1X090ZYFED2yC/7HnKbEAiki2CiA6BGg=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "jupyter",
@@ -71,9 +72,11 @@
         "ipynb"
       ]
     },
+    "owner": "dprint",
+    "repo": "dprint-plugin-jupyter",
+    "rev": "2fcf93c087324a58fe5026514e0cac2ed8a12eab",
     "updateUrl": "https://plugins.dprint.dev/dprint/jupyter/latest.json",
-    "url": "https://plugins.dprint.dev/jupyter-0.2.1.wasm",
-    "version": "0.2.1"
+    "version": "0.3.1"
   },
   "dprint-plugin-mago": {
     "description": "Mago (PHP) wrapper plugin",
