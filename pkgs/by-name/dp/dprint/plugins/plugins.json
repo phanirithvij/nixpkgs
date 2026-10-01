@@ -263,8 +263,9 @@
     "version": "0.27.5"
   },
   "g-plane-pretty_graphql": {
+    "cargoHash": "sha256-nhq0UM8Mk810Aof4sDFRy59r5zF4+kIW+SBj88s2+UU=",
     "description": "GraphQL formatter",
-    "hash": "sha256-xEEBnmxxiIPNOePBDS2HG6lfAhR4l53w+QDF2mXdyzg=",
+    "hash": "sha256-MruGPMEx3hJxonuNY+BpcPum22oBHIPtCMTNBpkr+o8=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "graphql",
@@ -273,8 +274,10 @@
         "gql"
       ]
     },
+    "owner": "g-plane",
+    "repo": "pretty_graphql",
+    "rev": "da2086dc9a1aa08f18ac2db3e7bffc43c46cd24c",
     "updateUrl": "https://plugins.dprint.dev/g-plane/pretty_graphql/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/pretty_graphql-v0.2.3.wasm",
     "version": "0.2.3"
   },
   "g-plane-pretty_yaml": {
