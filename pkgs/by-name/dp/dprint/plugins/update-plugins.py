@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p nix 'python3.withPackages (ps: [ ps.requests ])'
+#!nix-shell -i python3 -p nix nix-prefetch-github 'python3.withPackages (ps: [ ps.requests ])'
 
 import json
 import os
@@ -7,145 +7,173 @@ from pathlib import Path
 import sys
 import subprocess
 import requests
+import re
 
-USAGE = """Usage: {0} [ | plugin-name | plugin-file-path]
+USAGE = """Usage: {0} [ | plugin-name ]
 
 eg.
   {0}
-  {0} dprint-plugin-json
-  {0} /path/to/dprint-plugin-json.nix"""
+  {0} dprint-plugin-json"""
 
 FILE_PATH = Path(os.path.realpath(__file__))
 SCRIPT_DIR = FILE_PATH.parent
+PLUGINS_JSON = SCRIPT_DIR / "plugins.json"
 
-pname = ""
-if len(sys.argv) > 1:
-    if "-help" in "".join(sys.argv):
-        print(USAGE.format(FILE_PATH.name))
-        exit(0)
-    pname = sys.argv[1]
-else:
-    pname = os.environ.get("UPDATE_NIX_PNAME", "")
+pname = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("UPDATE_NIX_PNAME", "")
 
-
-# get sri hash for a url, no unpack
-def nix_prefetch_url(url, algo="sha256"):
-    hash = (
-        subprocess.check_output(["nix-prefetch-url", "--type", algo, url])
-        .decode("utf-8")
-        .rstrip()
-    )
-    sri = (
-        subprocess.check_output(
-            # split by space is enough for this command
-            "nix --extra-experimental-features nix-command "
-            f"hash convert --hash-algo {algo} --to sri {hash}".split(" ")
-        )
-        .decode("utf-8")
-        .rstrip()
-    )
-    return sri
-
-
-# json object to nix string
-def json_to_nix(jsondata):
-    # to quote strings, dumps twice does it
-    json_str = json.dumps(json.dumps(jsondata))
-    return (
-        subprocess.check_output(
-            "nix --extra-experimental-features nix-command eval "
-            f"--expr 'builtins.fromJSON ''{json_str}''' --impure | nixfmt",
-            shell=True,
-        )
-        .decode("utf-8")
-        .rstrip()
-    )
-
-
-# nix string to json object
-def nix_to_json(nixstr):
-    return json.loads(
-        subprocess.check_output(
-            f"nix --extra-experimental-features nix-command eval --json --expr '{nixstr}'",
-            shell=True,
-        )
-        .decode("utf-8")
-        .rstrip()
-    )
-
-
-# nixfmt a file
-def nixfmt(nixfile):
-    subprocess.run(["nixfmt", nixfile])
+if "-help" in sys.argv:
+    print(USAGE.format(FILE_PATH.name))
+    exit(0)
 
 
 def get_update_url(plugin_url):
-    """Get a single plugin's update url given the plugin's url"""
-
-    # remove -version.wasm at the end
     url = "-".join(plugin_url.split("-")[:-1])
     names = url.split("/")[3:]
-    # if single name then -> dprint/<name>
     if len(names) == 1:
         names.insert(0, "dprint")
     return "https://plugins.dprint.dev/" + "/".join(names) + "/latest.json"
 
 
-def write_plugin_derivation(drv_attrs):
-    drv = f"{{ mkDprintPlugin }}: mkDprintPlugin {json_to_nix(drv_attrs)}"
-    filepath = SCRIPT_DIR / f"{drv_attrs["pname"]}.nix"
-    with open(filepath, "w+", encoding="utf8") as f:
-        f.write(drv)
-    nixfmt(filepath)
+def get_hashes(owner, repo, version):
+    rev = version
+    print(f"Prefetching {owner}/{repo} at {rev}")
+    try:
+        res = subprocess.check_output(
+            f"nix-prefetch-github {owner} {repo} --rev {rev}",
+            shell=True,
+            stderr=subprocess.DEVNULL,
+        )
+    except subprocess.CalledProcessError:
+        rev = "v" + version
+        try:
+            res = subprocess.check_output(
+                f"nix-prefetch-github {owner} {repo} --rev {rev}",
+                shell=True,
+                stderr=subprocess.DEVNULL,
+            )
+        except subprocess.CalledProcessError:
+            print(f"Failed to fetch {owner}/{repo} at {rev} and v{version}")
+            return None, None
+
+    src_data = json.loads(res.decode("utf-8"))
+    return src_data["rev"], src_data["hash"]
+
+
+def get_cargo_hash(pname, plugins):
+    print(f"Building {pname} to get cargoHash...")
+    # First set fakeHash
+    plugins[pname]["cargoHash"] = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    with open(PLUGINS_JSON, "w") as f:
+        json.dump(plugins, f, indent=2, sort_keys=True)
+        f.write("\n")
+
+    try:
+        subprocess.check_output(
+            f"nix-build -A dprint-plugins.{pname} --no-out-link",
+            shell=True,
+            stderr=subprocess.STDOUT,
+        )
+        print(f"Wait, {pname} succeeded with fake hash?")
+        return "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    except subprocess.CalledProcessError as e:
+        output = e.output.decode("utf-8")
+        m = re.search(r"got:\s+(sha256-[a-zA-Z0-9+/=]+)", output)
+        if m:
+            print(f"Found cargoHash for {pname}: {m.group(1)}")
+            return m.group(1)
+        else:
+            print(
+                f"Build failed for {pname} and no cargoHash found in output:\n{output}"
+            )
+            return None
+
+
+def update_plugin(plugins, pname, e):
+    if "repoUrl" not in e:
+        print(f"Skipping {pname} (no repoUrl, cannot build from source)")
+        return
+
+    p = plugins.get(pname, {})
+    if p.get("version") == e["version"] and "cargoHash" in p:
+        print(f"Skipping {pname} (already at {e['version']})")
+        return
+
+    repo_url = e["repoUrl"]
+    parts = repo_url.split("/")
+    owner = parts[-2]
+    repo = parts[-1]
+
+    rev, src_hash = get_hashes(owner, repo, e["version"])
+    if not rev:
+        return
+
+    if pname not in plugins:
+        plugins[pname] = {}
+
+    p = plugins[pname]
+    p["owner"] = owner
+    p["repo"] = repo
+    p["rev"] = rev
+    p["hash"] = src_hash
+    p["version"] = e["version"]
+    p["updateUrl"] = get_update_url(e["url"])
+    p["description"] = e["description"].rstrip(".")
+    p["initConfig"] = {
+        "configKey": e.get("configKey", ""),
+        "configExcludes": e.get("configExcludes", []),
+        "fileExtensions": e.get("fileExtensions", []),
+    }
+
+    # Strip the binary url if it exists since we do source builds now
+    p.pop("url", None)
+
+    c_hash = get_cargo_hash(pname, plugins)
+    if c_hash:
+        p["cargoHash"] = c_hash
+    else:
+        print(f"WARNING: Could not fetch cargoHash for {pname}. Source build broken.")
 
 
 def update_plugin_by_name(name):
-    """Update a single plugin by name"""
-
-    # allow passing in filename as well as pname
     if name.endswith(".nix"):
         name = Path(name[:-4]).name
-    try:
-        p = (SCRIPT_DIR / f"{name}.nix").read_text().replace("\n", "")
-    except OSError as e:
-        print(f"failed to update plugin {name}: error: {e}")
+
+    with open(PLUGINS_JSON, "r") as f:
+        plugins = json.load(f)
+
+    if name not in plugins:
+        print(f"plugin {name} not found in plugins.json")
         exit(1)
 
-    start_idx = p.find("mkDprintPlugin {") + len("mkDprintPlugin {")
-    p = nix_to_json("{" + p[start_idx:].strip())
-
+    p = plugins[name]
     data = requests.get(p["updateUrl"]).json()
-    p["url"] = data["url"]
-    p["version"] = data["version"]
-    p["hash"] = nix_prefetch_url(data["url"])
+    e = requests.get("https://plugins.dprint.dev/info.json").json()["latest"]
+    e = next((x for x in e if x["name"].replace("/", "-") == name), None)
+    if e is None:
+        print(f"plugin {name} not found in dprint info.json")
+        exit(1)
 
-    write_plugin_derivation(p)
+    update_plugin(plugins, name, e)
+
+    with open(PLUGINS_JSON, "w") as f:
+        json.dump(plugins, f, indent=2, sort_keys=True)
+        f.write("\n")
 
 
 def update_plugins():
-    """Update all the plugins"""
+    with open(PLUGINS_JSON, "r") as f:
+        plugins = json.load(f)
 
     data = requests.get("https://plugins.dprint.dev/info.json").json()["latest"]
 
     for e in data:
-        update_url = get_update_url(e["url"])
-        pname = e["name"]
-        if "/" in e["name"]:
-            pname = pname.replace("/", "-")
-        drv_attrs = {
-            "url": e["url"],
-            "hash": nix_prefetch_url(e["url"]),
-            "updateUrl": update_url,
-            "pname": pname,
-            "version": e["version"],
-            "description": e["description"].rstrip("."),
-            "initConfig": {
-                "configKey": e["configKey"],
-                "configExcludes": e["configExcludes"],
-                "fileExtensions": e["fileExtensions"],
-            },
-        }
-        write_plugin_derivation(drv_attrs)
+        pname = e["name"].replace("/", "-")
+        if pname in plugins:
+            update_plugin(plugins, pname, e)
+
+    with open(PLUGINS_JSON, "w") as f:
+        json.dump(plugins, f, indent=2, sort_keys=True)
+        f.write("\n")
 
 
 if pname != "":

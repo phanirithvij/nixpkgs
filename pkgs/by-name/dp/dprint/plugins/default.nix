@@ -2,9 +2,12 @@
   lib,
   fetchurl,
   stdenv,
+  fetchFromGitHub,
+  rustPlatform,
   dprint,
   writableTmpDirAsHomeHook,
   callPackage,
+  lld,
 }:
 let
   pluginsData = builtins.fromJSON (builtins.readFile ./plugins.json);
@@ -51,36 +54,43 @@ let
       };
     });
 
-  mkDprintPluginFromJson =
+  mkDprintRustPlugin =
     {
       pname,
+      cargoBuildFlags ? [ ],
       ...
     }@args:
     let
       data = pluginsData.${pname} or (throw "Plugin ${pname} not found in plugins.json");
       pos = builtins.unsafeGetAttrPos "pname" args;
     in
-    stdenv.mkDerivation (
-      finalAttrs:
+    rustPlatform.buildRustPackage (
       {
-        inherit pname pos;
+        inherit pname cargoBuildFlags pos;
         version = data.version;
-        src = fetchurl {
-          url = data.url;
+
+        src = fetchFromGitHub {
+          owner = data.owner;
+          repo = data.repo;
+          rev = data.rev;
           hash = data.hash;
         };
-        dontUnpack = true;
-        meta = {
-          description = data.description;
-          license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.phanirithvij ];
-        };
+        cargoHash = data.cargoHash;
 
         buildPhase = ''
-          mkdir -p $out
-          cp $src $out/plugin.wasm
+          runHook preBuild
+          cargo build --release --target wasm32-unknown-unknown ${builtins.concatStringsSep " " cargoBuildFlags}
+          runHook postBuild
         '';
 
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp target/wasm32-unknown-unknown/release/*.wasm $out/plugin.wasm
+          runHook postInstall
+        '';
+
+        nativeBuildInputs = [ lld ];
         doInstallCheck = true;
         nativeInstallCheckInputs = [
           dprint
@@ -95,13 +105,22 @@ let
           runHook postInstallCheck
         '';
 
+        meta = {
+          description = data.description;
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.phanirithvij ];
+        };
+
         passthru = {
           updateScript = ./update-plugins.py;
           initConfig = data.initConfig;
           updateUrl = data.updateUrl;
         };
       }
-      // removeAttrs args [ "pname" ]
+      // removeAttrs args [
+        "pname"
+        "cargoBuildFlags"
+      ]
     );
 
   inherit (lib)
@@ -123,10 +142,10 @@ let
   plugins = mapAttrs' (
     name: _:
     nameValuePair (removeSuffix ".nix" name) (
-      callPackage (./. + "/${name}") { mkDprintPlugin = mkDprintPluginFromJson; }
+      callPackage (./. + "/${name}") { inherit mkDprintRustPlugin; }
     )
   ) files;
 
   getPluginList = cb: map (p: "${p}/plugin.wasm") (cb plugins);
 in
-plugins // { inherit mkDprintPlugin getPluginList; }
+plugins // { inherit mkDprintRustPlugin mkDprintPlugin getPluginList; }

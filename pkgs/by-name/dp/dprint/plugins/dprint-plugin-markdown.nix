@@ -1,5 +1,9 @@
-{ mkDprintPlugin }:
+{ mkDprintRustPlugin }:
 
-mkDprintPlugin {
+mkDprintRustPlugin {
   pname = "dprint-plugin-markdown";
+  cargoBuildFlags = [
+    "--features"
+    "wasm"
+  ];
 }
