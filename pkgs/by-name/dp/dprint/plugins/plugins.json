@@ -1,7 +1,8 @@
 {
   "dprint-plugin-biome": {
+    "cargoHash": "sha256-ue7VHe3WUuwGN4wdBkBIDW3HMq+sQZOdSPC6XlebZB8=",
     "description": "Biome (JS/TS/JSON) wrapper plugin",
-    "hash": "sha256-ftJjvr9oIBFhudbayLNM5Ta/7GncW2y9XtU41e/9Tac=",
+    "hash": "sha256-0qRgx0D/caTvRhJ748sg7+dS1zh/E//seBkTF5Vo0y0=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -20,9 +21,11 @@
         "jsonc"
       ]
     },
+    "owner": "dprint",
+    "repo": "dprint-plugin-biome",
+    "rev": "1743aa0790a5caa4156ab4617e9f1ffdb8ab208e",
     "updateUrl": "https://plugins.dprint.dev/dprint/biome/latest.json",
-    "url": "https://plugins.dprint.dev/biome-0.13.12.wasm",
-    "version": "0.13.12"
+    "version": "0.13.13"
   },
   "dprint-plugin-dockerfile": {
     "cargoHash": "sha256-T0rsorSgWc+0teQOPn3ibsvZBna7RLpEkHJRkZ9Dwmk=",
