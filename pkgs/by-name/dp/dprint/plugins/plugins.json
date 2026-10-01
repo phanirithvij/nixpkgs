@@ -281,8 +281,9 @@
     "version": "0.2.3"
   },
   "g-plane-pretty_yaml": {
+    "cargoHash": "sha256-oT2Ci12eyF3Bf0bu9AwE5xNn81SLAD+NG8GPJ5UJKGQ=",
     "description": "YAML formatter",
-    "hash": "sha256-QKL92nBAMX6xsjUg86AHaaVXHu2wScTKkXXBue66Aa4=",
+    "hash": "sha256-Bbkw6a4Tjix0dDBWSdzZICuU7KUMM45XkVGG6yJ25ak=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "yaml",
@@ -291,8 +292,10 @@
         "yml"
       ]
     },
+    "owner": "g-plane",
+    "repo": "pretty_yaml",
+    "rev": "8692d450e21b6dd8a573e561776e102cb5fdb171",
     "updateUrl": "https://plugins.dprint.dev/g-plane/pretty_yaml/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm",
     "version": "0.6.0"
   }
 }
