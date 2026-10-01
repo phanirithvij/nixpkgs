@@ -42,20 +42,24 @@
     "version": "0.6.0"
   },
   "dprint-plugin-json": {
+    "cargoHash": "sha256-oXwHd1xqxcVJwEs2o+x83/duOL15jh60ZBAdKE88k+g=",
     "description": "JSON/JSONC code formatter",
-    "hash": "sha256-CetVbLXlgZcrBs6yxFNqkK4DK4TThL7qiDfJkYhFTN8=",
+    "hash": "sha256-RS0pw9Esnv2/+VcBKrxP8dGAttrApqvih+XRpo7Hzfo=",
     "initConfig": {
       "configExcludes": [
         "**/*-lock.json"
       ],
       "configKey": "json",
       "fileExtensions": [
-        "json"
+        "json",
+        "jsonc"
       ]
     },
+    "owner": "dprint",
+    "repo": "dprint-plugin-json",
+    "rev": "f0894ac955f79280b82fd1d17e1912d4aed47328",
     "updateUrl": "https://plugins.dprint.dev/dprint/json/latest.json",
-    "url": "https://plugins.dprint.dev/json-0.21.1.wasm",
-    "version": "0.21.1"
+    "version": "0.25.0"
   },
   "dprint-plugin-jupyter": {
     "description": "Jupyter notebook code block formatter",
