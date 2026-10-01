@@ -118,8 +118,9 @@
     "version": "0.24.0"
   },
   "dprint-plugin-oxc": {
+    "cargoHash": "sha256-Wi8C4greWikEH/Uv2Nbq/h8WyzGlQDhXtpvAFze1J9I=",
     "description": "Oxc (JS/TS) wrapper plugin",
-    "hash": "sha256-BctJI87x82s3gpCovPSbGp+PfdBuYRZnXeCWWyFHpRs=",
+    "hash": "sha256-DAsiUMRuzZXK8vIC+wz4EixZwy6ECeT5km2HJdosNsI=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -128,15 +129,19 @@
       "fileExtensions": [
         "ts",
         "tsx",
+        "mts",
+        "cts",
         "js",
         "jsx",
         "cjs",
         "mjs"
       ]
     },
+    "owner": "dprint",
+    "repo": "dprint-plugin-oxc",
+    "rev": "78b673e267cbda8960b5bffb5a8ae0c38f221c3e",
     "updateUrl": "https://plugins.dprint.dev/dprint/oxc/latest.json",
-    "url": "https://plugins.dprint.dev/oxc-0.2.0.wasm",
-    "version": "0.2.0"
+    "version": "0.42.0"
   },
   "dprint-plugin-ruff": {
     "description": "Ruff (Python) wrapper plugin",
