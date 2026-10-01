@@ -1,15 +1,17 @@
 {
   lib,
   fetchurl,
+  fetchFromGitHub,
+  rustPlatform,
+  rustc,
   stdenv,
   dprint,
   writableTmpDirAsHomeHook,
+  callPackage,
 }:
 let
   mkDprintPlugin =
     {
-      url,
-      hash,
       pname,
       version,
       description,
@@ -17,66 +19,124 @@ let
       updateUrl,
       license ? lib.licenses.mit,
       maintainers ? [ lib.maintainers.phanirithvij ],
+
+      # Optional source build info
+      owner ? null,
+      repo ? null,
+      rev ? null,
+      hash ? null,
+      cargoHash ? null,
+
+      # Optional binary info
+      url ? null,
+      pos ? null,
+
+      cargoBuildFlags ? [
+        "--target"
+        "wasm32-unknown-unknown"
+        "--features"
+        "wasm"
+      ],
+
+      ...
     }:
-    stdenv.mkDerivation (finalAttrs: {
-      inherit pname version;
-      src = fetchurl { inherit url hash; };
-      dontUnpack = true;
-      meta = {
-        inherit description license maintainers;
-      };
-      /*
-        in the dprint configuration
-        dprint expects a plugin path to end with .wasm extension
+    if cargoHash != null && owner != null then
+      rustPlatform.buildRustPackage {
+        inherit pos;
+        inherit pname version cargoHash;
+        src = fetchFromGitHub {
+          inherit
+            owner
+            repo
+            rev
+            hash
+            ;
+        };
 
-        for auto update with nixpkgs-update to work
-        we cannot have .wasm extension at the end in the nix store path
-      */
-      buildPhase = ''
-        mkdir -p $out
-        cp $src $out/plugin.wasm
-      '';
-      doInstallCheck = true;
-      nativeInstallCheckInputs = [
-        dprint
-        writableTmpDirAsHomeHook
-      ];
-      # Prevent schema unmatching errors
-      # See https://github.com/NixOS/nixpkgs/pull/369415#issuecomment-2566112144 for detail
-      installCheckPhase = ''
-        runHook preInstallCheck
+        nativeBuildInputs = [
+          rustc.llvmPackages.lld
+        ];
 
-        mkdir empty && cd empty
-        dprint check --allow-no-files --config-discovery=false --plugins "$out/plugin.wasm"
+        inherit cargoBuildFlags;
 
-        runHook postInstallCheck
-      '';
-      passthru = {
-        updateScript = ./update-plugins.py;
-        inherit initConfig updateUrl;
-      };
-    });
-  inherit (lib)
-    filterAttrs
-    isDerivation
-    mapAttrs'
-    nameValuePair
-    removeSuffix
-    ;
-  files = filterAttrs (
-    name: type: type == "regular" && name != "default.nix" && lib.hasSuffix ".nix" name
-  ) (builtins.readDir ./.);
-  plugins = mapAttrs' (
-    name: _:
-    nameValuePair (removeSuffix ".nix" name) (import (./. + "/${name}") { inherit mkDprintPlugin; })
-  ) files;
-  # Expects a function that receives the dprint plugin set as an input
-  # and returns a list of plugins
-  # Example:
-  # pkgs.dprint-plugins.getPluginList (plugins: [
-  #   plugins.dprint-plugin-toml
-  #   (pkgs.callPackage ./dprint/plugins/sample.nix {})
-  # ]
+        meta = {
+          inherit description license maintainers;
+        };
+
+        installPhase = ''
+          mkdir -p $out
+          WASM_PATH=$(find target/wasm32-unknown-unknown/release -maxdepth 1 -name "*.wasm" | head -n 1)
+          cp "$WASM_PATH" $out/plugin.wasm
+        '';
+
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [
+          dprint
+          writableTmpDirAsHomeHook
+        ];
+        installCheckPhase = ''
+          runHook preInstallCheck
+
+          mkdir empty && cd empty
+          dprint check --allow-no-files --config-discovery=false --plugins "$out/plugin.wasm"
+
+          runHook postInstallCheck
+        '';
+        passthru = {
+          updateScript = ./update-plugins.py;
+          inherit initConfig updateUrl;
+        };
+      }
+    else
+      stdenv.mkDerivation (finalAttrs: {
+        inherit pos;
+        inherit pname version;
+        src = fetchurl { inherit url hash; };
+        dontUnpack = true;
+        meta = {
+          inherit description license maintainers;
+        };
+        buildPhase = ''
+          mkdir -p $out
+          cp $src $out/plugin.wasm
+        '';
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [
+          dprint
+          writableTmpDirAsHomeHook
+        ];
+        installCheckPhase = ''
+          runHook preInstallCheck
+
+          mkdir empty && cd empty
+          dprint check --allow-no-files --config-discovery=false --plugins "$out/plugin.wasm"
+
+          runHook postInstallCheck
+        '';
+        passthru = {
+          updateScript = ./update-plugins.py;
+          inherit initConfig updateUrl;
+        };
+      });
+
+  pluginsJson = builtins.fromJSON (builtins.readFile ./plugins.json);
+
+  # For each plugin in plugins.json, load its manual overrides from the respective .nix file
+  plugins = lib.mapAttrs (
+    pname: data:
+    let
+      overrides = import (./. + "/${pname}.nix");
+    in
+    mkDprintPlugin (
+      data
+      // overrides
+      // {
+        pos = builtins.unsafeGetAttrPos "pname" overrides;
+        maintainers = map (m: lib.maintainers.${m}) (data.maintainers or [ "phanirithvij" ]);
+      }
+    )
+  ) pluginsJson;
+
   getPluginList = cb: map (p: "${p}/plugin.wasm") (cb plugins);
 in
 plugins // { inherit mkDprintPlugin getPluginList; }
