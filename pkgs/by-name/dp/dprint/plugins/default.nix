@@ -31,6 +31,13 @@ let
       meta = {
         inherit description license maintainers;
       };
+      /*
+        in the dprint configuration
+        dprint expects a plugin path to end with .wasm extension
+
+        for auto update with nixpkgs-update to work
+        we cannot have .wasm extension at the end in the nix store path
+      */
       buildPhase = ''
         mkdir -p $out
         cp $src $out/plugin.wasm
@@ -40,6 +47,8 @@ let
         dprint
         writableTmpDirAsHomeHook
       ];
+      # Prevent schema unmatching errors
+      # See https://github.com/NixOS/nixpkgs/pull/369415#issuecomment-2566112144 for detail
       installCheckPhase = ''
         runHook preInstallCheck
 
@@ -77,6 +86,13 @@ let
         };
         cargoHash = data.cargoHash;
 
+        /*
+          in the dprint configuration
+          dprint expects a plugin path to end with .wasm extension
+
+          for auto update with nixpkgs-update to work
+          we cannot have .wasm extension at the end in the nix store path
+        */
         buildPhase = ''
           runHook preBuild
           cargo build --release --target wasm32-unknown-unknown ${builtins.concatStringsSep " " cargoBuildFlags}
@@ -146,6 +162,13 @@ let
     )
   ) files;
 
+  # Expects a function that receives the dprint plugin set as an input
+  # and returns a list of plugins
+  # Example:
+  # pkgs.dprint-plugins.getPluginList (plugins: [
+  #   plugins.dprint-plugin-toml
+  #   (pkgs.callPackage ./dprint/plugins/sample.nix {})
+  # ]
   getPluginList = cb: map (p: "${p}/plugin.wasm") (cb plugins);
 in
 plugins // { inherit mkDprintRustPlugin mkDprintPlugin getPluginList; }

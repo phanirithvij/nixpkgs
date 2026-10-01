@@ -1,8 +1,8 @@
 {
   "dprint-plugin-biome": {
-    "cargoHash": "",
+    "cargoHash": "sha256-ue7VHe3WUuwGN4wdBkBIDW3HMq+sQZOdSPC6XlebZB8=",
     "description": "Biome (JS/TS/JSON) wrapper plugin",
-    "hash": "sha256-6JaQd89gK1dx3ixltIaPr6JSNOge5anpA7Z5Xhg1IOY=",
+    "hash": "sha256-0qRgx0D/caTvRhJ748sg7+dS1zh/E//seBkTF5Vo0y0=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -11,24 +11,26 @@
       "fileExtensions": [
         "ts",
         "tsx",
+        "mts",
+        "cts",
         "js",
         "jsx",
         "cjs",
         "mjs",
-        "json"
+        "json",
+        "jsonc"
       ]
     },
     "owner": "dprint",
     "repo": "dprint-plugin-biome",
-    "rev": "04231e1a65dc6036f3d23738bd7b51d8e2142476",
+    "rev": "1743aa0790a5caa4156ab4617e9f1ffdb8ab208e",
     "updateUrl": "https://plugins.dprint.dev/dprint/biome/latest.json",
-    "url": "https://plugins.dprint.dev/biome-0.13.0.wasm",
-    "version": "0.13.0"
+    "version": "0.13.13"
   },
   "dprint-plugin-dockerfile": {
-    "cargoHash": "",
+    "cargoHash": "sha256-T0rsorSgWc+0teQOPn3ibsvZBna7RLpEkHJRkZ9Dwmk=",
     "description": "Dockerfile code formatter",
-    "hash": "sha256-0sUB2x3i2l7pAFNAYQeJuyb2OlR5Cb2kl804p3VI80w=",
+    "hash": "sha256-abnwTlkq44cx/dch5TjdeVEXhiuKXXYL6DYQGcY2vaM=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "dockerfile",
@@ -38,35 +40,34 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-dockerfile",
-    "rev": "c20fd3ee7851e1c0263c0b04322303ac24373e52",
+    "rev": "d896d73f4b474506ac4d31af161f1db0c09331fc",
     "updateUrl": "https://plugins.dprint.dev/dprint/dockerfile/latest.json",
-    "url": "https://plugins.dprint.dev/dockerfile-0.3.3.wasm",
-    "version": "0.3.3"
+    "version": "0.6.0"
   },
   "dprint-plugin-json": {
-    "cargoHash": "",
+    "cargoHash": "sha256-oXwHd1xqxcVJwEs2o+x83/duOL15jh60ZBAdKE88k+g=",
     "description": "JSON/JSONC code formatter",
-    "hash": "sha256-a7/8P2s2Oe8aQkX1CmkRz6ZO3lFL6sY+y1A3JXjDJko=",
+    "hash": "sha256-RS0pw9Esnv2/+VcBKrxP8dGAttrApqvih+XRpo7Hzfo=",
     "initConfig": {
       "configExcludes": [
         "**/*-lock.json"
       ],
       "configKey": "json",
       "fileExtensions": [
-        "json"
+        "json",
+        "jsonc"
       ]
     },
     "owner": "dprint",
     "repo": "dprint-plugin-json",
-    "rev": "c0ad7d46a542cc2eed27e56d8ad63f8cc91beae0",
+    "rev": "f0894ac955f79280b82fd1d17e1912d4aed47328",
     "updateUrl": "https://plugins.dprint.dev/dprint/json/latest.json",
-    "url": "https://plugins.dprint.dev/json-0.21.1.wasm",
-    "version": "0.21.1"
+    "version": "0.25.0"
   },
   "dprint-plugin-jupyter": {
-    "cargoHash": "",
+    "cargoHash": "sha256-MgJL6/OP4/48YLj1NQpLBWY5TP6NbdA6vc5HdEid1Nw=",
     "description": "Jupyter notebook code block formatter",
-    "hash": "sha256-ha5gkQmjZlrtZbdiBEFgH0mDb/jwHY5eGKusXprmaNo=",
+    "hash": "sha256-Dfv38bkKrhi/VuPsA2QjlPriqHgvgoeQdMkSaVUrgxI=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "jupyter",
@@ -76,15 +77,14 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-jupyter",
-    "rev": "926316f1e9dbe6f821e59fdce495d66ba28874d4",
+    "rev": "ac8ea720ca319ec4f257213329fde411866c7b4b",
     "updateUrl": "https://plugins.dprint.dev/dprint/jupyter/latest.json",
-    "url": "https://plugins.dprint.dev/jupyter-0.2.1.wasm",
-    "version": "0.2.1"
+    "version": "0.4.0"
   },
   "dprint-plugin-mago": {
-    "cargoHash": "",
+    "cargoHash": "sha256-jqXNJXlYPUfRjKu60lB3a2Cd3LIl+c3OwTtJ5LcO5r8=",
     "description": "Mago (PHP) wrapper plugin",
-    "hash": "sha256-1E7H+Pl2a4bsHuNWuBVM5dRAZYYzj0GA4W+bEH/mOJ4=",
+    "hash": "sha256-sh//P0n5LgMK1SzPkwUsIQ1BOr7dHaFL1OUtj7JjPVY=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "mago",
@@ -94,33 +94,36 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-mago",
-    "rev": "1846153a1344b787e2329f47e1c41a40eb28f6a2",
+    "rev": "67b538d359904578b5b0ced7c40e6de4b7f81c2d",
     "updateUrl": "https://plugins.dprint.dev/dprint/mago/latest.json",
-    "url": "https://plugins.dprint.dev/mago-0.0.1.wasm",
-    "version": "0.0.1"
+    "version": "0.28.0"
   },
   "dprint-plugin-markdown": {
-    "cargoHash": "",
+    "cargoHash": "sha256-VwVEF001iLFM8nLWswDsz9F2A4Hd3al6PSgnTTbrWDE=",
     "description": "Markdown code formatter",
-    "hash": "sha256-L00RVpbt/PZWopWK9RGnzYQcsyNgqce2iCqmb2BVb1U=",
+    "hash": "sha256-72k6qmovN6Fe6+QlN3XQM0dz2qYHT0ZbeYC2P0dWVRA=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "markdown",
       "fileExtensions": [
-        "md"
+        "md",
+        "mkd",
+        "mdwn",
+        "mkdn",
+        "mdown",
+        "markdown"
       ]
     },
     "owner": "dprint",
     "repo": "dprint-plugin-markdown",
-    "rev": "77d5c8a47d06869dc78473d647e3450e1e2c82b6",
+    "rev": "02f8a427e737ba7399a6259683bdd791c32036b9",
     "updateUrl": "https://plugins.dprint.dev/dprint/markdown/latest.json",
-    "url": "https://plugins.dprint.dev/markdown-0.20.0.wasm",
-    "version": "0.20.0"
+    "version": "0.24.0"
   },
   "dprint-plugin-oxc": {
-    "cargoHash": "",
+    "cargoHash": "sha256-Wi8C4greWikEH/Uv2Nbq/h8WyzGlQDhXtpvAFze1J9I=",
     "description": "Oxc (JS/TS) wrapper plugin",
-    "hash": "sha256-biWeVE2j6/K0zp/TZrwh9r6Go77Mvn4SWXoduOX8lY0=",
+    "hash": "sha256-DAsiUMRuzZXK8vIC+wz4EixZwy6ECeT5km2HJdosNsI=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -129,6 +132,8 @@
       "fileExtensions": [
         "ts",
         "tsx",
+        "mts",
+        "cts",
         "js",
         "jsx",
         "cjs",
@@ -137,15 +142,14 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-oxc",
-    "rev": "c16dbd50fd339fa77c9001ea5a248507b728fbc5",
+    "rev": "78b673e267cbda8960b5bffb5a8ae0c38f221c3e",
     "updateUrl": "https://plugins.dprint.dev/dprint/oxc/latest.json",
-    "url": "https://plugins.dprint.dev/oxc-0.2.0.wasm",
-    "version": "0.2.0"
+    "version": "0.42.0"
   },
   "dprint-plugin-ruff": {
-    "cargoHash": "",
+    "cargoHash": "sha256-mq7vRCKD9BMTBKCFd4PdGOalEAk47BYjUGj5Z7bGXik=",
     "description": "Ruff (Python) wrapper plugin",
-    "hash": "sha256-97tNZb+Eds+NbnUIpZrQVq6vd0nth3GeqmlfdAmmJIg=",
+    "hash": "sha256-Mrzj4JbPOXMo0n00O75v2tN8/YiwMb/O27MFM/9CW1g=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "ruff",
@@ -156,15 +160,14 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-ruff",
-    "rev": "d5e2c7f3070dcd3c9eb726943e3c711bbd0ac4b5",
+    "rev": "6325e43740d162a47515bd24f0533c4fd3a1fd2d",
     "updateUrl": "https://plugins.dprint.dev/dprint/ruff/latest.json",
-    "url": "https://plugins.dprint.dev/ruff-0.6.12.wasm",
-    "version": "0.6.12"
+    "version": "0.9.0"
   },
   "dprint-plugin-toml": {
-    "cargoHash": "",
+    "cargoHash": "sha256-DQf5zQakxENvRjhUBi81eCfWyxQSC8ezp2oUabavX+E=",
     "description": "TOML code formatter",
-    "hash": "sha256-6QIehKchE8u6jbncClIGvufMUyiVI05mx+RzQak2fek=",
+    "hash": "sha256-4eIxxbmDCm3q0RaFBcrNBvJPkL5hovWpuPHKAZDRSqQ=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "toml",
@@ -174,15 +177,14 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-toml",
-    "rev": "07383747e788015f7dbc224b7371b2bbe2f2cec5",
+    "rev": "3ef1ec2693d56f0b5a1b5de7576dd8894d06efa2",
     "updateUrl": "https://plugins.dprint.dev/dprint/toml/latest.json",
-    "url": "https://plugins.dprint.dev/toml-0.7.0.wasm",
-    "version": "0.7.0"
+    "version": "0.8.0"
   },
   "dprint-plugin-typescript": {
-    "cargoHash": "",
+    "cargoHash": "sha256-FgfAgCbRezJ6lHsfV/tBi1nqMVfXRyKd2XvuEjrmniY=",
     "description": "TypeScript/JavaScript code formatter",
-    "hash": "sha256-Z9YgLI51erj3jf6oyPKyJw6KmwQ/uKdt2o4cpJFAJac=",
+    "hash": "sha256-U3GQOsiPhDT6We6lVjjD95KAaWD05JMTzFJw3ZRimOc=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -191,6 +193,8 @@
       "fileExtensions": [
         "ts",
         "tsx",
+        "mts",
+        "cts",
         "js",
         "jsx",
         "cjs",
@@ -199,15 +203,14 @@
     },
     "owner": "dprint",
     "repo": "dprint-plugin-typescript",
-    "rev": "2c759192bb0669c47bfec8ded2ccfd92b7681a1b",
+    "rev": "f7dd1f3768da3aa97982d68cad62f720130d812a",
     "updateUrl": "https://plugins.dprint.dev/dprint/typescript/latest.json",
-    "url": "https://plugins.dprint.dev/typescript-0.95.13.wasm",
-    "version": "0.95.13"
+    "version": "0.96.1"
   },
   "g-plane-malva": {
-    "cargoHash": "",
+    "cargoHash": "sha256-S9m3e1+KrrdthckzEcj21PKeFYx37MXrNavvEwJ23IY=",
     "description": "CSS, SCSS, Sass and Less formatter",
-    "hash": "sha256-ii2+2rwineIJNFAdKh93kNVy/p+DkVUVyGxHHg8EIno=",
+    "hash": "sha256-ro9f/5doOjYJ+twkGyYRexmliz6+pEfBH7DtW0IygDI=",
     "initConfig": {
       "configExcludes": [
         "**/node_modules"
@@ -222,15 +225,14 @@
     },
     "owner": "g-plane",
     "repo": "malva",
-    "rev": "85a47e9b7a3704460257fe00768433c4ebdb3494",
+    "rev": "11b53f7654391e54ba6a67dd35454cb8ceee072d",
     "updateUrl": "https://plugins.dprint.dev/g-plane/malva/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/malva-v0.15.1.wasm",
-    "version": "0.15.1"
+    "version": "0.16.0"
   },
   "g-plane-markup_fmt": {
-    "cargoHash": "",
+    "cargoHash": "sha256-nC5wJHq1LksmuV1rnPWxoDcMoUCBaFltUVexIZ0b9DM=",
     "description": "HTML, Vue, Svelte, Astro, Angular, Jinja, Twig, Nunjucks, and Vento formatter",
-    "hash": "sha256-R2uMSX/e2C2oUFKyTZye4fomss+CcbxqxBpLPPVTxkE=",
+    "hash": "sha256-rjY1Xp3vXyveOK03JvQmNBuATS24ebB0HnBPKeNZfno=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "markup",
@@ -241,20 +243,30 @@
         "astro",
         "jinja",
         "jinja2",
+        "j2",
         "twig",
         "njk",
-        "vto"
+        "vto",
+        "component.html",
+        "mustache",
+        "hbs",
+        "handlebars",
+        "xml",
+        "svg",
+        "wsdl",
+        "xsd",
+        "xslt",
+        "xsl"
       ]
     },
     "owner": "g-plane",
     "repo": "markup_fmt",
-    "rev": "b47c64c50ace5b4d8aed67740af0394d2809b283",
+    "rev": "f08eec8aedd014c3a35f7b6a2ca38c06e0348e1d",
     "updateUrl": "https://plugins.dprint.dev/g-plane/markup_fmt/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/markup_fmt-v0.25.3.wasm",
-    "version": "0.25.3"
+    "version": "0.27.5"
   },
   "g-plane-pretty_graphql": {
-    "cargoHash": "",
+    "cargoHash": "sha256-nhq0UM8Mk810Aof4sDFRy59r5zF4+kIW+SBj88s2+UU=",
     "description": "GraphQL formatter",
     "hash": "sha256-MruGPMEx3hJxonuNY+BpcPum22oBHIPtCMTNBpkr+o8=",
     "initConfig": {
@@ -269,11 +281,10 @@
     "repo": "pretty_graphql",
     "rev": "da2086dc9a1aa08f18ac2db3e7bffc43c46cd24c",
     "updateUrl": "https://plugins.dprint.dev/g-plane/pretty_graphql/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/pretty_graphql-v0.2.3.wasm",
     "version": "0.2.3"
   },
   "g-plane-pretty_yaml": {
-    "cargoHash": "",
+    "cargoHash": "sha256-oT2Ci12eyF3Bf0bu9AwE5xNn81SLAD+NG8GPJ5UJKGQ=",
     "description": "YAML formatter",
     "hash": "sha256-Bbkw6a4Tjix0dDBWSdzZICuU7KUMM45XkVGG6yJ25ak=",
     "initConfig": {
@@ -288,7 +299,6 @@
     "repo": "pretty_yaml",
     "rev": "8692d450e21b6dd8a573e561776e102cb5fdb171",
     "updateUrl": "https://plugins.dprint.dev/g-plane/pretty_yaml/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.6.0.wasm",
     "version": "0.6.0"
   }
 }

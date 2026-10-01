@@ -94,7 +94,7 @@ def update_plugin(plugins, pname, e):
         return
 
     p = plugins.get(pname, {})
-    if p.get("version") == e["version"] and "cargoHash" in p:
+    if p.get("version") == e["version"] and p.get("cargoHash"):
         print(f"Skipping {pname} (already at {e['version']})")
         return
 
