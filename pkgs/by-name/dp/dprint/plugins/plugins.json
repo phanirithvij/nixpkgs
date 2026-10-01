@@ -227,8 +227,9 @@
     "version": "0.16.0"
   },
   "g-plane-markup_fmt": {
+    "cargoHash": "sha256-nC5wJHq1LksmuV1rnPWxoDcMoUCBaFltUVexIZ0b9DM=",
     "description": "HTML, Vue, Svelte, Astro, Angular, Jinja, Twig, Nunjucks, and Vento formatter",
-    "hash": "sha256-bw7cMRYmqzWYqkp7RjT+HtL5jO6+GW9h/yOGQmw+bbU=",
+    "hash": "sha256-rjY1Xp3vXyveOK03JvQmNBuATS24ebB0HnBPKeNZfno=",
     "initConfig": {
       "configExcludes": [],
       "configKey": "markup",
@@ -239,14 +240,27 @@
         "astro",
         "jinja",
         "jinja2",
+        "j2",
         "twig",
         "njk",
-        "vto"
+        "vto",
+        "component.html",
+        "mustache",
+        "hbs",
+        "handlebars",
+        "xml",
+        "svg",
+        "wsdl",
+        "xsd",
+        "xslt",
+        "xsl"
       ]
     },
+    "owner": "g-plane",
+    "repo": "markup_fmt",
+    "rev": "f08eec8aedd014c3a35f7b6a2ca38c06e0348e1d",
     "updateUrl": "https://plugins.dprint.dev/g-plane/markup_fmt/latest.json",
-    "url": "https://plugins.dprint.dev/g-plane/markup_fmt-v0.25.3.wasm",
-    "version": "0.25.3"
+    "version": "0.27.5"
   },
   "g-plane-pretty_graphql": {
     "description": "GraphQL formatter",
