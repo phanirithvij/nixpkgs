@@ -4,8 +4,11 @@
   stdenv,
   dprint,
   writableTmpDirAsHomeHook,
+  callPackage,
 }:
 let
+  pluginsData = builtins.fromJSON (builtins.readFile ./plugins.json);
+
   mkDprintPlugin =
     {
       url,
@@ -25,13 +28,6 @@ let
       meta = {
         inherit description license maintainers;
       };
-      /*
-        in the dprint configuration
-        dprint expects a plugin path to end with .wasm extension
-
-        for auto update with nixpkgs-update to work
-        we cannot have .wasm extension at the end in the nix store path
-      */
       buildPhase = ''
         mkdir -p $out
         cp $src $out/plugin.wasm
@@ -41,8 +37,6 @@ let
         dprint
         writableTmpDirAsHomeHook
       ];
-      # Prevent schema unmatching errors
-      # See https://github.com/NixOS/nixpkgs/pull/369415#issuecomment-2566112144 for detail
       installCheckPhase = ''
         runHook preInstallCheck
 
@@ -56,27 +50,83 @@ let
         inherit initConfig updateUrl;
       };
     });
+
+  mkDprintPluginFromJson =
+    {
+      pname,
+      ...
+    }@args:
+    let
+      data = pluginsData.${pname} or (throw "Plugin ${pname} not found in plugins.json");
+      pos = builtins.unsafeGetAttrPos "pname" args;
+    in
+    stdenv.mkDerivation (
+      finalAttrs:
+      {
+        inherit pname pos;
+        version = data.version;
+        src = fetchurl {
+          url = data.url;
+          hash = data.hash;
+        };
+        dontUnpack = true;
+        meta = {
+          description = data.description;
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.phanirithvij ];
+        };
+
+        buildPhase = ''
+          mkdir -p $out
+          cp $src $out/plugin.wasm
+        '';
+
+        doInstallCheck = true;
+        nativeInstallCheckInputs = [
+          dprint
+          writableTmpDirAsHomeHook
+        ];
+        installCheckPhase = ''
+          runHook preInstallCheck
+
+          mkdir empty && cd empty
+          dprint check --allow-no-files --config-discovery=false --plugins "$out/plugin.wasm"
+
+          runHook postInstallCheck
+        '';
+
+        passthru = {
+          updateScript = ./update-plugins.py;
+          initConfig = data.initConfig;
+          updateUrl = data.updateUrl;
+        };
+      }
+      // removeAttrs args [ "pname" ]
+    );
+
   inherit (lib)
     filterAttrs
-    isDerivation
     mapAttrs'
     nameValuePair
     removeSuffix
     ;
+
   files = filterAttrs (
-    name: type: type == "regular" && name != "default.nix" && lib.hasSuffix ".nix" name
+    name: type:
+    type == "regular"
+    && name != "default.nix"
+    && name != "plugins.json"
+    && name != "update-plugins.py"
+    && lib.hasSuffix ".nix" name
   ) (builtins.readDir ./.);
+
   plugins = mapAttrs' (
     name: _:
-    nameValuePair (removeSuffix ".nix" name) (import (./. + "/${name}") { inherit mkDprintPlugin; })
+    nameValuePair (removeSuffix ".nix" name) (
+      callPackage (./. + "/${name}") { mkDprintPlugin = mkDprintPluginFromJson; }
+    )
   ) files;
-  # Expects a function that receives the dprint plugin set as an input
-  # and returns a list of plugins
-  # Example:
-  # pkgs.dprint-plugins.getPluginList (plugins: [
-  #   plugins.dprint-plugin-toml
-  #   (pkgs.callPackage ./dprint/plugins/sample.nix {})
-  # ]
+
   getPluginList = cb: map (p: "${p}/plugin.wasm") (cb plugins);
 in
 plugins // { inherit mkDprintPlugin getPluginList; }
