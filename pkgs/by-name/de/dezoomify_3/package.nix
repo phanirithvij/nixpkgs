@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dezoomify";
-  version = "3.0.241";
+  version = "3.0.3";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify";
-    tag = "rolling-v${finalAttrs.version}";
-    hash = "sha256-pR9/2OCtIue5chBrxan5aJpUfcSzpOoZjs8qBiADDnc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p3aZroiJnkmHDJJAWh3uJEntq5pglqL7hgZdbRQh9n4=";
   };
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -35,12 +35,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cacert
   ];
 
-  cargoHash = "sha256-E/Y4DT0U5FMPYxMZ4yCn9tF0yC76mNGsjYPuUoJE7mI=";
+  cargoHash = "sha256-AN2WWCfbfgaWfeIosRgBBnY7GJtmqYsAs2/yWiLS73k=";
+  cargoBuildFlags = [ "-p" "dezoomify-cli" ];
+  cargoTestFlags = [ "-p" "dezoomify-cli" ];
 
   # hyper uses SystemConfiguration.framework to read system proxy settings.
   # Allow access to the Mach service to prevent the tests from failing.
   sandboxProfile = ''
     (allow mach-lookup (global-name "com.apple.SystemConfiguration.configd"))
+  '';
+
+  postInstall = ''
+    mv $out/bin/dezoomify-cli $out/bin/dezoomify
   '';
 
   passthru = {
@@ -50,11 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # TODO expose as dezoomify-desktop, dezoomify, dezoomify-rs ??
     # TODO decide if all-packages.nix or by-name?
     # TODO this is like caesium (functionality) + ironcalc, asciinema (packaging)
-    desktop = callPackage ./desktop.nix { };
-    cli = callPackage ./cli.nix { }; # TODO put in package.nix ??
-    crx = callPackage ./crx.nix { };
-    xpi = callPackage ./xpi.nix { };
-    web = callPackage ./web.nix { };
+    desktop = callPackage ./desktop.nix { inherit (finalAttrs) src version cargoHash; };
+    cli = callPackage ./cli.nix { inherit (finalAttrs) src version cargoHash; }; # TODO put in package.nix ??
+    crx = callPackage ./crx.nix { inherit (finalAttrs) src version cargoHash; };
+    xpi = callPackage ./xpi.nix { inherit (finalAttrs) src version cargoHash; };
+    web = callPackage ./web.nix { inherit (finalAttrs) src version cargoHash; };
   };
 
   meta = {
