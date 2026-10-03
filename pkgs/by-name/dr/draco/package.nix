@@ -1,6 +1,5 @@
 {
   lib,
-  callPackage,
   stdenv,
   fetchFromGitHub,
   nix-update-script,
@@ -11,11 +10,9 @@
   withTranscoder ? true,
   eigen,
   ghc_filesystem,
+  tinygltf_2,
 }:
 
-let
-  tinygltf = callPackage ./tinygltf.nix { };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "draco";
   version = "1.5.7";
@@ -26,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-Y1bwBFe3bCklZN2+TBs6mhqDKQjrezMiT5zXlPFuMew=";
   };
+
+  patches = [
+    # remove if new version is released https://github.com/google/draco/pull/1230
+    ./tinygltf_2.patch
+  ];
 
   # ld: unknown option: --start-group
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = lib.optionals withTranscoder [
     eigen
     ghc_filesystem
-    tinygltf
+    tinygltf_2
   ];
 
   cmakeFlags = [
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withTranscoder [
     (lib.cmakeFeature "DRACO_EIGEN_PATH" "${eigen}/include/eigen3")
     (lib.cmakeFeature "DRACO_FILESYSTEM_PATH" (builtins.toString ghc_filesystem))
-    (lib.cmakeFeature "DRACO_TINYGLTF_PATH" (builtins.toString tinygltf))
+    (lib.cmakeFeature "DRACO_TINYGLTF_PATH" (builtins.toString tinygltf_2))
   ];
 
   env.CXXFLAGS = toString [
