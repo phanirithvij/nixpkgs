@@ -36,8 +36,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoHash = "sha256-AN2WWCfbfgaWfeIosRgBBnY7GJtmqYsAs2/yWiLS73k=";
-  cargoBuildFlags = [ "-p" "dezoomify-cli" ];
-  cargoTestFlags = [ "-p" "dezoomify-cli" ];
+  cargoBuildFlags = [
+    "-p"
+    "dezoomify-cli"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "dezoomify-cli"
+  ];
 
   # hyper uses SystemConfiguration.framework to read system proxy settings.
   # Allow access to the Mach service to prevent the tests from failing.
@@ -56,11 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # TODO expose as dezoomify-desktop, dezoomify, dezoomify-rs ??
     # TODO decide if all-packages.nix or by-name?
     # TODO this is like caesium (functionality) + ironcalc, asciinema (packaging)
-    desktop = callPackage ./desktop.nix { inherit (finalAttrs) src version cargoHash; };
-    cli = callPackage ./cli.nix { inherit (finalAttrs) src version cargoHash; }; # TODO put in package.nix ??
-    crx = callPackage ./crx.nix { inherit (finalAttrs) src version cargoHash; };
-    xpi = callPackage ./xpi.nix { inherit (finalAttrs) src version cargoHash; };
-    web = callPackage ./web.nix { inherit (finalAttrs) src version cargoHash; };
+    desktop = callPackage ./desktop.nix { dezoomify = finalAttrs.finalPackage; };
+    cli = callPackage ./cli.nix { dezoomify = finalAttrs.finalPackage; }; # TODO put in package.nix ??
+    crx = callPackage ./crx.nix { dezoomify = finalAttrs.finalPackage; };
+    xpi = callPackage ./xpi.nix { dezoomify = finalAttrs.finalPackage; };
+    web = callPackage ./web.nix { dezoomify = finalAttrs.finalPackage; };
   };
 
   meta = {

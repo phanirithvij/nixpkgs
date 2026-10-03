@@ -1,1 +1,1 @@
-{ src, version, cargoHash, ... }: throw "TODO: implement $f"
+{ dezoomify, ... }: throw "TODO: implement $f"
