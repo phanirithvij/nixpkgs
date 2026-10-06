@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  nix-update-script,
   nodejs_latest,
   pkg-config,
   openssl,
@@ -14,6 +13,7 @@
   version ? src.version,
   src,
   cargoDeps,
+  meta ? { },
 }:
 
 rustPlatform.buildRustPackage {
@@ -37,13 +37,13 @@ rustPlatform.buildRustPackage {
   # tests require it to be ran in the wasm-bindgen monorepo
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://wasm-bindgen.github.io/wasm-bindgen/";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
+    license = lib.licenses.OR [
+      lib.licenses.asl20
+      lib.licenses.mit
     ];
     description = "Facilitating high-level interactions between wasm modules and JavaScript";
     maintainers = with lib.maintainers; [
@@ -51,5 +51,6 @@ rustPlatform.buildRustPackage {
       insipx
     ];
     mainProgram = "wasm-bindgen";
-  };
+  }
+  // meta;
 }
