@@ -5,7 +5,7 @@ set -ex
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
-latestVersion=`curl https://crates.io/api/v1/crates/cargo-c/versions | jq '.versions[0].num | split("+cargo-")'`
+latestVersion=`curl -s -A "nixpkgs update script (https://github.com/NixOS/nixpkgs)" https://crates.io/api/v1/crates/cargo-c/versions | jq '.versions[0].num | split("+cargo-")'`
 crateVersion=`jq -r '.[0]' <<< $latestVersion`
 cargoVersion=`jq -r '.[1]' <<< $latestVersion`
 
