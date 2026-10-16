@@ -52,6 +52,11 @@
     machine.screenshot("Repath-Studio-GUI-Welcome")
     machine.send_key("kp_enter") # OK
 
+    # Wait for the home screen and create a new document
+    machine.sleep(2)
+    machine.execute("su - alice -c \"DISPLAY=:0 xdotool key ctrl+n\"")
+    machine.sleep(2)
+
     # move the mouse to the "Save" icon on the toolbar
     machine.execute("su - alice -c \"DISPLAY=:0 xdotool mousemove --sync 95 65\"")
 
