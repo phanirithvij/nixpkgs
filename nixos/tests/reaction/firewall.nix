@@ -20,7 +20,9 @@
         settings = {
           # In the qemu vm `run0 ls` as root prints nothing, so we can't use it
           # see https://reaction.ppom.me/reference.html#systemd
+          plugins.httpban.systemd = false;
           plugins.ipset.systemd = false;
+          plugins.nftables.systemd = false;
           plugins.virtual.systemd = false;
         };
       };
@@ -29,6 +31,8 @@
 
   testScript = # py
     ''
+      from datetime import timedelta
+
       start_all()
 
       machine.wait_for_unit("multi-user.target")
@@ -37,7 +41,7 @@
 
       def check_reaction_in_iptables(context = ""):
         with subtest("check reaction chain exists"):
-          machine.sleep(3)
+          machine.sleep(duration=timedelta(seconds=3))
           output = machine.succeed("iptables -nvL")
           assert "reaction" in output, f"error: reaction chain missing in iptables, {context}"
 
@@ -59,7 +63,7 @@
 
       with subtest("stop reaction manually and verify chains are cleaned up"):
         machine.succeed("systemctl stop reaction")
-        machine.sleep(3)
+        machine.sleep(duration=timedelta(seconds=3))
         output = machine.succeed("iptables -nvL")
         assert "reaction" not in output, "reaction chain still exists after the service was stopped"
 
