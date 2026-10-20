@@ -178,7 +178,7 @@
                   ];
                   retry = 2;
                   retryperiod = "6h";
-                  actions = banFor "sshreset" "48h";
+                  actions = banFor "ssh" "48h";
                 };
               };
             };
@@ -254,14 +254,13 @@
   testScript =
     { nodes, ... }: # py
     ''
-      from datetime import timedelta
-
       start_all()
 
       server.wait_for_unit("multi-user.target")
       server.wait_for_unit("reaction.service")
       server.wait_for_unit("sshd.service")
       server.wait_for_unit("nginx.service")
+      client.wait_for_unit("multi-user.target")
 
       server.wait_for_file("/run/reaction/httpban.sock")
 
@@ -278,7 +277,7 @@
         server.succeed("nft list set inet reaction reaction-sshv4")
         server.succeed(f"reaction show | grep -q {client_addr} || test $? -eq 1")
 
-        client.succeed(f"nc -w3 -z {server_addr} 22")
+        client.wait_until_succeeds(f"nc -w3 -z {server_addr} 22")
 
         output = curl_httpban(client_addr)
         assert "backend ok" in output and "HTTP_CODE:200" in output
@@ -289,24 +288,24 @@
             sshpass -p 'wrongpassword' \
               ssh -o StrictHostKeyChecking=no \
                 -o User=nixos \
-                -o ServerAliveInterval=1 \
-                -o ServerAliveCountMax=2 \
+                -o ServerAliveInterval=2 \
+                -o ServerAliveCountMax=3 \
                 {server_addr}
           """)
-        server.sleep(duration=timedelta(seconds=2))
+        server.wait_until_succeeds(f"reaction show | grep -q {client_addr}")
         output = server.succeed("reaction show")
         print(output)
         assert client_addr in output, f"client did not get banned, {client_addr}"
 
       with subtest("verify all plugins applied the ban"):
         # 1. ipset plugin
-        server.succeed(f"ipset list reaction-sshv4 | grep -q {client_addr}")
+        server.wait_until_succeeds(f"ipset list reaction-sshv4 | grep -q {client_addr}")
 
         # 2. nftables plugin
-        server.succeed(f"nft list set inet reaction reaction-sshv4 | grep -q {client_addr}")
+        server.wait_until_succeeds(f"nft list set inet reaction reaction-sshv4 | grep -q {client_addr}")
 
         # 3. virtual plugin
-        server.succeed(f"grep -q 'banned {client_addr}' /var/lib/reaction/virtual.log")
+        server.wait_until_succeeds(f"grep -q 'banned {client_addr}' /var/lib/reaction/virtual.log")
 
         # 4. httpban plugin
         output = curl_httpban(client_addr)
@@ -337,7 +336,7 @@
         )
 
         # Check we are unbanned
-        client.succeed(f"nc -w3 -z {server_addr} 22")
+        client.wait_until_succeeds(f"nc -w3 -z {server_addr} 22")
     '';
 
   # Debug interactively with:

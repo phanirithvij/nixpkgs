@@ -40,19 +40,22 @@
   testScript =
     { nodes, ... }: # py
     ''
+      from datetime import timedelta
+
       start_all()
 
       # Wait for everything to be ready.
       server.wait_for_unit("multi-user.target")
       server.wait_for_unit("reaction")
       server.wait_for_unit("sshd")
+      client.wait_for_unit("multi-user.target")
 
       client_addr = "${(lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address}"
       server_addr = "${(lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address}"
 
       # Verify there is not ban and the port is reachable from the client.
       server.succeed(f"reaction show | grep -q {client_addr} || test $? -eq 1")
-      client.succeed(f"nc -w3 -z {server_addr} 22")
+      client.wait_until_succeeds(f"nc -w3 -z {server_addr} 22")
 
       # Cause authentication failure log entries.
       for _ in range(2):
@@ -66,7 +69,7 @@
         """)
 
       # Verify there is a ban and the port is unreachable from the client.
-      server.sleep(2)
+      server.sleep(duration=timedelta(seconds=2))
       output = server.succeed("reaction show")
       print(output)
       assert client_addr in output, f"client did not get banned, {client_addr}"
@@ -77,7 +80,7 @@
       output = server.succeed("reaction flush")
       print(output)
 
-      client.succeed(f"nc -w3 -z {server_addr} 22")
+      client.wait_until_succeeds(f"nc -w3 -z {server_addr} 22")
     '';
 
   # Debug interactively with:
