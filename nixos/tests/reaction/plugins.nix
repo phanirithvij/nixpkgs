@@ -234,7 +234,16 @@
         ];
       };
 
-      services.openssh.enable = true;
+      networking.useDHCP = false;
+      services.openssh = {
+        enable = true;
+        hostKeys = [
+          {
+            type = "ed25519";
+            path = "/etc/ssh/ssh_host_ed25519_key";
+          }
+        ];
+      };
       users.users.nixos.isNormalUser = true; # neeeded to establish a ssh connection, by default root login is succeeding without any password
 
       environment.systemPackages = [
@@ -245,6 +254,7 @@
     };
 
   nodes.client = _: {
+    networking.useDHCP = false;
     environment.systemPackages = [
       pkgs.sshpass
       pkgs.libressl.nc
@@ -254,15 +264,15 @@
   testScript =
     { nodes, ... }: # py
     ''
-      start_all()
-
+      server.start()
       server.wait_for_unit("multi-user.target")
       server.wait_for_unit("reaction.service")
       server.wait_for_unit("sshd.service")
       server.wait_for_unit("nginx.service")
-      client.wait_for_unit("multi-user.target")
-
       server.wait_for_file("/run/reaction/httpban.sock")
+
+      client.start()
+      client.wait_for_unit("multi-user.target")
 
       client_addr = "${(lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address}"
       server_addr = "${(lib.head nodes.server.networking.interfaces.eth1.ipv4.addresses).address}"

@@ -14,7 +14,16 @@
       settingsFiles = [ "${pkgs.reaction}/share/examples/example.jsonnet" ];
       runAsRoot = false;
     };
-    services.openssh.enable = true;
+    networking.useDHCP = false;
+    services.openssh = {
+      enable = true;
+      hostKeys = [
+        {
+          type = "ed25519";
+          path = "/etc/ssh/ssh_host_ed25519_key";
+        }
+      ];
+    };
     # If not running as root you need to give the reaction user and service the proper permissions
 
     # allows reading journal logs of processess
@@ -31,6 +40,7 @@
   };
 
   nodes.client = _: {
+    networking.useDHCP = false;
     environment.systemPackages = [
       pkgs.sshpass
       pkgs.libressl.nc
@@ -42,12 +52,13 @@
     ''
       from datetime import timedelta
 
-      start_all()
-
       # Wait for everything to be ready.
+      server.start()
       server.wait_for_unit("multi-user.target")
       server.wait_for_unit("reaction")
       server.wait_for_unit("sshd")
+
+      client.start()
       client.wait_for_unit("multi-user.target")
 
       client_addr = "${(lib.head nodes.client.networking.interfaces.eth1.ipv4.addresses).address}"
