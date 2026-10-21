@@ -11393,8 +11393,6 @@ self: super: with self; {
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
 
-  msrplib = callPackage ../development/python-modules/msrplib { };
-
   mss = callPackage ../development/python-modules/mss { };
 
   msticpy = callPackage ../development/python-modules/msticpy { };
@@ -17392,6 +17390,8 @@ self: super: with self; {
   python3-eventlib = callPackage ../development/python-modules/python3-eventlib { };
 
   python3-gnutls = callPackage ../development/python-modules/python3-gnutls { };
+
+  python3-msrplib = callPackage ../development/python-modules/python3-msrplib { };
 
   python3-nmap = callPackage ../development/python-modules/python3-nmap { };
 
