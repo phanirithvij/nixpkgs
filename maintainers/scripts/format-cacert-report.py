@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import os
 import re
 import sys
 import collections
@@ -13,11 +14,20 @@ def main():
     team = sys.argv[2]
     total_pkgs = int(sys.argv[3])
 
-    raw_input = sys.stdin.read()
-    if not raw_input.strip():
+    raw_input = sys.stdin.read().strip()
+    if not raw_input:
         findings = []
-    else:
+    elif raw_input.startswith("["):
         findings = json.loads(raw_input)
+    else:
+        findings = []
+        for line in raw_input.splitlines():
+            line = line.strip()
+            if line.startswith("{"):
+                try:
+                    findings.append(json.loads(line))
+                except json.JSONDecodeError:
+                    pass
 
     pkgs = collections.defaultdict(lambda: {
         "files": [],
@@ -28,8 +38,9 @@ def main():
     })
 
     def pname(nar):
-        base = re.sub(r"^/nix/store/[a-z0-9]{32}-", "", nar)
-        clean = re.sub(r"-[0-9].*$", "", base)
+        base = os.path.basename(nar)
+        clean = re.sub(r"^[a-z0-9]{32}-", "", base)
+        clean = re.sub(r"-[0-9].*$", "", clean)
         return clean
 
     for f in findings:
