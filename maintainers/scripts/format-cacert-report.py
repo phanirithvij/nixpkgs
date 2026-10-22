@@ -39,7 +39,7 @@ def main():
 
     def pname(nar):
         base = os.path.basename(nar)
-        clean = re.sub(r"^[a-z0-9]{32}-", "", base)
+        clean = re.sub(r"^([a-z0-9]{32}-)+", "", base)
         clean = re.sub(r"-[0-9].*$", "", clean)
         return clean
 
