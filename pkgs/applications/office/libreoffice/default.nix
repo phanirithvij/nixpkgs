@@ -1,5 +1,5 @@
 {
-  stdenv,
+  ccacheStdenv,
   fetchurl,
   fetchgit,
   fetchpatch2,
@@ -336,6 +336,7 @@ let
 
   tarballPath = "external/tarballs";
 
+  stdenv = ccacheStdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
@@ -454,6 +455,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix for Python 3.12
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
+
+    # TODO remove in final commit
+    export CCACHE_COMPRESS=1
+    export CCACHE_SLOPPINESS=random_seed
+    export CCACHE_DIR=/tmp/ccache
+    export CCACHE_UMASK=007
   '';
 
   nativeBuildInputs = [
