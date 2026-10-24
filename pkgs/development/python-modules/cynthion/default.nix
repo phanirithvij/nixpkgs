@@ -47,6 +47,7 @@ let
   moondancer = callPackage ./moondancer.nix { inherit src version; };
 in
 buildPythonPackage {
+  # Verify Python 3.13.15 builds gateware without --timing-allow-fail
   pname = "cynthion";
   inherit version src;
   pyproject = true;
