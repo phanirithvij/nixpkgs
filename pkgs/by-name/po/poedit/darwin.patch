@@ -123,7 +123,7 @@ index 19316ad..fad2b4c 100644
  // ---------------------------------------------------------------------
  // ActionButton
 diff --git a/src/edapp.cpp b/src/edapp.cpp
-index 8ab0286..56eff65 100644
+index 8ab0286..9df59c0 100644
 --- a/src/edapp.cpp
 +++ b/src/edapp.cpp
 @@ -57,7 +57,7 @@
@@ -135,6 +135,15 @@ index 8ab0286..56eff65 100644
  #import "PFMoveApplication.h"
  #endif
  
+@@ -297,7 +297,7 @@ wxString PoeditApp::GetAppBuildNumber() const
+ #if defined(__WXOSX__)
+     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
+     NSString *ver = [infoDict objectForKey:@"CFBundleVersion"];
+-    return str::to_wx(ver);
++    return ver ? str::to_wx(ver) : "";
+ #elif defined(__WXMSW__)
+     auto exe = wxStandardPaths::Get().GetExecutablePath();
+     DWORD unusedHandle;
 @@ -372,8 +372,10 @@ bool PoeditApp::OnInit()
  
      InitHiDPIHandling();
@@ -147,6 +156,54 @@ index 8ab0286..56eff65 100644
  
      wxSystemOptions::SetOption(wxMAC_TEXTCONTROL_USE_SPELL_CHECKER, 1);
  
+@@ -383,9 +385,9 @@ bool PoeditApp::OnInit()
+     // timestamps on the logs are of not use for Poedit:
+     wxLog::DisableTimestamp();
+ 
+-#if defined(__UNIX__) && !defined(__WXOSX__)
++#if defined(__UNIX__)
+     wxString installPrefix = POEDIT_PREFIX;
+-#ifdef __linux__
++#if defined(__linux__) || defined(__APPLE__)
+     wxFileName::SplitPath(wxStandardPaths::Get().GetExecutablePath(), &installPrefix, nullptr, nullptr);
+     wxFileName fn = wxFileName::DirName(installPrefix);
+     fn.RemoveLastDir();
+@@ -393,6 +395,7 @@ bool PoeditApp::OnInit()
+ #endif
+     wxStandardPaths::Get().SetInstallPrefix(installPrefix);
+ 
++#ifndef __WXOSX__
+     wxString xdgConfigHome;
+     if (!wxGetEnv("XDG_CONFIG_HOME", &xdgConfigHome))
+         xdgConfigHome = wxGetHomeDir() + "/.config";
+@@ -400,6 +403,7 @@ bool PoeditApp::OnInit()
+     if (!wxFileName::DirExists(configDir))
+         wxFileName::Mkdir(configDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
+     wxString configFile = configDir + "/config";
++#endif
+ #endif // __UNIX__
+ 
+ #if defined(__WXOSX__)
+@@ -430,9 +434,7 @@ bool PoeditApp::OnInit()
+     wxXmlResource::Get()->InitAllHandlers();
+     wxXmlResource::Get()->AddHandler(new LearnMoreLinkXmlHandler);
+ 
+-#if defined(__WXOSX__)
+-    wxXmlResource::Get()->LoadAllFiles(wxStandardPaths::Get().GetResourcesDir());
+-#elif defined(__WXMSW__)
++#if defined(__WXMSW__)
+     wxStandardPaths::Get().DontIgnoreAppSubDir();
+     wxXmlResource::Get()->LoadAllFiles(wxStandardPaths::Get().GetResourcesDir() + "\\Resources");
+ #else
+@@ -544,7 +546,7 @@ void PoeditApp::SetupLanguage()
+ #if defined(__WXMSW__)
+     wxFileTranslationsLoader::AddCatalogLookupPathPrefix(wxStandardPaths::Get().GetResourcesDir() + "\\Translations");
+     wxFileTranslationsLoader::AddCatalogLookupPathPrefix(GetGettextDatadirPath() + "/locale");
+-#elif defined(__WXOSX__)
++#elif defined(__WXOSX__) && defined(USE_GETTEXT_TOOLS)
+     wxFileTranslationsLoader::AddCatalogLookupPathPrefix(GetGettextDatadirPath() + "/locale");
+ #else // UNIX
+     wxFileTranslationsLoader::AddCatalogLookupPathPrefix(wxStandardPaths::Get().GetInstallPrefix() + "/share/locale");
 diff --git a/src/gexecute.cpp b/src/gexecute.cpp
 index e3f256b..6908108 100644
 --- a/src/gexecute.cpp
@@ -178,7 +235,7 @@ index e3f256b..6908108 100644
  wxString GetGettextBinariesPath() { return ""; }
  wxString GetGettextDatadirPath() { return ""; }
 diff --git a/src/menus.cpp b/src/menus.cpp
-index e85e2af..0749675 100644
+index e85e2af..6b9b348 100644
 --- a/src/menus.cpp
 +++ b/src/menus.cpp
 @@ -31,9 +31,7 @@
@@ -192,6 +249,16 @@ index e85e2af..0749675 100644
  
  
  #ifdef __WXOSX__
+@@ -169,7 +167,9 @@ void MenusManager::TweakOSXMenuBar(wxMenuBar *bar)
+     wxMenu *apple = bar->OSXGetAppleMenu();
+     if (apple)
+     {
++#ifdef HAS_UPDATES_CHECK
+         apple->Insert(1, XRCID("menu_check_for_updates"), _(L"Check for Updates…"));
++#endif
+ 
+         apple->Insert(4, XRCID("menu_manager"), _("Catalogs Manager"));
+         apple->InsertSeparator(4);
 diff --git a/src/prefsdlg.cpp b/src/prefsdlg.cpp
 index 36f2274..e083e5e 100644
 --- a/src/prefsdlg.cpp
