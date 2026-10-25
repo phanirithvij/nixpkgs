@@ -1,5 +1,5 @@
 diff --git a/configure.ac b/configure.ac
-index c9935c6..63a374e 100644
+index c9935c6..e5a5d5f 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -180,29 +180,47 @@ PKG_CHECK_MODULES([ICU], [icu-uc icu-i18n >= 54],
@@ -67,7 +67,7 @@ index c9935c6..63a374e 100644
  
 +case "$host" in
 +    *-*-darwin*)
-+        CXXFLAGS="$CXXFLAGS -ObjC++ -include \$(top_srcdir)/src/Poedit-Prefix.pch"
++        CXXFLAGS="$CXXFLAGS -ObjC++ -fobjc-arc -include \$(top_srcdir)/src/Poedit-Prefix.pch"
 +        ;;
 +esac
 +
@@ -110,7 +110,7 @@ index 351d023..2a91ec1 100644
  #endif
  
 diff --git a/src/custom_buttons.cpp b/src/custom_buttons.cpp
-index 19316ad..fad2b4c 100644
+index 19316ad..9f16178 100644
 --- a/src/custom_buttons.cpp
 +++ b/src/custom_buttons.cpp
 @@ -51,7 +51,7 @@
@@ -122,6 +122,26 @@ index 19316ad..fad2b4c 100644
  
  // ---------------------------------------------------------------------
  // ActionButton
+@@ -60,7 +60,7 @@
+ @interface POActionButton : NSButton
+ 
+ @property wxWindow *parent;
+-@property NSString *heading;
++@property (copy) NSString *heading;
+ @property BOOL mouseHover;
+ 
+ @end
+@@ -153,8 +153,8 @@ ActionButton::ActionButton(wxWindow *parent, wxWindowID winid, const wxString& s
+ 
+ @interface POSwitchButton : NSButton
+ 
+-@property NSColor* onColor;
+-@property NSColor* labelOffColor;
++@property (strong) NSColor* onColor;
++@property (strong) NSColor* labelOffColor;
+ @property SwitchButton *parent;
+ @property (nonatomic) double animationPosition;
+ 
 diff --git a/src/edapp.cpp b/src/edapp.cpp
 index 8ab0286..725e2e4 100644
 --- a/src/edapp.cpp
