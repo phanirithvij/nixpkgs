@@ -123,7 +123,7 @@ index 19316ad..fad2b4c 100644
  // ---------------------------------------------------------------------
  // ActionButton
 diff --git a/src/edapp.cpp b/src/edapp.cpp
-index 8ab0286..9df59c0 100644
+index 8ab0286..725e2e4 100644
 --- a/src/edapp.cpp
 +++ b/src/edapp.cpp
 @@ -57,7 +57,7 @@
@@ -156,35 +156,7 @@ index 8ab0286..9df59c0 100644
  
      wxSystemOptions::SetOption(wxMAC_TEXTCONTROL_USE_SPELL_CHECKER, 1);
  
-@@ -383,9 +385,9 @@ bool PoeditApp::OnInit()
-     // timestamps on the logs are of not use for Poedit:
-     wxLog::DisableTimestamp();
- 
--#if defined(__UNIX__) && !defined(__WXOSX__)
-+#if defined(__UNIX__)
-     wxString installPrefix = POEDIT_PREFIX;
--#ifdef __linux__
-+#if defined(__linux__) || defined(__APPLE__)
-     wxFileName::SplitPath(wxStandardPaths::Get().GetExecutablePath(), &installPrefix, nullptr, nullptr);
-     wxFileName fn = wxFileName::DirName(installPrefix);
-     fn.RemoveLastDir();
-@@ -393,6 +395,7 @@ bool PoeditApp::OnInit()
- #endif
-     wxStandardPaths::Get().SetInstallPrefix(installPrefix);
- 
-+#ifndef __WXOSX__
-     wxString xdgConfigHome;
-     if (!wxGetEnv("XDG_CONFIG_HOME", &xdgConfigHome))
-         xdgConfigHome = wxGetHomeDir() + "/.config";
-@@ -400,6 +403,7 @@ bool PoeditApp::OnInit()
-     if (!wxFileName::DirExists(configDir))
-         wxFileName::Mkdir(configDir, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL);
-     wxString configFile = configDir + "/config";
-+#endif
- #endif // __UNIX__
- 
- #if defined(__WXOSX__)
-@@ -430,9 +434,7 @@ bool PoeditApp::OnInit()
+@@ -430,9 +432,7 @@ bool PoeditApp::OnInit()
      wxXmlResource::Get()->InitAllHandlers();
      wxXmlResource::Get()->AddHandler(new LearnMoreLinkXmlHandler);
  
@@ -195,15 +167,14 @@ index 8ab0286..9df59c0 100644
      wxStandardPaths::Get().DontIgnoreAppSubDir();
      wxXmlResource::Get()->LoadAllFiles(wxStandardPaths::Get().GetResourcesDir() + "\\Resources");
  #else
-@@ -544,7 +546,7 @@ void PoeditApp::SetupLanguage()
- #if defined(__WXMSW__)
-     wxFileTranslationsLoader::AddCatalogLookupPathPrefix(wxStandardPaths::Get().GetResourcesDir() + "\\Translations");
+@@ -546,6 +546,7 @@ void PoeditApp::SetupLanguage()
      wxFileTranslationsLoader::AddCatalogLookupPathPrefix(GetGettextDatadirPath() + "/locale");
--#elif defined(__WXOSX__)
-+#elif defined(__WXOSX__) && defined(USE_GETTEXT_TOOLS)
+ #elif defined(__WXOSX__)
      wxFileTranslationsLoader::AddCatalogLookupPathPrefix(GetGettextDatadirPath() + "/locale");
++    wxFileTranslationsLoader::AddCatalogLookupPathPrefix(POEDIT_PREFIX "/share/locale");
  #else // UNIX
      wxFileTranslationsLoader::AddCatalogLookupPathPrefix(wxStandardPaths::Get().GetInstallPrefix() + "/share/locale");
+ #endif
 diff --git a/src/gexecute.cpp b/src/gexecute.cpp
 index e3f256b..6908108 100644
 --- a/src/gexecute.cpp
