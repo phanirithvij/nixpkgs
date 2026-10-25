@@ -8,7 +8,7 @@
   libtool,
   gettext,
   pkg-config,
-  wxwidgets_3_2,
+  wxwidgets_3_3,
   boost,
   icu,
   lucenepp,
@@ -46,15 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
+  patches = [
+    ./darwin.patch
+  ];
+
   buildInputs = [
     lucenepp
     nlohmann_json
-    wxwidgets_3_2
+    wxwidgets_3_3
     icu
     pugixml
+    hicolor-icon-theme
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk3
     gtkspell3
-    hicolor-icon-theme
   ];
 
   propagatedBuildInputs = [ gettext ];
@@ -92,7 +98,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ RumBugen ];
-    # configure: error: GTK+ build of wxWidgets is required
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
