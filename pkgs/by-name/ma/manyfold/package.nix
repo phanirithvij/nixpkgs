@@ -5,7 +5,7 @@
   fetchFromGitHub,
   lib,
   libarchive,
-  nodejs_22,
+  nodejs_24,
   ruby_3_4,
   stdenvNoCC,
   writeTextDir,
@@ -13,9 +13,8 @@
   nixosTests,
 }:
 let
-  yarn-berry = yarn-berry_3;
   ruby = ruby_3_4;
-  gems = bundlerEnv rec {
+  gems = bundlerEnv {
     name = "manyfold-env";
     inherit ruby;
     gemdir = ./.;
@@ -50,14 +49,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs_24
     gems.ruby
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
   ];
 
   missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
+  offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     hash = "sha256-poS/exOkwRVOrWS0jX711eD/gkheyKDBpw13+w02J40=";
   };
@@ -121,6 +120,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://manyfold.app/";
     downloadPage = "https://github.com/manyfold3d/manyfold";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      prince213
+      phanirithvij
+    ];
     teams = [ lib.teams.ngi ];
   };
 })
