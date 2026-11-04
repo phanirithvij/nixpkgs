@@ -4937,6 +4937,10 @@ self: super: with self; {
 
   django-simple-history = callPackage ../development/python-modules/django-simple-history { };
 
+  django-simple-math-captcha =
+    callPackage ../development/python-modules/django-simple-math-captcha
+      { };
+
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-soft-delete = callPackage ../development/python-modules/django-soft-delete { };
