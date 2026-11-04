@@ -2,6 +2,10 @@
 
 {
   name = "manyfold";
+  meta.maintainers = with lib.maintainers; [
+    prince213
+    phanirithvij
+  ];
   meta.teams = with lib.teams; [ ngi ];
 
   nodes = {

@@ -8,6 +8,10 @@ let
   cfg = config.services.manyfold;
 in
 {
+  meta.maintainers = with lib.maintainers; [
+    prince213
+    phanirithvij
+  ];
   meta.teams = with lib.teams; [ ngi ];
 
   options.services.manyfold = {
