@@ -39,6 +39,11 @@ buildPythonPackage (finalAttrs: {
       url = "https://github.com/almarklein/timetagger/commit/9d4cb5937c52a6cc72e786e5411515737ad3f242.patch?full_index=1";
       hash = "sha256-n0KluJ3wNA4SDISwJ6KC5PoguJLOMDFt/o2cPBb91Wc=";
     })
+    # PR https://github.com/almarklein/timetagger/pull/638
+    (fetchpatch2 {
+      url = "https://github.com/almarklein/timetagger/commit/d32c6361faba31ba08b87bbbc1899f92cc646936.patch?full_index=1";
+      hash = "sha256-dZtvNF0OwlxLN10JZzJ9PsotgdtKmVSDualOxXwpeKw=";
+    })
   ];
 
   # NOTE: fetchpatch2 doesn't handle new empty files in the patches properly
