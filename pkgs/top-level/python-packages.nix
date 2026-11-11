@@ -23061,6 +23061,8 @@ self: super: with self; {
 
   xeus-python = toPythonModule pkgs.xeus-python;
 
+  xeus-python-shell = callPackage ../development/python-modules/xeus-python-shell { };
+
   xformers = callPackage ../development/python-modules/xformers {
     inherit (pkgs.llvmPackages) openmp;
   };
