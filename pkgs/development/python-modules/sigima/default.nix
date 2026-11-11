@@ -8,6 +8,7 @@
 
   # dependencies
   guidata,
+  imagecodecs,
   makefun,
   numpy,
   packaging,
@@ -15,12 +16,12 @@
   pywavelets,
   scikit-image,
   scipy,
-  typing-extensions,
 
   # optional-dependencies
   babel,
   build,
   coverage,
+  jsonschema,
   pre-commit,
   pylint,
   ruff,
@@ -47,7 +48,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sigima";
-  version = "1.2.0";
+  version = "1.4.0";
   pyproject = true;
   __darwinAllowLocalNetworking = true;
 
@@ -55,7 +56,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DataLab-Platform";
     repo = "Sigima";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pKI1xODYR0ZanXEI3r3UhKj2FvrBA8MWVwSpcg+GBls=";
+    hash = "sha256-NDbRZFPdlgu7+TzTwFO0zYYZDN54Ce58l8KbH3C9ZcY=";
   };
 
   build-system = [
@@ -64,6 +65,7 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     guidata
+    imagecodecs
     makefun
     numpy
     packaging
@@ -71,7 +73,6 @@ buildPythonPackage (finalAttrs: {
     pywavelets
     scikit-image
     scipy
-    typing-extensions
   ];
 
   optional-dependencies = {
@@ -109,6 +110,7 @@ buildPythonPackage (finalAttrs: {
       qtpy
     ];
     test = [
+      jsonschema
       pytest
       pytest-xvfb
     ];
@@ -116,11 +118,12 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.test;
 
-  pythonRelaxDeps = [
-    "numpy"
-    "scipy"
+  disabledTests = [
+    # imagecodecs in nixpkgs is built without ccittfax4
+    "test_read_ccitt_group4_tiff"
   ];
 
   pythonImportsCheck = [
