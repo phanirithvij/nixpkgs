@@ -11,11 +11,14 @@
   setuptools,
 
   # dependencies
+  datalab-capsule,
   fastapi,
   guidata,
+  jedi,
   numpy,
   packaging,
   pandas,
+  pip,
   plotpy,
   psutil,
   pydantic,
@@ -23,6 +26,7 @@
   scikit-image,
   scipy,
   sigima,
+  sigimax,
   uvicorn,
 
   # optional-dependencies
@@ -40,6 +44,7 @@
   sphinx-intl,
   sphinx-sitemap,
   sphinxcontrib-svg2pdfconverter,
+  sphinxext-opengraph,
   opencv-python-headless,
   pyinstaller,
   pyqt5,
@@ -49,18 +54,20 @@
 
   # tests
   pytestCheckHook,
+  pyyaml,
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "datalab-platform";
-  version = "1.2.2";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DataLab-Platform";
     repo = "DataLab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c9ze/Qw6FZ78JEkoQzJSESf/0tWvbL9wHuE2xlzKlv8=";
+    hash = "sha256-wTKo59eat2ZPtmfCf+gLW+4UA602Cn4iqshmlFGY+K8=";
   };
 
   # NOTE: DataLab is compatible with qt6, but it's apparently not perfect as
@@ -82,11 +89,14 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    datalab-capsule
     fastapi
     guidata
+    jedi
     numpy
     packaging
     pandas
+    pip
     plotpy
     psutil
     pydantic
@@ -94,6 +104,7 @@ buildPythonPackage (finalAttrs: {
     scikit-image
     scipy
     sigima
+    sigimax
     uvicorn
   ]
   ++ finalAttrs.passthru.optional-dependencies.qt
@@ -118,6 +129,7 @@ buildPythonPackage (finalAttrs: {
       sphinx-intl
       sphinx-sitemap
       sphinxcontrib-svg2pdfconverter
+      sphinxext-opengraph
     ];
     exe = [
       opencv-python-headless
@@ -137,19 +149,19 @@ buildPythonPackage (finalAttrs: {
     ];
   };
 
-  pythonRelaxDeps = [
-    "guidata"
-    "numpy"
-    "plotpy"
-    "scipy"
-  ];
-
   pythonImportsCheck = [
     "datalab"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  doInstallCheck = true;
+
   nativeCheckInputs = [
     pytestCheckHook
+    pyyaml
   ]
   ++ finalAttrs.passthru.optional-dependencies.test;
 
