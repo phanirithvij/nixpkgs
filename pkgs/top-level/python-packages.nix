@@ -23059,6 +23059,8 @@ self: super: with self; {
 
   xen = toPythonModule (pkgs.xen.override { python3Packages = self; });
 
+  xeus-python = toPythonModule pkgs.xeus-python;
+
   xformers = callPackage ../development/python-modules/xformers {
     inherit (pkgs.llvmPackages) openmp;
   };
