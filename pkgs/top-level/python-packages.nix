@@ -23463,3 +23463,7 @@ self: super: with self; {
 
   # keep-sorted end
 }
+  datalab-capsule = callPackage ../development/python-modules/datalab-capsule { };
+
+  sigimax = callPackage ../development/python-modules/sigimax { };
+
