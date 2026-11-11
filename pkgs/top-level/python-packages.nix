@@ -4148,6 +4148,8 @@ self: super: with self; {
 
   datalab-capsule = callPackage ../development/python-modules/datalab-capsule { };
 
+  datalab-kernel = callPackage ../development/python-modules/datalab-kernel { };
+
   datalab-platform = callPackage ../development/python-modules/datalab-platform { };
 
   datalad = callPackage ../development/python-modules/datalad { };
