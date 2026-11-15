@@ -2041,7 +2041,7 @@ in
     pkgs = pkgsLinux;
     inherit runTest lib;
   };
-  without-nix = runTest ./without-nix.nix;
+  without-nix = import ./without-nix.nix { inherit pkgs; };
   wmderland = runTest ./wmderland.nix;
   wordpress = runTest ./wordpress.nix;
   workout-tracker = runTest ./workout-tracker.nix;
