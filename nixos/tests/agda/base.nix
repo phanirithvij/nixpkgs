@@ -1,44 +1,39 @@
-{ pkgs, ... }:
+{ pkgs }:
 
 let
+  inherit (pkgs) lib;
   hello-world = ./files/HelloWorld.agda;
+  agdaWithStdlib = pkgs.agda.withPackages (p: [ p.standard-library ]);
 in
-{
-  name = "agda";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      alexarice
-      turion
+pkgs.runCommand "agda-base-test"
+  {
+    nativeBuildInputs = [
+      agdaWithStdlib
+      pkgs.ghc
     ];
-  };
-
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      environment.systemPackages = [
-        (pkgs.agda.withPackages {
-          pkgs = p: [ p.standard-library ];
-        })
+    meta = with lib.maintainers; {
+      maintainers = [
+        alexarice
+        turion
       ];
-      virtualisation.memorySize = 2000; # Agda uses a lot of memory
     };
-
-  testScript = ''
+  }
+  ''
     # agda and agda-mode are in path
-    machine.succeed("agda --version")
+    agda --version
 
     # Minimal script that typechecks
-    machine.succeed("touch TestEmpty.agda")
-    machine.succeed("agda TestEmpty.agda")
+    touch TestEmpty.agda
+    agda TestEmpty.agda
 
     # Hello world
-    machine.succeed(
-        "cp ${hello-world} HelloWorld.agda"
-    )
-    machine.succeed("agda -l standard-library -i . -c HelloWorld.agda")
+    cp ${hello-world} HelloWorld.agda
+    agda -l standard-library -i . -c HelloWorld.agda
+
     # Check execution
-    assert "Hello World!" in machine.succeed(
-        "./HelloWorld"
-    ), "HelloWorld does not run properly"
-  '';
-}
+    output=$(./HelloWorld)
+    echo "$output"
+    [[ "$output" =~ "Hello World!" ]]
+
+    touch $out
+  ''
