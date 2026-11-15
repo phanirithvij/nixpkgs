@@ -989,7 +989,7 @@ in
   koito = runTest ./web-apps/koito.nix;
   komga = runTest ./komga.nix;
   komodo-periphery = runTest ./komodo-periphery.nix;
-  krb5 = discoverTests (import ./krb5);
+  krb5 = discoverTests (import ./krb5 { inherit system pkgs evalSystem; });
   krill = runTest ./krill.nix;
   ksm = runTest ./ksm.nix;
   kthxbye = runTest ./kthxbye.nix;
