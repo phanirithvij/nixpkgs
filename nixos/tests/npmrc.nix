@@ -1,22 +1,29 @@
-{ ... }:
+{
+  pkgs,
+  evalSystem,
+}:
 let
-  machineName = "machine";
   settingName = "prefix";
   settingValue = "/some/path";
-in
-{
-  name = "npmrc";
 
-  nodes."${machineName}".programs.npm = {
-    enable = true;
-    npmrc = ''
-      ${settingName} = ${settingValue}
-    '';
+  node = evalSystem {
+    system.stateVersion = "26.11";
+    programs.npm = {
+      enable = true;
+      npmrc = ''
+        ${settingName} = ${settingValue}
+      '';
+    };
   };
-
-  testScript = ''
-    ${machineName}.start()
-
-    assert ${machineName}.succeed("npm config get ${settingName}") == "${settingValue}\n"
-  '';
-}
+in
+pkgs.runCommand "npmrc-test"
+  {
+    nativeBuildInputs = [ node.config.programs.npm.package ];
+    meta.maintainers = [ ];
+  }
+  ''
+    export NPM_CONFIG_GLOBALCONFIG="${node.config.environment.etc.npmrc.source}"
+    val="$(npm config get ${settingName})"
+    [[ "$val" == "${settingValue}" ]]
+    touch $out
+  ''
