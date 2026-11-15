@@ -2,7 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  nixosTests,
+  timidity,
+  runCommand,
+  ffmpeg-headless,
+  jq,
   pkg-config,
   libjack2,
   ncurses,
@@ -127,7 +130,33 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  passthru.tests = nixosTests.timidity;
+  passthru.tests = {
+    with-vorbis =
+      let
+        timidityVorbis = timidity.override { enableVorbis = true; };
+      in
+      runCommand "timidity-with-vorbis"
+        {
+          nativeBuildInputs = [
+            timidityVorbis
+            ffmpeg-headless
+            jq
+          ];
+        }
+        ''
+          timidity --help | grep "Ogg Vorbis"
+          timidity -Ov ${./tam-lin.midi} -o test.ogg
+          test -e test.ogg
+
+          format=$(ffprobe -show_format -print_format json -i test.ogg | jq -r .format.format_name)
+          [[ "$format" == "ogg" ]]
+
+          duration=$(ffprobe -show_format -print_format json -i test.ogg | jq -r .format.duration)
+          awk -v dur="$duration" 'BEGIN { if (dur >= 37 && dur <= 38) exit 0; else exit 1 }'
+
+          touch $out
+        '';
+  };
 
   meta = {
     homepage = "https://sourceforge.net/projects/timidity/";
