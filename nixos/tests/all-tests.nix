@@ -1312,7 +1312,7 @@ in
   noto-fonts = runTest ./noto-fonts.nix;
   noto-fonts-cjk-qt-default-weight = runTest ./noto-fonts-cjk-qt-default-weight.nix;
   novacomd = handleTestOn [ "x86_64-linux" ] ./novacomd.nix { };
-  npmrc = runTest ./npmrc.nix;
+  npmrc = import ./npmrc.nix { inherit pkgs evalSystem; };
   nscd = runTest ./nscd.nix;
   nsd = runTest ./nsd.nix;
   ntfy-sh = runTest ./ntfy-sh.nix;
