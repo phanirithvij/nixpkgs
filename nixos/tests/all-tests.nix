@@ -274,7 +274,7 @@ in
   };
   alice-lg = runTest ./alice-lg.nix;
   alloy = runTest ./alloy.nix;
-  allTerminfo = runTest ./all-terminfo.nix;
+  allTerminfo = import ./all-terminfo.nix { inherit pkgs evalSystem; };
   alps = runTest ./alps.nix;
   amazon-cloudwatch-agent = runTest ./amazon-cloudwatch-agent.nix;
   amazon-init-shell = runTest ./amazon-init-shell.nix;
