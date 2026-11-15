@@ -2027,7 +2027,7 @@ in
     _module.args.getPackage = pkgs: pkgs.whisparr_3;
   };
   whoami = runTest ./whoami.nix;
-  whois = runTest ./whois.nix;
+  whois = import ./whois.nix { inherit pkgs evalSystem; };
   whoogle-search = runTest ./whoogle-search.nix;
   wiki-js = runTest ./wiki-js.nix;
   windmill = import ./windmill {
