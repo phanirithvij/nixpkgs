@@ -1,5 +1,6 @@
-{ pkgs, ... }:
+{ pkgs }:
 let
+  inherit (pkgs) lib;
   mainProgram = "agda-trivial-backend";
 
   hello-world = ./files/HelloWorld.agda;
@@ -21,45 +22,51 @@ let
       cp ${mainProgram} $out/bin
     '';
   };
-in
-{
-  name = "agda-trivial-backend";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      carlostome
-    ];
+
+  agdaPackages = pkgs.agdaPackages.override (oldAttrs: {
+    Agda = agda-trivial-backend;
+  });
+
+  customAgda = agdaPackages.withPackages {
+    pkgs = p: [ p.standard-library ];
   };
-
-  nodes.machine =
-    { pkgs, ... }:
-    let
-      agdaPackages = pkgs.agdaPackages.override (oldAttrs: {
-        Agda = agda-trivial-backend;
-      });
-    in
-    {
-      environment.systemPackages = [
-        (agdaPackages.withPackages {
-          pkgs = p: [ p.standard-library ];
-        })
+in
+pkgs.runCommand "agda-trivial-backend-test"
+  {
+    nativeBuildInputs = [
+      customAgda
+      pkgs.ghc
+    ];
+    meta = with lib.maintainers; {
+      maintainers = [
+        carlostome
       ];
-      virtualisation.memorySize = 2000; # Agda uses a lot of memory
     };
+  }
+  ''
+    export LC_ALL=C.UTF-8
 
-  testScript = ''
     # agda and agda-mode are not in path
-    machine.fail("agda --version")
-    machine.fail("agda-mode")
+    if command -v agda >/dev/null; then
+      echo "agda should not be in path" >&2
+      exit 1
+    fi
+    if command -v agda-mode >/dev/null; then
+      echo "agda-mode should not be in path" >&2
+      exit 1
+    fi
+
     # backend is present
-    text = machine.succeed("${mainProgram} --help")
-    assert "${mainProgram}" in text
+    ${mainProgram} --help | grep -F "${mainProgram}"
+
     # Hello world
-    machine.succeed(
-        "cp ${hello-world} HelloWorld.agda"
-    )
-    machine.succeed("${mainProgram} -l standard-library -i . -c HelloWorld.agda")
+    cp ${hello-world} HelloWorld.agda
+    ${mainProgram} -l standard-library -i . -c HelloWorld.agda
+
     # Check execution
-    text = machine.succeed("./HelloWorld")
-    assert "Hello World!" in text, f"HelloWorld does not run properly: output was {text}"
-  '';
-}
+    output=$(./HelloWorld)
+    echo "$output"
+    [[ "$output" =~ "Hello World!" ]]
+
+    touch $out
+  ''
