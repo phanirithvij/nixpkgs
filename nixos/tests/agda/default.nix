@@ -1,5 +1,5 @@
-{ runTest }:
+{ pkgs, runTest }:
 {
-  base = runTest ./base.nix;
+  base = import ./base.nix { inherit pkgs; };
   override-with-backend = runTest ./override-with-backend.nix;
 }
