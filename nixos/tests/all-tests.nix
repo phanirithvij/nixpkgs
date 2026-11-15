@@ -1357,7 +1357,7 @@ in
     imports = [ ./odoo/multi-process.nix ];
     _module.args.package = pkgs.odoo19;
   };
-  oh-my-zsh = runTest ./oh-my-zsh.nix;
+  oh-my-zsh = import ./oh-my-zsh.nix { inherit pkgs evalSystem; };
   oku = runTest ./oku.nix;
   olivetin = runTest ./olivetin.nix;
   ollama = runTest ./ollama.nix;
