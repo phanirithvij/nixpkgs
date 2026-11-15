@@ -8,7 +8,7 @@
   installShellFiles,
   makeWrapper,
   unixtools,
-  nixosTests,
+  runCommand,
 }:
 
 buildGoModule (finalAttrs: {
@@ -75,7 +75,20 @@ buildGoModule (finalAttrs: {
     git
   ];
 
-  passthru.tests = { inherit (nixosTests) hub; };
+  passthru.tests = {
+    version =
+      runCommand "hub-test-version"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          output="$(hub version)"
+          echo "$output"
+          echo "$output" | grep -F "hub version ${finalAttrs.version}"
+          hub help | grep -F "These GitHub commands are provided by hub"
+          touch $out
+        '';
+  };
 
   meta = {
     description = "Command-line wrapper for git that makes you better at GitHub";
