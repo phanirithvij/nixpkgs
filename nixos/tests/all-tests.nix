@@ -877,7 +877,6 @@ in
     inherit (pkgs) lib;
   };
   hound = runTest ./hound.nix;
-  hub = runTest ./git/hub.nix;
   hydra = runTest ./hydra;
   hyphanet = runTest ./hyphanet.nix;
   i18n = runTest ./i18n.nix;
