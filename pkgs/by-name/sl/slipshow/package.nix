@@ -3,24 +3,24 @@
   ocamlPackages,
   fetchFromGitHub,
   versionCheckHook,
-  nixosTests,
+  runCommand,
   nix-update-script,
 }:
 
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "slipshow";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "panglesd";
     repo = "slipshow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6i7zbfk0uBgwoXlg5fLvC+onZMYKBJwUd74FUakt3jc=";
   };
 
   postPatch = ''
     substituteInPlace ./src/cli/main.ml \
-      --replace-fail '%%VERSION%%' '${version}'
+      --replace-fail '%%VERSION%%' '${finalAttrs.version}'
   '';
 
   nativeBuildInputs = with ocamlPackages; [
@@ -56,7 +56,19 @@ ocamlPackages.buildDunePackage rec {
   doInstallCheck = true;
 
   passthru = {
-    tests = { inherit (nixosTests) slipshow; };
+    tests.compile =
+      runCommand "slipshow-test-compile"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          cat << 'EOF' > test.md
+          # Hello Slipshow
+          Test presentation slide
+          EOF
+          slipshow compile test.md -o $out
+          grep -F "Hello Slipshow" $out
+        '';
     updateScript = nix-update-script { };
   };
 
@@ -69,4 +81,4 @@ ocamlPackages.buildDunePackage rec {
     teams = [ lib.teams.ngi ];
     mainProgram = "slipshow";
   };
-}
+})
