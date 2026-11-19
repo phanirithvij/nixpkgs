@@ -6,11 +6,6 @@
 
 let
   olympics-qleverfile = "${pkgs.qlever-control.src}/src/qlever/Qleverfiles/Qleverfile.olympics";
-
-  olympics-dataset = pkgs.fetchurl {
-    url = "https://github.com/wallscope/olympics-rdf/raw/54483d539082641d48e1d49873662b3af628ca4d/data/olympics-nt-nodup.zip";
-    hash = "sha256-dY28CQKaMDUUw/pw+p9yX0EtJOnbAAplodMFaedL1B8=";
-  };
 in
 
 {
@@ -27,7 +22,6 @@ in
         environment.systemPackages = with pkgs; [
           qlever
           qlever-control
-          unzip
         ];
       };
   };
@@ -35,9 +29,8 @@ in
   testScript =
     # python
     ''
-      machine.succeed("cp ${olympics-dataset} /tmp/olympics.zip")
+      machine.succeed("cp ${pkgs.qlever.olympics-rdf-data}/olympics.nt /tmp/olympics.nt")
       machine.succeed("cp ${olympics-qleverfile} /tmp/Qleverfile")
-      machine.succeed("unzip -q olympics.zip")
 
       # use qlever binary instead of docker
       machine.succeed("sed -i 's/SYSTEM = docker/SYSTEM = native/' /tmp/Qleverfile")

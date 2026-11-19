@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  callPackage,
 
   pkg-config,
   cmake,
@@ -187,6 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests = nixosTests.qlever;
 
     updateScript = ./update.sh;
+
+    olympics-rdf-data = callPackage ./olympics-rdf-data.nix { };
   };
 
   __structuredAttrs = true;
