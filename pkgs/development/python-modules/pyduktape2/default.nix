@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  nix-update-script,
   pytestCheckHook,
   setuptools,
 }:
@@ -28,8 +27,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyduktape2" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Embed the Duktape JS interpreter in Python";

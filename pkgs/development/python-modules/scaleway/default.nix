@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   poetry-core,
   pyprojectVersionPatchHook,
   scaleway-core,
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "scaleway" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Integrate Scaleway with your Python applications";

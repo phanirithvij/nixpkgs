@@ -4,7 +4,6 @@
   caido-server-auth,
   fetchPypi,
   gql,
-  nix-update-script,
   pydantic,
   semver,
   uv-build,
@@ -45,8 +44,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-asyncio
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Client SDK for interacting with a Caido instance";

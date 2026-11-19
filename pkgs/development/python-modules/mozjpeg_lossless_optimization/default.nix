@@ -7,7 +7,6 @@
   pytestCheckHook,
   setuptools,
   cmake,
-  nix-update-script,
   cffi,
 }:
 buildPythonPackage rec {
@@ -38,10 +37,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
   nativeCheckInputs = [ pytestCheckHook ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Python library to optimize JPEGs losslessly using MozJPEG";

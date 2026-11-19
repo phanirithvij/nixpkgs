@@ -11,7 +11,6 @@
   httpbin,
   hyperframe,
   kaitaistruct,
-  nix-update-script,
   pyasn1,
   pyopenssl,
   pyparsing,
@@ -77,8 +76,6 @@ buildPythonPackage (finalAttrs: {
     # AssertionError
     "test_save_response"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Extends Selenium's Python bindings to give you the ability to inspect requests made by the browser";

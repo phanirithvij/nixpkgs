@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools_80,
   six,
-  nix-update-script,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -31,8 +30,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wrappers for class callables";

@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   groff,
-  nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -55,8 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
   # Writable $HOME is required for `cppman --version` to work
   versionCheckKeepEnvironment = "HOME";
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal viewer for C++ 98/11/14 manual pages";

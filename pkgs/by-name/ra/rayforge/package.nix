@@ -11,7 +11,6 @@
   shared-mime-info,
   wrapGAppsHook4,
   xvfb-run,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -121,8 +120,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "2D CAD and G-code sender for laser cutters and engravers";

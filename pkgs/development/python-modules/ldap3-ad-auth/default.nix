@@ -4,7 +4,6 @@
   fetchPypi,
   impacket,
   ldap3,
-  nix-update-script,
   pytestCheckHook,
   setuptools,
 }:
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ldap3_ad_auth" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Protected AD LDAP authentication for ldap3";

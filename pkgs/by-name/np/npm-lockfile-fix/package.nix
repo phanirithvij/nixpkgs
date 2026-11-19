@@ -3,7 +3,6 @@
   stdenv,
   python3,
   fetchFromGitHub,
-  nix-update-script,
   cacert,
 }:
 
@@ -38,8 +37,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "REQUESTS_CA_BUNDLE"
     "${cacert}/etc/ssl/certs/ca-bundle.crt"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Add missing integrity and resolved fields to a package-lock.json file";

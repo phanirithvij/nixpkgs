@@ -4,7 +4,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -29,8 +28,6 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     sed -i /addopts/d pyproject.toml
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Implementation of the XDG Base Directory Specification in Python";

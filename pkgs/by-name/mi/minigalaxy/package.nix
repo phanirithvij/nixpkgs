@@ -7,7 +7,6 @@
   innoextract,
   lib,
   libnotify,
-  nix-update-script,
   python3Packages,
   replaceVars,
   umu-launcher,
@@ -78,8 +77,6 @@ python3Packages.buildPythonApplication rec {
       }"
     )
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://sharkwouter.github.io/minigalaxy/";

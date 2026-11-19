@@ -3,7 +3,6 @@
   fetchFromGitHub,
   python3Packages,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -32,8 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ]);
 
   pythonImportsCheck = [ "urlscan" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mutt and terminal url selector (similar to urlview)";

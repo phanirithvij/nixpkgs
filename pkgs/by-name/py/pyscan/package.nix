@@ -2,7 +2,6 @@
   lib,
   cargo,
   fetchFromGitHub,
-  nix-update-script,
   openssl,
   pkg-config,
   python3Packages,
@@ -44,8 +43,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python dependency vulnerability scanner";

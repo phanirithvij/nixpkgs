@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   python,
 
   # nativeBuildInputs
@@ -78,8 +77,6 @@ buildPythonPackage (finalAttrs: {
   preInstallCheck = "make test";
 
   pythonImportsCheck = [ "nanoeigenpy" ];
-
-  passthru.updateScript = nix-update-script { };
 
   postFixup = ''
     substituteInPlace $dev/lib/cmake/nanoeigenpy/nanoeigenpyConfig.cmake \

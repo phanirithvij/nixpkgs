@@ -8,7 +8,6 @@
   beets-minimal,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "beets-ytimport";
@@ -37,8 +36,6 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
     pytestCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/mgoltzsche/beets-ytimport/releases/tag/v${version}";

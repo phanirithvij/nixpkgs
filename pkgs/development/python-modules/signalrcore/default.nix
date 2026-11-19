@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pytestCheckHook,
 
   # build
@@ -61,8 +60,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "signalrcore" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "signalrcore";

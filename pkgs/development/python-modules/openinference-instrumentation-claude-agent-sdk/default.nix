@@ -4,7 +4,6 @@
   claude-agent-sdk,
   fetchFromGitHub,
   hatchling,
-  nix-update-script,
   openinference-instrumentation,
   openinference-semantic-conventions,
   opentelemetry-api,
@@ -63,7 +62,6 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     # bulk updater uses wrong tag
     skipBulkUpdate = true;
-    updateScript = nix-update-script { };
   };
 
   meta = {

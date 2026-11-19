@@ -31,7 +31,6 @@
   obs-studio-plugins,
   libxml2,
   umu-launcher,
-  nix-update-script,
   removeWarningPopup ? false,
   withObsVkCapture ? false,
   withLsfgVk ? false,
@@ -133,8 +132,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Easy-to-use wineprefix manager";

@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   versionCheckHook,
 }:
 
@@ -34,8 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "grep-like filter for Beancount";

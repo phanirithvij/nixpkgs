@@ -13,7 +13,6 @@
   setuptools,
   samtools,
   zlib,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -79,8 +78,6 @@ buildPythonPackage rec {
     "pysam.libcvcf"
     "pysam.libcsamtools"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python module for reading, manipulating and writing genome data sets";

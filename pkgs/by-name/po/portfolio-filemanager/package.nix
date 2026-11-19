@@ -13,7 +13,6 @@
   ninja,
   pkg-config,
   wrapGAppsHook4,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -67,10 +66,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Minimalist file manager for those who want to use Linux mobile devices";

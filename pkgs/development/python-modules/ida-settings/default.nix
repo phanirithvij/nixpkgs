@@ -4,7 +4,6 @@
   fetchFromGitHub,
   uv-build,
   ida-hcli,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fetch and set configuration values for IDA Plugins";

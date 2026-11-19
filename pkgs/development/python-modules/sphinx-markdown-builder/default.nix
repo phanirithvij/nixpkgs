@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build system
   setuptools,
@@ -43,8 +42,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     sphinxcontrib-httpdomain
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sphinx extension to add markdown generation support";

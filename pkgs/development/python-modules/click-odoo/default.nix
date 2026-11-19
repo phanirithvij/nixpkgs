@@ -3,7 +3,6 @@
   click,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   setuptools-scm,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [ click ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Odoo scripting helper library";

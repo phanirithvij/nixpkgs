@@ -7,7 +7,6 @@
   steam,
   winetricks,
   yad,
-  nix-update-script,
   extraCompatPaths ? "",
 }:
 
@@ -95,8 +94,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "protontricks" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple wrapper for running Winetricks commands for Proton-enabled games";

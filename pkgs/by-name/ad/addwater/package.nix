@@ -10,7 +10,6 @@
   python3Packages,
   wrapGAppsHook4,
   appstream,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -45,8 +44,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygobject3
     requests
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Installer for the fantastic GNOME for Firefox theme";

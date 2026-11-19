@@ -11,7 +11,6 @@
   zstd,
   cffi,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -61,8 +60,6 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "py" ];
 
   pythonImportsCheck = [ "symbolic" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for dealing with symbol files and more";

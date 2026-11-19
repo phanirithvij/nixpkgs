@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   numba,
   numpy,
   pynndescent,
@@ -45,8 +44,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "fast_hdbscan" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Multi-core implementation of HDBSCAN for low dimensional Euclidean spaces";

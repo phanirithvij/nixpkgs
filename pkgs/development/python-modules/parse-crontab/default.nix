@@ -6,7 +6,6 @@
   pytestCheckHook,
   python-dateutil,
   pytz,
-  nix-update-script,
 }:
 
 # Distributed on PyPI as "crontab"; not to be confused with python-crontab,
@@ -33,8 +32,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "crontab" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Parse crontab schedules and compute execution times";

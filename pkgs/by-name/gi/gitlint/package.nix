@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gitMinimal,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -43,8 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "gitlint"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linting for your git commit messages";

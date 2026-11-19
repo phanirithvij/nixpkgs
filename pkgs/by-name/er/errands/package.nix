@@ -14,7 +14,6 @@
   libportal,
   gtk4,
   gtksourceview5,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "errands";
@@ -61,10 +60,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Manage your tasks";

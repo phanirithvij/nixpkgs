@@ -9,7 +9,6 @@
   blueprint-compiler,
   desktop-file-utils,
   libadwaita,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -46,8 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/CleoMenezesJr/Serigy";

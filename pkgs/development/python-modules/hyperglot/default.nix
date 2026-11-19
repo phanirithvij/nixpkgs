@@ -1,6 +1,5 @@
 {
   lib,
-  nix-update-script,
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
@@ -37,8 +36,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "hyperglot" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Database and tools for detecting language support in fonts";

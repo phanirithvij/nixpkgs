@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   versionCheckHook,
   bashInteractive,
 }:
@@ -38,8 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "linecast";

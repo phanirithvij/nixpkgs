@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
 }:
 let
   version = "1.2.2";
@@ -43,8 +42,6 @@ python3Packages.buildPythonApplication {
   env = {
     UNITTEST_CONF = "tests/citest.conf";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Manage DANE TLSA records in DNS servers";

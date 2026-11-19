@@ -11,7 +11,6 @@
   pytest-asyncio,
   psycopg2,
   psycopg,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -56,8 +55,6 @@ buildPythonPackage (finalAttrs: {
     export DJANGO_SETTINGS_MODULE="tests.django_settings"
     export POSTGRES_HOST="$PGHOST"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Useful PostgreSQL-specific Django utiites";

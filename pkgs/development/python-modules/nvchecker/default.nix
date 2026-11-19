@@ -10,7 +10,6 @@
   installShellFiles,
   jq,
   lxml,
-  nix-update-script,
   packaging,
   platformdirs,
   pycurl,
@@ -91,8 +90,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "nvchecker" ];
 
   disabledTestMarks = [ "needs_net" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "New version checker for software";

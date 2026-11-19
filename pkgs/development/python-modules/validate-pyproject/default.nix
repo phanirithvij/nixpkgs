@@ -3,7 +3,6 @@
   buildPythonPackage,
   fastjsonschema,
   fetchFromGitHub,
-  nix-update-script,
   packaging,
   pytest-cov-stub,
   pytestCheckHook,
@@ -132,8 +131,6 @@ buildPythonPackage (finalAttrs: {
       "test_examples_api[${example}-cli_pre_compile]"
     ]) examples
     ++ [ "test_downloaded" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Validation library for simple check on pyproject.toml";

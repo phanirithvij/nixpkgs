@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -103,8 +102,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_scout_suite_help"
     "test_snake_case"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Multi-Cloud Security Auditing Tool";

@@ -12,7 +12,6 @@
   rich-tables,
   filelock,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -59,7 +58,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       beets-with-beetcamp = beets.override {
         pluginOverrides = {

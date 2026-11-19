@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  nix-update-script,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -34,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     # bulk updater uses wrong tag
     skipBulkUpdate = true;
-    updateScript = nix-update-script { };
   };
 
   meta = {

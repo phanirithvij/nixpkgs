@@ -11,7 +11,6 @@
   grpcio-reflection,
   jinja2,
   lib,
-  nix-update-script,
   mock,
   openssh,
   pexpect,
@@ -44,8 +43,6 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-rHEWh78DbDF/k0jalNXOisi/v3+ft3aI8oj5iaxJbWY=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   build-system = [
     setuptools

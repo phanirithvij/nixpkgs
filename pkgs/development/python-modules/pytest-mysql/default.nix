@@ -6,7 +6,6 @@
   mirakuru,
   port-for,
   pymysql,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -44,8 +43,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "pytest_mysql"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "This is a pytest plugin, that enables you to test your code that relies on a running MySQL Database. It allows you to specify fixtures for MySQL process and client";

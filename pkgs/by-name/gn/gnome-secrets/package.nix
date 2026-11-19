@@ -18,7 +18,6 @@
   libadwaita,
   gtksourceview5,
   xvfb-run,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -96,10 +95,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";

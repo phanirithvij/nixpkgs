@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  nix-update-script,
 
   # build-system
   poetry-core,
@@ -91,8 +90,6 @@ buildPythonPackage rec {
     "atproto_lexicon"
     "atproto_server"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "AT Protocol (Bluesky) SDK for Python";

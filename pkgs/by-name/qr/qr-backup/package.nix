@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pkgs,
   installShellFiles,
-  nix-update-script,
   versionCheckHook,
   dejavu_fonts,
   fetchpatch,
@@ -85,10 +84,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     runHook postInstallCheck
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Utility to generate paper backup of files using QR codes";

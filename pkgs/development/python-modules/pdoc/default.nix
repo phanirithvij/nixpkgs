@@ -9,7 +9,6 @@
   markupsafe,
   pytestCheckHook,
   hypothesis,
-  nix-update-script,
   markdown2,
   pydantic,
 }:
@@ -55,8 +54,6 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pdoc" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";

@@ -4,7 +4,6 @@
   buildPythonPackage,
   darabonba-core,
   fetchPypi,
-  nix-update-script,
   setuptools,
 }:
 
@@ -30,8 +29,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Alibaba Cloud ActionTrail (20200706) SDK Library for Python";

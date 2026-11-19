@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  nix-update-script,
   torch,
 }:
 
@@ -29,8 +28,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     torch
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Optimizer for the hidden layers of neural networks";

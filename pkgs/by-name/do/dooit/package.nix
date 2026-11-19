@@ -4,7 +4,6 @@
   dooit,
   python3,
   testers,
-  nix-update-script,
   extraPackages ? [ ],
   writableTmpDirAsHomeHook,
 }:
@@ -55,8 +54,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       package = dooit;
       command = "HOME=$(mktemp -d) dooit --version";
     };
-
-    updateScript = nix-update-script { };
   };
 
   meta = {

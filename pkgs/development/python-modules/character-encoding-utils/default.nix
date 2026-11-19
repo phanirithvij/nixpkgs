@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  nix-update-script,
   uv-build,
 }:
 
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "character_encoding_utils" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/TakWolf/character-encoding-utils";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   colorthief,
   fetchFromGitHub,
-  nix-update-script,
   pillow,
   pytestCheckHook,
   rustPlatform,
@@ -46,10 +45,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "modern_colorthief" ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://modern-colorthief.readthedocs.io/";

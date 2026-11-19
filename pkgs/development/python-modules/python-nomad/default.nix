@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   requests,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "nomad" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python client library for Hashicorp Nomad";

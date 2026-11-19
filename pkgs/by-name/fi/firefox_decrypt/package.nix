@@ -3,7 +3,6 @@
   fetchFromGitHub,
   nss_latest,
   nixosTests,
-  nix-update-script,
   stdenv,
   python3Packages,
 }:
@@ -48,7 +47,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tests = {
       inherit (nixosTests) firefox_decrypt;
     };
-    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -22,7 +22,6 @@
 
   # passthru
   nixosTests,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -86,7 +85,6 @@ buildPythonPackage rec {
 
   passthru = {
     tests = { inherit (nixosTests) temporal; };
-    updateScript = nix-update-script { };
   };
 
   meta = {

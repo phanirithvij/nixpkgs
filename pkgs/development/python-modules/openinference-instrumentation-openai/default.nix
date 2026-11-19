@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   httpx,
-  nix-update-script,
   openai,
   openinference-instrumentation,
   openinference-semantic-conventions,
@@ -78,7 +77,6 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     # bulk updater uses wrong tag
     skipBulkUpdate = true;
-    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   android-image-kitchen,
   gitpython,
   poetry-core,
@@ -56,8 +55,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "sebaubuntu_libs" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SebaUbuntu's shared libs";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   gql,
-  nix-update-script,
   uv-build,
 }:
 
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Authenticate with a Caido instance";

@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   testers,
 }:
 
@@ -32,7 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };

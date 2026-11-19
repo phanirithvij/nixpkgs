@@ -14,7 +14,6 @@
   libadwaita,
   libportal-gtk4,
   gtksourceview5,
-  nix-update-script,
 }:
 let
   version = "1.1.1";
@@ -66,8 +65,6 @@ python3Packages.buildPythonApplication {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Bring color to Adwaita";

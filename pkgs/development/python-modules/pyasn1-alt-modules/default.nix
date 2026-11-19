@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pyasn1,
   pytestCheckHook,
   setuptools,
@@ -27,8 +26,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyasn1_alt_modules" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Alternative ASN.1 modules for pyasn1";

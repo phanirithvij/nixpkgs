@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -38,8 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # AssertionError
     "test_real_first_run_action_flow"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to detect behavioral drift in third-party APIs";

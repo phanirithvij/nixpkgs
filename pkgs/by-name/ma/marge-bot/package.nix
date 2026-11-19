@@ -4,7 +4,6 @@
   python3Packages,
   git,
   openssh,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -48,8 +47,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
 
   pythonImportsCheck = [ "marge" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Merge bot for GitLab";

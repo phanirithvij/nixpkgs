@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -73,8 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
         --zsh  <("$out/bin/$bin" --print-completion zsh)
     done
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/andreafrancia/trash-cli";

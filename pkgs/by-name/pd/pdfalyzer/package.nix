@@ -4,7 +4,6 @@
   python3Packages,
   fetchFromGitHub,
   pkgs,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -36,8 +35,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pdfalyzer" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to analyze PDFs with colors";

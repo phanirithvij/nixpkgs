@@ -6,7 +6,6 @@
   python3Packages,
   makeDesktopItem,
   copyDesktopItems,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pixelflasher";
@@ -81,8 +80,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pixel™ phone flashing GUI utility with features";

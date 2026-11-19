@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # setuptools
   setuptools,
@@ -40,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "stravaweblib" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for extending the Strava v3 API using web scraping";

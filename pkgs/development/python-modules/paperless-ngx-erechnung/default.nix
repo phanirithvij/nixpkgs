@@ -10,7 +10,6 @@
   pillow,
   fop,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -45,8 +44,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "paperless_ngx_erechnung" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "XRechnung and ZUGFeRD/Factur-X parser plugin for Paperless-ngx";

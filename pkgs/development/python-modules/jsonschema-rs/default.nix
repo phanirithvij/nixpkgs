@@ -4,7 +4,6 @@
   fetchPypi,
   hypothesis,
   lib,
-  nix-update-script,
   pytestCheckHook,
   rustPlatform,
   pkg-config,
@@ -70,8 +69,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonschema_rs" ];
 
   __darwinAllowLocalNetworking = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "High-performance JSON Schema validator for Python";

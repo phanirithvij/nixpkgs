@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   versionCheckHook,
 }:
 
@@ -45,8 +44,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight CLI tool that fetches programming tutorials from \"Learn X in Y Minutes\" directly into your terminal";

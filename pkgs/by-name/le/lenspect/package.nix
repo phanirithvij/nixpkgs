@@ -10,7 +10,6 @@
   libsoup_3,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -54,8 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight security threat scanner intended to make malware detection more accessible and efficient";

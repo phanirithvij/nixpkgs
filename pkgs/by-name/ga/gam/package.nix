@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python3,
   yubikey-manager,
-  nix-update-script,
   cacert,
 }:
 
@@ -69,8 +68,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "gam" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line management for Google Workspace";

@@ -4,7 +4,6 @@
   fetchPypi,
   poetry-core,
   pydantic,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "pydantic_argparse_extensible"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Typed wrapper around argparse using pydantic models";

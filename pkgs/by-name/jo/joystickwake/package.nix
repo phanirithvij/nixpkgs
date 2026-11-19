@@ -2,7 +2,6 @@
   lib,
   fetchFromCodeberg,
   installShellFiles,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -50,8 +49,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Joystick-aware screen waker";

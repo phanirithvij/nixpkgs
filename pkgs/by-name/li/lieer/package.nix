@@ -2,15 +2,12 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lieer";
   version = "1.6";
   pyproject = true;
-
-  passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "gauteh";

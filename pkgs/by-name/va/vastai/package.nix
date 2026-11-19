@@ -13,7 +13,6 @@
   writableTmpDirAsHomeHook,
 
   # passthru
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -141,8 +140,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     $out/bin/vastai --help >/dev/null
     test -x $out/bin/serve-vast-deployment
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI and SDK for the Vast.ai GPU cloud service";

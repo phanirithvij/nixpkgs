@@ -3,7 +3,6 @@
   fetchPypi,
   fetchpatch,
   lib,
-  nix-update-script,
   flit-core,
 }:
 buildPythonPackage rec {
@@ -30,8 +29,6 @@ buildPythonPackage rec {
 
   # has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://pypi.org/project/pkgutil_resolve_name/";

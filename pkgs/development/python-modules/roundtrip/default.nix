@@ -4,7 +4,6 @@
   fetchPypi,
   google-cloud-translate,
   mtranslate,
-  nix-update-script,
   setuptools,
 }:
 
@@ -29,8 +28,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Round trip translation for NLP data augmentation";

@@ -12,7 +12,6 @@
   appstream-glib,
   gobject-introspection,
   libadwaita,
-  nix-update-script,
 }:
 let
   version = "1.0.1";
@@ -50,8 +49,6 @@ python3Packages.buildPythonApplication {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Stay on track during speeches";

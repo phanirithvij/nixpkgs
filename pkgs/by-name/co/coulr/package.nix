@@ -12,7 +12,6 @@
   libadwaita,
   libportal-gtk4,
   libnotify,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -56,8 +55,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Color box to help developers and designers";

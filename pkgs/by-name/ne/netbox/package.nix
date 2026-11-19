@@ -130,7 +130,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
             touch $out
           '';
     };
-    updateScript = nix-update-script { };
     plugins = lib.recurseIntoAttrs (
       lib.makeExtensible (
         self:

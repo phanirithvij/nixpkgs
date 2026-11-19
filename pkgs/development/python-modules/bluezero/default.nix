@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pygobject3,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -40,8 +39,6 @@ buildPythonPackage (finalAttrs: {
 
   # Most of the tests are failing due to a missing working dbus instance and bluetooth devices
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A simple Python interface to Bluez";

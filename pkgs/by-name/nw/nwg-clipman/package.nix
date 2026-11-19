@@ -8,7 +8,6 @@
   gtk3,
   wl-clipboard,
   cliphist,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonPackage (finalAttrs: {
@@ -54,8 +53,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "nwg_clipman" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK3-based GUI for cliphist";

@@ -36,7 +36,6 @@
   writableTmpDirAsHomeHook,
 
   # passthru
-  nix-update-script,
   pygame-gui,
 }:
 
@@ -183,7 +182,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       inherit pygame-gui;
     };

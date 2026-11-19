@@ -10,7 +10,6 @@
   libadwaita,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -54,8 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygobject3
     tmdbsimple
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/aleiepure/ticketbooth/releases/tag/${finalAttrs.src.tag}";

@@ -5,7 +5,6 @@
   fetchFromGitHub,
   pythonAtLeast,
   flit-core,
-  nix-update-script,
   httpx,
   websockets,
   pytestCheckHook,
@@ -55,8 +54,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "gotify"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/d-k-bo/python-gotify/releases/tag/v${version}";

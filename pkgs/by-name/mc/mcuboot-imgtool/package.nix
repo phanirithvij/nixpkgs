@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   python3Packages,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -15,8 +14,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pname = "imgtool";
     hash = "sha256-ImtQKb6wzbSQCV7dWcz6Mu36ezFFDCaDtEsau3cugNk=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = with python3Packages; [ setuptools ];
 

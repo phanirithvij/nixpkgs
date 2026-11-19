@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nix-update-script,
   setuptools,
   writableTmpDirAsHomeHook,
 }:
@@ -26,8 +25,6 @@ buildPythonPackage (finalAttrs: {
 
   # Requires IDE to be installed
   # pythonImportsCheck = [ "idapro" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "IDA Library Python module";

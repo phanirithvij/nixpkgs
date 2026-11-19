@@ -6,7 +6,6 @@
   hatch-vcs,
   hatchling,
   lib,
-  nix-update-script,
   pyopenssl,
   pytestCheckHook,
 }:
@@ -51,8 +50,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "smartthings_local"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Local control of Samsung SmartThings appliances over cert-authenticated CoAP-DTLS. No cloud! Python library + Home Assistant MQTT bridge demo";

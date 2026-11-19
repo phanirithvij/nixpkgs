@@ -9,7 +9,6 @@
   lief,
   myst-parser,
   neo4j,
-  nix-update-script,
   oletools,
   poetry-core,
   pure-magic-rs,
@@ -104,8 +103,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pymisp" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library using the MISP Rest API";

@@ -3,7 +3,6 @@
   fetchFromGitLab,
   python3Packages,
   sphinxHook,
-  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 
@@ -38,8 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Autoqueuing mpd client";

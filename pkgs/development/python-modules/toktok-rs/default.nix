@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
-  nix-update-script,
 
   # optional-dependencies
   numpy,
@@ -52,8 +51,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "toktok" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, exact BPE tokenizer for OpenAI encodings, with a Rust core";

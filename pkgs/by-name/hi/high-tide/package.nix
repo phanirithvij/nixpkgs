@@ -15,7 +15,6 @@
   libportal,
   alsa-utils,
   pipewire,
-  nix-update-script,
 }:
 
 python313Packages.buildPythonApplication (finalAttrs: {
@@ -69,8 +68,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Libadwaita TIDAL client for Linux";

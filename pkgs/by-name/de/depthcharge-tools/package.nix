@@ -6,7 +6,6 @@
   lib,
   lz4,
   lzop,
-  nix-update-script,
   python3Packages,
   ubootTools,
   vboot-utils,
@@ -51,8 +50,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       zstd
     ]}"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tools to manage the Chrome OS bootloader";

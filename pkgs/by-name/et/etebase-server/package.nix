@@ -4,7 +4,6 @@
   python3,
   withLdap ? false,
   withPostgres ? true,
-  nix-update-script,
   nixosTests,
 }:
 
@@ -52,7 +51,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     chmod +x $out/bin/etebase-server
   '';
 
-  passthru.updateScript = nix-update-script { };
   passthru.python = python3;
   # PYTHONPATH of all dependencies used by the package
   passthru.pythonPath = python3.pkgs.makePythonPath finalAttrs.propagatedBuildInputs;

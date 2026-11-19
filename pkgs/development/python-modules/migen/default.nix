@@ -5,7 +5,6 @@
   setuptools,
   colorama,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -33,8 +32,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "migen" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python toolbox for building complex digital hardware";

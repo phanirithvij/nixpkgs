@@ -8,7 +8,6 @@
   jaraco-envs,
   jaraco-path,
   jaraco-test,
-  nix-update-script,
   packaging,
   pip,
   pyproject-hooks,
@@ -63,8 +62,6 @@ buildPythonPackage (finalAttrs: {
     "test_resource_filename_rewrites_on_change"
     "test_interop_pkg_resources_iter_entry_points"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Snapshot of last pkg_resources module from setuptools";

@@ -4,7 +4,6 @@
   hatch-vcs,
   lib,
   manifestoo-core,
-  nix-update-script,
   pytestCheckHook,
   textual,
   typer,
@@ -29,8 +28,6 @@ buildPythonPackage rec {
     textual
     typer
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to reason about Odoo addons manifests";

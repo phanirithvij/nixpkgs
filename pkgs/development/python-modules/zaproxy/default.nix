@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   poetry-core,
   pyhamcrest,
   pytestCheckHook,
@@ -37,8 +36,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "zapv2" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "ZAP Python API";

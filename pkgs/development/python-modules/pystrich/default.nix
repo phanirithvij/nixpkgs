@@ -13,7 +13,6 @@
   dmtx-utils,
   librsvg,
   ghostscript,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -51,8 +50,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pystrich" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pure-Python module to generate 1D and 2D barcodes";

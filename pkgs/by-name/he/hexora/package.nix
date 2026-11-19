@@ -2,7 +2,6 @@
   lib,
   cargo,
   fetchFromGitHub,
-  nix-update-script,
   pkg-config,
   python3Packages,
   rustc,
@@ -47,8 +46,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Static analysis of malicious Python code";

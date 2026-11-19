@@ -4,7 +4,6 @@
   python3Packages,
   fetchFromGitHub,
   callPackage,
-  nix-update-script,
   _7zz,
   android-tools,
   cpio,
@@ -68,7 +67,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
           dumpyara system.zip
           touch $out
         '';
-    updateScript = nix-update-script { };
   };
 
   meta = {

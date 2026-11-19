@@ -3,7 +3,6 @@
   fetchFromGitHub,
   python3Packages,
   testers,
-  nix-update-script,
   nixosTests,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -46,7 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;

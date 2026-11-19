@@ -18,7 +18,6 @@
   rtmpSupport ? true,
   withAlias ? false, # Provides bin/youtube-dl for backcompat
   withSecretStorage ? !stdenvNoCC.hostPlatform.isDarwin,
-  nix-update-script,
   # required for tests
   yt-dlp,
   nodejs,
@@ -149,7 +148,6 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     # Try to build with each of the supported JS runtimes
     tests = lib.genAttrs' [ nodejs bun quickjs quickjs-ng ] (
       runtime:

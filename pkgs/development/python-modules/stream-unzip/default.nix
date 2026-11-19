@@ -3,7 +3,6 @@
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
-  nix-update-script,
   pycryptodome,
   pyprojectVersionPatchHook,
   rustc,
@@ -54,8 +53,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "stream_unzip" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python function to stream unzip all the files in a ZIP archive on the fly";

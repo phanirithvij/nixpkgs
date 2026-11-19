@@ -16,7 +16,6 @@
   ffmpeg,
   gst-thumbnailers,
   glycin-loaders,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -68,10 +67,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps}
     )
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Compresses your videos to your chosen file size";

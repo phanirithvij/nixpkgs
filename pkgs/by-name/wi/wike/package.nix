@@ -15,7 +15,6 @@
   libadwaita,
   glib-networking,
   webkitgtk_6_0,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -62,10 +61,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/share/wike" "$out ''${pythonPath[*]}"
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Wikipedia Reader for the GNOME Desktop";

@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 
@@ -123,8 +122,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/tools/test_output_tool.py"
     "tests/util/test_wait_hints_compact.py"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Framework for AI Security";

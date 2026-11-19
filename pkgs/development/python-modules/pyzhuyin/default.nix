@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   wheel,
-  nix-update-script,
   unittestCheckHook,
 }:
 
@@ -31,8 +30,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     unittestCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Phonetic and Pinyin conversion tool";

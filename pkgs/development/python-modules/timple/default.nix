@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   setuptools,
 
   # deps
@@ -48,8 +47,6 @@ buildPythonPackage rec {
     # gui plotting tests
     "timple/tests/test_timple.py"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/theOehrly/timple/releases/tag/v${version}";

@@ -7,7 +7,6 @@
   wtforms-htmx,
   pytestCheckHook,
   flask,
-  nix-update-script,
 }:
 
 let
@@ -48,8 +47,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "wtforms_htmx_components"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ready-made interactive WTForms fields built on wtforms-htmx";

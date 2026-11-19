@@ -4,7 +4,6 @@
   fetchFromGitHub,
   jsonschema,
   mcp,
-  nix-update-script,
   pytestCheckHook,
   rich,
   setuptools,
@@ -42,8 +41,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pqc_scanner" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library to scan and audit PQC implementations for known vulnerabilities";

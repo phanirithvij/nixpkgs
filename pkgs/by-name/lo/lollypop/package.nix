@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitLab,
-  nix-update-script,
   meson,
   ninja,
   pkg-config,
@@ -103,10 +102,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     changelog = "https://gitlab.gnome.org/World/lollypop/tags/${finalAttrs.version}";

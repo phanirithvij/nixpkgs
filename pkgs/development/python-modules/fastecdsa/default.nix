@@ -3,7 +3,6 @@
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
-  nix-update-script,
   parameterized,
   pytest-cov-stub,
   pytestCheckHook,
@@ -46,8 +45,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "fastecdsa" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for fast elliptic curve crypto";

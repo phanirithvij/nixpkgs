@@ -6,7 +6,6 @@
   netcat-openbsd,
   procps,
   bash,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -64,8 +63,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "flashfocus" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/fennerm/flashfocus";

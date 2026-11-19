@@ -3,7 +3,6 @@
   buildPythonPackage,
   configparser,
   fetchFromGitHub,
-  nix-update-script,
   packaging,
   requests,
   setuptools,
@@ -33,8 +32,6 @@ buildPythonPackage (finalAttrs: {
 
   # Tests require network access
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Valhalla API Client";

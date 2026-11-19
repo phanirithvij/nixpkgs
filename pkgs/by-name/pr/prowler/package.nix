@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   kingfisher,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -136,8 +135,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "prowler" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Security tool to perform Cloud Security best practices assessments";

@@ -1,7 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  nix-update-script,
   python3Packages,
   qt6,
   qt6Packages,
@@ -71,8 +70,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     mkdir -p "$out/share/applications"
     mv openfreebuds_qt/assets/pw.mmk.OpenFreebuds.desktop "$out/share/applications"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/melianmiko/OpenFreebuds/blob/${finalAttrs.src.rev}/CHANGELOG.md";

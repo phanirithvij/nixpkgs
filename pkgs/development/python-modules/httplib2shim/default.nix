@@ -4,7 +4,6 @@
   certifi,
   fetchFromGitHub,
   httplib2,
-  nix-update-script,
   setuptools,
   six,
   urllib3,
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "httplib2shim" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Urllib3 sanity for httplib2 users";

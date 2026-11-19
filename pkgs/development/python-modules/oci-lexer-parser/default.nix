@@ -5,7 +5,6 @@
   setuptools,
   antlr4-python3-runtime,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -27,8 +26,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "oci_lexer_parser" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utility to convert OCI IAM Policy Statements and Dynamic Group Matching Rules to serialized JSON output";

@@ -9,7 +9,6 @@
   pyjwt,
   pytestCheckHook,
   responses,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -44,8 +43,6 @@ buildPythonPackage rec {
   ];
 
   enabledTestPaths = [ "tests/unit" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python interface library for JFrog Artifactory";

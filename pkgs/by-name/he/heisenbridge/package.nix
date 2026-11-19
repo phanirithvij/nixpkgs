@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3,
 }:
 
@@ -41,8 +40,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Bouncer-style Matrix-IRC bridge";

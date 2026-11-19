@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   packaging,
   pytestCheckHook,
   sanic,
@@ -41,8 +40,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "sanic_cors" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sanic extension for handling Cross Origin Resource Sharing (CORS)";

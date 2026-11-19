@@ -6,7 +6,6 @@
   packaging,
   pydantic,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -41,8 +40,6 @@ buildPythonPackage (finalAttrs: {
     # Tests require pip/network access
     "hatch_rs/tests/test_projects.py"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hatch plugin for Rust";

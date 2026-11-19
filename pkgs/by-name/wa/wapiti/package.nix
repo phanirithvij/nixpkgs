@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   php,
   python3Packages,
   versionCheckHook,
@@ -160,10 +159,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "wapitiCore" ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Web application vulnerability scanner";

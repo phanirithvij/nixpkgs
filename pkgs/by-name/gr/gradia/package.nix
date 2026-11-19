@@ -20,7 +20,6 @@
   bash,
   glib-networking,
   tesseract,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradia";
@@ -82,8 +81,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Make your screenshots ready for the world";

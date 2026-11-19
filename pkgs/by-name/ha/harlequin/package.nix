@@ -3,7 +3,6 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   glibcLocales,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -69,10 +68,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "harlequin_sqlite"
     "harlequin_vscode"
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   nativeCheckInputs = with python3Packages; [
     flaky

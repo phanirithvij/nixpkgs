@@ -22,7 +22,6 @@
   huggingface-hub,
   modelscope,
   aistudio-sdk,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -67,8 +66,6 @@ buildPythonPackage (finalAttrs: {
     modelscope
     aistudio-sdk
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleX";

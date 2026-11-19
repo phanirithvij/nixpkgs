@@ -4,7 +4,6 @@
   cryptography,
   fetchPypi,
   hatchling,
-  nix-update-script,
   pydantic,
   pyjwt,
   requests,
@@ -36,8 +35,6 @@ buildPythonPackage (finalAttrs: {
 
   # Tests are not included in PyPI release
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Core functionality for the STACKIT SDK";

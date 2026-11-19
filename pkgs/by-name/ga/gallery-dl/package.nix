@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromCodeberg,
-  nix-update-script,
   yt-dlp,
   python3Packages,
 }:
@@ -43,8 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "gallery_dl" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://codeberg.org/mikf/gallery-dl/src/tag/v${finalAttrs.version}/CHANGELOG.md";

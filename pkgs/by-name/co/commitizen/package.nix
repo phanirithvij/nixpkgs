@@ -5,7 +5,6 @@
   gitMinimal,
   stdenv,
   installShellFiles,
-  nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -99,10 +98,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "version";
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";

@@ -42,7 +42,6 @@
   nixosTests,
   go_1_26,
   buildGo126Module,
-  nix-update-script,
   makeBinaryWrapper,
   darwin,
   cairo,
@@ -337,7 +336,6 @@ buildPythonApplication rec {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       default = nixosTests.terminal-emulators.kitty;
     };
-    updateScript = nix-update-script { };
   };
 
   meta = {

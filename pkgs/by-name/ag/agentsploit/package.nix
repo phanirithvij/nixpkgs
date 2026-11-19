@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -59,8 +58,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   versionCheckProgramArg = [ "version" ];
 
   pythonImportsCheck = [ "agentsploit" ];
-
-  passthru.updateScript = nix-update-script { };
 
   __darwinAllowLocalNetworking = true;
 

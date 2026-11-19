@@ -4,7 +4,6 @@
   fetchFromGitHub,
   uv-build,
   wtforms_3_3,
-  nix-update-script,
   pytestCheckHook,
   pytest-xdist,
   flask,
@@ -48,8 +47,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "wtforms_htmx"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Interactive WTForms forms with no hand-written JavaScript, powered by htmx and dark magic";

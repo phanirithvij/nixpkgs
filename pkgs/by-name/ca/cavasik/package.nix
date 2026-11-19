@@ -9,7 +9,6 @@
   libadwaita,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -67,8 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=(''${gappsWrapperArgs[@]})
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Audio visualizer based on CAVA with extended capabilities";

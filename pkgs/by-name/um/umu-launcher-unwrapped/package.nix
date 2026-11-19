@@ -10,7 +10,6 @@
   withTruststore ? true,
   withDeltaUpdates ? true,
   versionCheckHook,
-  nix-update-script,
 }:
 python3Packages.buildPythonPackage rec {
   pname = "umu-launcher-unwrapped";
@@ -89,8 +88,6 @@ python3Packages.buildPythonPackage rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unified launcher for Windows games on Linux using the Steam Linux Runtime and Tools";

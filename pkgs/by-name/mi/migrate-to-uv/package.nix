@@ -6,7 +6,6 @@
   rustPlatform,
   rustc,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -34,8 +33,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Migrate a project from Poetry/Pipenv/pip-tools/pip to uv package manager";

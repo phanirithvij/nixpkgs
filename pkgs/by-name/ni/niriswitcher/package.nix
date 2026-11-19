@@ -6,7 +6,6 @@
   gobject-introspection,
   gtk4-layer-shell,
   libadwaita,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -43,8 +42,6 @@ python3Packages.buildPythonPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk4-layer-shell ]}
     )
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Application switcher for niri";

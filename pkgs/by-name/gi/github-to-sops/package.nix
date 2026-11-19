@@ -5,7 +5,6 @@
   python3Packages,
   sops,
   versionCheckHook,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "github-to-sops";
@@ -37,8 +36,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for managing infrastructure secrets in git repositories using SOPS and GitHub SSH keys";

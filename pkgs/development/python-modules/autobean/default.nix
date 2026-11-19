@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   beancount,
-  nix-update-script,
   pdm-pep517,
   pytest-cov-stub,
   pytestCheckHook,
@@ -41,8 +40,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "autobean" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/SEIAROTg/autobean";

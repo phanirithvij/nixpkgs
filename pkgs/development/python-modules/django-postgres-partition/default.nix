@@ -6,7 +6,6 @@
   django,
   psycopg,
   python-dateutil,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "psql_partition" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Partition support for django, based on django-postgres-extra";

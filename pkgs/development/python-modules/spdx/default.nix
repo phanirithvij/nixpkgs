@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  nix-update-script,
   setuptools,
 }:
 
@@ -24,8 +23,6 @@ buildPythonPackage rec {
 
   # upstream has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SPDX license list database";

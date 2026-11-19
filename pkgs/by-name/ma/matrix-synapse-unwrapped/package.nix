@@ -9,7 +9,6 @@
   rustPlatform,
   rustc,
   nixosTests,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -181,7 +180,6 @@ python3Packages.buildPythonApplication rec {
     tests = { inherit (nixosTests) matrix-synapse; };
     plugins = python3Packages.callPackage ./plugins { };
     inherit (python3Packages) python;
-    updateScript = nix-update-script { };
   };
 
   meta = {

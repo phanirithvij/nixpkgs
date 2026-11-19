@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -43,8 +42,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   doInstallCheck = true;
 
   pythonImportsCheck = [ "user_scanner" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Email & Username OSINT suite";

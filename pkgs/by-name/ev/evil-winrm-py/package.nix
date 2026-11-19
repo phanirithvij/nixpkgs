@@ -4,7 +4,6 @@
   fetchFromGitHub,
   libkrb5,
   versionCheckHook,
-  nix-update-script,
   enableKerberos ? true,
 }:
 
@@ -44,8 +43,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Execute commands interactively on remote Windows machines using the WinRM protocol";

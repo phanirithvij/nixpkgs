@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  nix-update-script,
   installShellFiles,
   versionCheckHook,
 }:
@@ -28,8 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   nativeCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal tool to test your typing speed with various difficulty levels";

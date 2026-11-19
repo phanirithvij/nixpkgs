@@ -3,7 +3,6 @@
   fetchFromGitHub,
   python3,
   rsync,
-  nix-update-script,
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ietf-cli";
@@ -25,8 +24,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line interface for accessing IETF documents and other information";

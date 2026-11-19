@@ -7,7 +7,6 @@
   numpy,
   patchelfUnstable,
   pyyaml,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -39,8 +38,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "hebi" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for the Hebi Robotics API";

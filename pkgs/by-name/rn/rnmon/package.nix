@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -33,8 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # No tests in the repository
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "RNS Monitoring Agent";

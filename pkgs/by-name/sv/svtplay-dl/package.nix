@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
   python3Packages,
   perl,
   ffmpeg,
@@ -78,8 +77,6 @@ buildPythonApplication {
     installManPage svtplay-dl.1
     makeWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ ffmpeg ]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/spaam/svtplay-dl";

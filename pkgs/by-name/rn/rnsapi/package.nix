@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -39,8 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "rnsapi"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "REST + WebSocket API daemon that exposes the full Reticulum Network Stack (RNS) service over HTTP(S) and WS(S)";

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dowhen" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Intuitive and low-overhead instrumentation tool for Python";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lxml,
-  nix-update-script,
   poetry-core,
   pydantic-core,
   pydantic,
@@ -40,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pydantic_xml" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python xml for humans";

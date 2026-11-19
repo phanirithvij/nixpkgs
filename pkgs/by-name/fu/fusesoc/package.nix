@@ -8,7 +8,6 @@
   gitMinimal,
   openssh,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fusesoc";
@@ -66,8 +65,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gnumake
     ])
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/olofk/fusesoc";

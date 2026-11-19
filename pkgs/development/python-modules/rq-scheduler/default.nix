@@ -7,7 +7,6 @@
   parse-crontab,
   python-dateutil,
   rq,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -33,8 +32,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "rq_scheduler" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Job scheduling capabilities for RQ (Redis Queue)";

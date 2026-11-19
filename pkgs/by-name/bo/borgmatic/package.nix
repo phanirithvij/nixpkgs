@@ -4,7 +4,6 @@
   coreutils,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fetchPypi,
-  nix-update-script,
   installShellFiles,
   lib,
   python3Packages,
@@ -22,8 +21,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-qsB8564wCWBemsxn7vIBmntdabzK1j7agP8ZK2nzdc8=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs =
     with python3Packages;

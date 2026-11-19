@@ -4,7 +4,6 @@
   configupdater,
   distutils,
   fetchFromGitHub,
-  nix-update-script,
   packaging,
   pytest-cov-stub,
   pytest-randomly,
@@ -91,8 +90,6 @@ buildPythonPackage (finalAttrs: {
       "test_examples_api[${example}]"
       "test_examples_cli[${example}]"
     ]) examples;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Automatically conversion of .ini/.cfg files to TOML equivalents";

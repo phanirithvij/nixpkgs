@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -39,8 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doInstallCheck = true;
 
   pythonImportsCheck = [ "getsploit" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Search and download public exploits from the Vulners database";

@@ -5,7 +5,6 @@
   setuptools,
   setuptools-scm,
   attrs,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "cmake_parser"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Parse CMake files with Python";

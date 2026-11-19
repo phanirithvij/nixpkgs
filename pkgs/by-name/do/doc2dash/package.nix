@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doc2dash";
@@ -33,8 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     pytest-cov-stub
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/hynek/doc2dash/releases/tag/${finalAttrs.src.tag}";

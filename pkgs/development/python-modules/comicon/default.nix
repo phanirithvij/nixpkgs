@@ -4,7 +4,6 @@
   fetchFromGitHub,
   lib,
   lxml,
-  nix-update-script,
   pillow,
   poetry-core,
   pypdf,
@@ -45,8 +44,6 @@ buildPythonPackage rec {
   doCheck = false; # test artifacts are not public
 
   pythonImportsCheck = [ "comicon" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/potatoeggy/comicon/releases/tag/v${version}";

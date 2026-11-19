@@ -12,7 +12,6 @@
   gobject-introspection,
   gtk4,
   libadwaita,
-  nix-update-script,
 }:
 let
   version = "0.5.1";
@@ -55,8 +54,6 @@ python3Packages.buildPythonApplication {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Extract color palettes from your images";

@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromCodeberg,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -35,8 +34,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     $out/bin/synadm -h > /dev/null
     runHook postCheck
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line admin tool for Synapse";

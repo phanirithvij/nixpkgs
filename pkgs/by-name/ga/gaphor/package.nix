@@ -8,7 +8,6 @@
   gtksourceview5,
   libadwaita,
   python3Packages,
-  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -117,10 +116,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "UML and SysML modeling tool";

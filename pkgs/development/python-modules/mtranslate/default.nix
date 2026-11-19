@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   setuptools,
 }:
 
@@ -24,8 +23,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no unit tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module to interact with the API for Google translate";

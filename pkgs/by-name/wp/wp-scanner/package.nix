@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3,
 }:
 
@@ -40,8 +39,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   # Project has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wordpress Security Scanner and Auto Exploiter";

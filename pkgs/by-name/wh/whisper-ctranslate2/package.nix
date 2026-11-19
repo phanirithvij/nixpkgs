@@ -4,7 +4,6 @@
   python3,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -45,8 +44,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # Tests fail in build sandbox on aarch64-linux, but the program still works at
   # runtime. See https://github.com/microsoft/onnxruntime/issues/10038.
   doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Whisper command line client compatible with original OpenAI client based on CTranslate2";

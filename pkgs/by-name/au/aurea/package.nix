@@ -11,7 +11,6 @@
   libsoup_3,
   glib-networking,
   libadwaita,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -55,8 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstallCheck = ''
     mesonCheckPhase
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flatpak metainfo banner previewer";

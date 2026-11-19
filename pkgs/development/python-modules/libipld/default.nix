@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   rustPlatform,
-  nix-update-script,
 
   # build-system
   maturin,
@@ -55,8 +54,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "libipld" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast Python library to work with IPLD: DAG-CBOR, CID, CAR, multibase";

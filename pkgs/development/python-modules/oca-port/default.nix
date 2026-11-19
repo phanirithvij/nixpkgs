@@ -6,7 +6,6 @@
   giturlparse,
   git-filter-repo,
   lib,
-  nix-update-script,
   requests,
   setuptools-scm,
 }:
@@ -35,8 +34,6 @@ buildPythonPackage rec {
     requests
     git-filter-repo
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "oca_port" ];
 

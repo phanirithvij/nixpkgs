@@ -8,7 +8,6 @@
   wheel,
   pytestCheckHook,
   pyvista,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -53,8 +52,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "fast_simplification"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast Quadratic Mesh Simplification";

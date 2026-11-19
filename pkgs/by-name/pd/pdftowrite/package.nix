@@ -4,7 +4,6 @@
   fetchFromGitHub,
   makeWrapper,
   versionCheckHook,
-  nix-update-script,
 
   # shared
   gzip,
@@ -78,7 +77,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
 
   nativeCheckInputs = [ versionCheckHook ];
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/apebl/pdftowrite";

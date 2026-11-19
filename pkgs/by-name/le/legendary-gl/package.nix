@@ -1,6 +1,5 @@
 {
   lib,
-  nix-update-script,
   fetchFromGitHub,
   python3Packages,
 }:
@@ -35,8 +34,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "legendary" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Free and open-source Epic Games Launcher alternative";

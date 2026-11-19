@@ -6,7 +6,6 @@
   fastcore,
   httpx2,
   cachy,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -38,8 +37,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "fasttransport" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sync and async HTTP transports over httpx2, plus base classes for small REST clients";

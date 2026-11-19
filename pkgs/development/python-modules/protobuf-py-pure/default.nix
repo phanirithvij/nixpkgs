@@ -4,7 +4,6 @@
   fetchPypi,
   uv-build,
   typing-extensions,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -28,8 +27,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ typing-extensions ];
 
   pythonImportsCheck = [ "protobuf" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pure Python implementation of protobuf-py, idiomatic Protocol Buffers for Python";

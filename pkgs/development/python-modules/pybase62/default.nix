@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pytestCheckHook,
   setuptools,
 }:
@@ -24,8 +23,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "base62" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module for base62 encoding";

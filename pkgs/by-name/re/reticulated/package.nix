@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -49,8 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # No --version flag and no Python tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/RFnexus/reticulated/releases/tag/${finalAttrs.src.tag}";

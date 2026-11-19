@@ -10,7 +10,6 @@
   addBinToPathHook,
   versionCheckHook,
 
-  nix-update-script,
 }:
 
 let
@@ -109,8 +108,6 @@ let
             doCheck = false;
           }
         );
-
-      updateScript = nix-update-script { };
     };
 
     meta = {

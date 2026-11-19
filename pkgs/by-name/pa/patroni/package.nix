@@ -84,8 +84,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   passthru = {
     tests.patroni = nixosTests.patroni;
-
-    updateScript = nix-update-script { };
   };
 
   meta = {

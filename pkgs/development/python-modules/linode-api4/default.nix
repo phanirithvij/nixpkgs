@@ -5,7 +5,6 @@
   fetchFromGitHub,
   httpretty,
   mock,
-  nix-update-script,
   polling,
   pyprojectVersionPatchHook,
   pytestCheckHook,
@@ -47,8 +46,6 @@ buildPythonPackage (finalAttrs: {
     # Tests require an API token
     "test/integration/"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Official Python bindings for the Linode API";

@@ -4,7 +4,6 @@
   buildPythonPackage,
   cachetools,
   fetchPypi,
-  nix-update-script,
   radixtarget,
   setuptools,
   typer,
@@ -33,8 +32,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "asndb" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for looking up ASNs by IP or AS number";

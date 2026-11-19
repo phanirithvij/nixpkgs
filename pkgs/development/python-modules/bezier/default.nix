@@ -12,7 +12,6 @@
   cmake,
   gfortran,
 
-  nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "bezier";
@@ -63,8 +62,6 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "bezier" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Helper for Bézier Curves, Triangles, and Higher Order Objects";

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -47,8 +46,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "catt"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Allows you to send videos from many, many online sources to your Chromecast";

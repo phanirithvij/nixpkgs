@@ -15,7 +15,6 @@
   tldextract,
 
   # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -51,10 +50,6 @@ buildPythonPackage rec {
     natsort
     tldextract
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Beets-audible: Organize Your Audiobook Collection With Beets";

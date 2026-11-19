@@ -13,7 +13,6 @@
   zstd,
   clickhouse-cityhash,
   stdenv,
-  nix-update-script,
   nixosTests,
 }:
 
@@ -60,7 +59,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       inherit (nixosTests) asynch;
     };

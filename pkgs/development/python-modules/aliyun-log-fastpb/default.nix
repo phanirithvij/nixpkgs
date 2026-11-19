@@ -3,7 +3,6 @@
   buildPythonPackage,
   cargo,
   fetchPypi,
-  nix-update-script,
   rustPlatform,
   rustc,
 }:
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "aliyun_log_fastpb" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast protobuf serialization for Aliyun Log using PyO3 and quick-protobuf";

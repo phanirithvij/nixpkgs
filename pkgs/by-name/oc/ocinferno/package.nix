@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -34,8 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ocinferno" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for enumeration/download/graphical analysis of OCI content";

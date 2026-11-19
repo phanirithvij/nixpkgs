@@ -4,7 +4,6 @@
   fetchFromGitHub,
   installShellFiles,
   git,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -46,10 +45,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   postInstallCheck = ''
     test "$($out/bin/git-machete version)" = "git-machete version ${finalAttrs.version}"
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://github.com/VirtusLab/git-machete";

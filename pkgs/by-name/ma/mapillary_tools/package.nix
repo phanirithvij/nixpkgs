@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -46,8 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "mapillary_tools" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command line tool for processing and uploading Mapillary imagery";

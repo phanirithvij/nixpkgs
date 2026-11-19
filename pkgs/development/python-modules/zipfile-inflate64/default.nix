@@ -6,7 +6,6 @@
   setuptools-scm,
   inflate64,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -33,8 +32,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "zipfile_inflate64" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Extract Enhanced Deflate ZIP archives with Python's zipfile API";

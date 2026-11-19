@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -41,8 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "isd_tui"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "TUI to interactively work with systemd units";

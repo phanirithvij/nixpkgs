@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   ffmpeg,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -25,8 +24,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("--prefix" "PATH" ":" "${lib.makeBinPath [ ffmpeg ]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal-based ASCII rain and lightning animation";

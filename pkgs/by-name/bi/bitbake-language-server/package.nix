@@ -1,6 +1,5 @@
 {
   lib,
-  nix-update-script,
   python3,
   oelint-adv,
   fetchFromGitHub,
@@ -29,8 +28,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       pygls
     ]
     ++ [ oelint-adv ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server for bitbake";

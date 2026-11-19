@@ -10,7 +10,6 @@
   libnotify,
   wrapGAppsHook4,
   writableTmpDirAsHomeHook,
-  nix-update-script,
   withIndicator ? true,
   withSplitTunneling ? false,
 }:
@@ -109,8 +108,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Requires a GDK display to register stylesheets.
     "test_high_contrast_toggle"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = meta // {
     platforms = lib.platforms.linux;

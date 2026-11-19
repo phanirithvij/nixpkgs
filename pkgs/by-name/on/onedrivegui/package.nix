@@ -7,7 +7,6 @@
   makeDesktopItem,
   onedrive,
 
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -86,8 +85,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # Rename executable
     mv $out/bin/onedrive-gui $out/bin/onedrivegui
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/bpozdena/OneDriveGUI";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,8 +23,6 @@ buildPythonPackage (finalAttrs: {
 
   # no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Automatically updated list of valid TLDs taken directly from IANA";

@@ -4,7 +4,6 @@
   fetchPypi,
   python3,
   installShellFiles,
-  nix-update-script,
   versionCheckHook,
 }:
 
@@ -109,8 +108,6 @@ py.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command Line Interface for Oracle Cloud Infrastructure";

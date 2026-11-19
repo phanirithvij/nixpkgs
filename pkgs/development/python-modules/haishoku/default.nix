@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  nix-update-script,
 
   pillow,
 }:
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "haishoku" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Development tool for grabbing the dominant color or representative color palette from an image";

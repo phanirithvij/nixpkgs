@@ -4,7 +4,6 @@
   python3Packages,
   nebula,
   nixosTests,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -51,8 +50,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   passthru.tests = {
     nebula-lighthouse-service = nixosTests.nebula-lighthouse-service;
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Public Nebula VPN Lighthouse Service";

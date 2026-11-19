@@ -20,7 +20,6 @@
   webkitgtk_6_0,
   webp-pixbuf-loader,
   wrapGAppsHook4,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -103,10 +102,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Manga reader for GNOME";

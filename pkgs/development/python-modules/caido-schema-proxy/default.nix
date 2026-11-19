@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,8 +22,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Caido Proxy API schemas (GraphQL and OpenAPI)";

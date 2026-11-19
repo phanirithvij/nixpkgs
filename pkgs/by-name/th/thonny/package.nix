@@ -6,7 +6,6 @@
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -80,8 +79,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "thonny" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python IDE for beginners";

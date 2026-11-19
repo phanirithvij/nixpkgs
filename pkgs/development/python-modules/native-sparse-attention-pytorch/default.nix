@@ -11,7 +11,6 @@
   torch,
   tqdm,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -62,8 +61,6 @@ buildPythonPackage (finalAttrs: {
       # Run all tests, including the ones that need a GPU
       disabledTestPaths = [ ];
     };
-
-    updateScript = nix-update-script { };
   };
 
   meta = {

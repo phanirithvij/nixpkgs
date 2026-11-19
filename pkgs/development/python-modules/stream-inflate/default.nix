@@ -3,7 +3,6 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  nix-update-script,
   pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "stream_inflate" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Uncompress Deflate and Deflate64 streams";

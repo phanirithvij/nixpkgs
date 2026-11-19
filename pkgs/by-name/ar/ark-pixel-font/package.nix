@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -51,8 +50,6 @@ python3Packages.buildPythonApplication rec {
 
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open source pan-CJK pixel font";

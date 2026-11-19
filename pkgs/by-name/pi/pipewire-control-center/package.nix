@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   wrapGAppsHook4,
   gobject-introspection,
   gtk4,
@@ -73,8 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "pwctl"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GTK4/libadwaita audio control center for PipeWire";

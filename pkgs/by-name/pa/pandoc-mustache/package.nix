@@ -1,7 +1,6 @@
 {
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   callPackage,
   lib,
 }:
@@ -31,7 +30,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = callPackage ./tests { };
   };
 

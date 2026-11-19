@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   qt6,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -46,8 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
   pythonImportsCheck = [ "flashcard_viewer" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Desktop app for studying HTML and React flashcard decks with quizzes and progress tracking";

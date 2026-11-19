@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   setuptools,
   six,
 }:
@@ -27,8 +26,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   # pythonImportsCheck = [ "netnode"];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Humane API for storing and accessing persistent data in IDA Pro databases";

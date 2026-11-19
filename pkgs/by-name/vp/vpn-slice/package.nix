@@ -2,7 +2,6 @@
   lib,
   stdenv,
   python3Packages,
-  nix-update-script,
   fetchFromGitHub,
   iproute2,
   iptables,
@@ -43,10 +42,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false;
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://github.com/dlenski/vpn-slice";

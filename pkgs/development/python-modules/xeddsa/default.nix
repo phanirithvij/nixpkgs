@@ -8,7 +8,6 @@
   libxeddsa,
   pytestCheckHook,
   pytest-cov-stub,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +21,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-FHZ9oo9Ps+98dWyPfu3RcmFqZ26zCmO3wNhw+hzuB+w=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   build-system = [ setuptools ];
 

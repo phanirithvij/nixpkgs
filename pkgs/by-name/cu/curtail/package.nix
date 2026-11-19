@@ -19,7 +19,6 @@
   pngquant,
   oxipng,
   scour,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -80,10 +79,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       }"
     )
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     changelog = "https://github.com/Huluti/Curtail/blob/${finalAttrs.src.tag}/CHANGELOG.md";

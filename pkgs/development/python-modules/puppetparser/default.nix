@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nix-update-script,
   ply,
   poetry-core,
 }:
@@ -25,8 +24,6 @@ buildPythonPackage (finalAttrs: {
 
   # Tests are not shipped
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Parser from Puppet to an object model";

@@ -14,7 +14,6 @@
   libspelling,
   meson,
   ninja,
-  nix-update-script,
   ollama,
   pipewire,
   pkg-config,
@@ -123,8 +122,6 @@ pythonPackages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ollama client made with GTK4 and Adwaita";

@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  nix-update-script,
   hatch-vcs,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ hatch-vcs ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/acsone/manifestoo-core/blob/v${version}/HISTORY.rst";

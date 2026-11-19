@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "strip_ansi"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Strip ANSI escape sequences from a string";

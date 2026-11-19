@@ -12,7 +12,6 @@
   writableTmpDirAsHomeHook,
 
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -118,10 +117,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     wrapProgram $out/bin/seagoat-server \
       --prefix PATH : "${ripgrep}/bin"
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Local-first semantic code search engine";

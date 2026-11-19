@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pytestCheckHook,
   requests,
   setuptools,
@@ -40,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "onvif" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for ONVIF-compliant devices";

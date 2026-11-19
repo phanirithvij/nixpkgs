@@ -8,7 +8,6 @@
   wrapGAppsHook4,
   copyDesktopItems,
   makeDesktopItem,
-  nix-update-script,
   udevCheckHook,
 }:
 
@@ -115,8 +114,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
       ];
     })
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/Lawstorant/boxflat";

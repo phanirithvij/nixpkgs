@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   slurp,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "swaytools";
@@ -20,8 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = with python3Packages; [ setuptools ];
 
   propagatedBuildInputs = [ slurp ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/tmccombs/swaytools";

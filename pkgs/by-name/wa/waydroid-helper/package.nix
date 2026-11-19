@@ -22,7 +22,6 @@
   systemdLibs,
   unzip,
   vte-gtk4,
-  nix-update-script,
   fetchpatch,
 }:
 
@@ -118,8 +117,6 @@ python3Packages.buildPythonApplication {
   postInstallCheck = ''
     mesonCheckPhase
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/waydroid-helper/waydroid-helper/releases/tag/${src.tag}";

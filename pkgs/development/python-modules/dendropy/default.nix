@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  nix-update-script,
   setuptools,
   paup-cli,
   paupIntegration ? false,
@@ -38,8 +37,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dendropy" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for phylogenetic computing";

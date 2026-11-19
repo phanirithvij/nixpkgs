@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nix-update-script,
   poetry-core,
   six,
 }:
@@ -25,8 +24,6 @@ buildPythonPackage (finalAttrs: {
 
   # Would require to switch to GitHub as source
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for working with protobuf messages without a protobuf type definition";

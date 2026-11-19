@@ -11,7 +11,6 @@
   appstream-glib,
   blueprint-compiler,
   libadwaita,
-  nix-update-script,
 }:
 let
   version = "3";
@@ -51,8 +50,6 @@ python3Packages.buildPythonApplication {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Unofficial GNOME Periodic Table";

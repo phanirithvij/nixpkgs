@@ -10,7 +10,6 @@
   gobject-introspection,
   wrapGAppsHook4,
   libadwaita,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tauno-monitor";
@@ -53,8 +52,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstallCheck = ''
     mesonCheckPhase
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple serial port monitor";

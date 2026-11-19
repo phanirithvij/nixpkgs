@@ -9,7 +9,6 @@
   setuptools,
   pytestCheckHook,
   cython,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,8 +36,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pydy" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python tool kit for multi-body dynamics";

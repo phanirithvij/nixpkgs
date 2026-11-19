@@ -4,7 +4,6 @@
   fetchFromGitHub,
   setuptools,
   python-dateutil,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,8 +29,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "suntime"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple sunset and sunrise time calculation python library";

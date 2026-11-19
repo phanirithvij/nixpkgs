@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   pkg-config,
   runCommand,
   writeText,
@@ -292,7 +291,6 @@ effectiveBuildPythonApplication (finalAttrs: {
 
   passthru = {
     inherit xf86videodummy;
-    updateScript = nix-update-script { };
   };
 
   meta = {

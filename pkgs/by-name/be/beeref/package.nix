@@ -3,7 +3,6 @@
   python313Packages,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
 }:
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "beeref";
@@ -39,8 +38,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   # Tests fail with "Fatal Python error: Aborted" due to PyQt6 GUI initialization issues in sandbox
   # Only versionCheckHook and pythonImportsCheck are used for basic validation
   nativeCheckInputs = [ versionCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/rbreu/beeref/blob/v${finalAttrs.version}/CHANGELOG.rst";

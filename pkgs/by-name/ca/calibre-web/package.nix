@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   nixosTests,
   python3Packages,
 }:
@@ -147,7 +146,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux { inherit (nixosTests) calibre-web; };
-    updateScript = nix-update-script { };
   };
 
   meta = {

@@ -7,7 +7,6 @@
   hatchling,
   impacket,
   msldap,
-  nix-update-script,
   pyasn1,
   pycryptodome,
   rich,
@@ -47,8 +46,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "pyldapsearch" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for issuing manual LDAP queries which offers bofhound compatible output";

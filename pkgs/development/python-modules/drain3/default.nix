@@ -5,7 +5,6 @@
   fetchFromGitHub,
   jsonpickle,
   kafka-python,
-  nix-update-script,
   pytestCheckHook,
   redis,
   setuptools,
@@ -40,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "drain3" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Robust streaming log template miner based on the Drain algorithm";

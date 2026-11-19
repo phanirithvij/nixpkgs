@@ -7,7 +7,6 @@
   typer,
   pyinstaller,
   tox,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -41,8 +40,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "pygrister"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python client for the Grist API";

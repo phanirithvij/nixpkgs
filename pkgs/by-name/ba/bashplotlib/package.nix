@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication {
@@ -20,8 +19,6 @@ python3Packages.buildPythonApplication {
   build-system = with python3Packages; [
     setuptools
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   # No tests
   doCheck = false;

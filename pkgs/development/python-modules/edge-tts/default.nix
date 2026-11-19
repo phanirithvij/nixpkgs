@@ -8,7 +8,6 @@
   certifi,
   tabulate,
   typing-extensions,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -36,8 +35,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "edge_tts" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Microsoft Edge text-to-speech service WITHOUT Edge, Windows and API keys";

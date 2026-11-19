@@ -4,7 +4,6 @@
   cryptography,
   dnspython,
   fetchFromGitHub,
-  nix-update-script,
   pyspnego,
   pytest-asyncio,
   pytestCheckHook,
@@ -41,8 +40,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "dpapi_ng" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python DPAPI NG Decryptor for non-Windows Platforms";

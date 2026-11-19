@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nodezator";
@@ -22,8 +21,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pygame-ce
     numpy
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generalist Python node editor";

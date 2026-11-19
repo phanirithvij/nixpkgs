@@ -2,7 +2,6 @@
   lib,
   python313Packages,
   fetchFromGitHub,
-  nix-update-script,
   testers,
   icloudpd,
 }:
@@ -80,7 +79,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = testers.testVersion { package = icloudpd; };
   };
 

@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 let
@@ -29,8 +28,6 @@ python3Packages.buildPythonApplication {
     pycryptodome
     tqdm
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/KnugiHK/Whatsapp-Chat-Exporter";

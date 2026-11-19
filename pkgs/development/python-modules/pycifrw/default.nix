@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   numpy,
   ply,
   prettytable,
@@ -37,8 +36,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "CifFile" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python library for reading and writing CIF files";

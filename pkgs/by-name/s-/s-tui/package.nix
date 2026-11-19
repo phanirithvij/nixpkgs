@@ -3,7 +3,6 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   s-tui,
   testers,
   stress,
@@ -30,7 +29,6 @@ python3Packages.buildPythonPackage (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = testers.testVersion { package = s-tui; };
   };
 

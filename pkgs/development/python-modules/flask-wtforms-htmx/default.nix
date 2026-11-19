@@ -9,7 +9,6 @@
   wtforms-htmx,
   pytestCheckHook,
   pytest-xdist,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -48,8 +47,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "flask_wtforms_htmx"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A drop-in FlaskForm that brings wtforms-htmx to Flask-WTF";

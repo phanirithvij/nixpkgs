@@ -6,7 +6,6 @@
   setuptools,
   hypothesis,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pyroaring" ];
-
-  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs = [
     hypothesis

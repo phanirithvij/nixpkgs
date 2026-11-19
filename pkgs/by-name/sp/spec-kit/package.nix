@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -37,8 +36,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "specify_cli"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Bootstrap your projects for Spec-Driven Development (SDD)";

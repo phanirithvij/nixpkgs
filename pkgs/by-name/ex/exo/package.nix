@@ -15,7 +15,6 @@
 
   writableTmpDirAsHomeHook,
 
-  nix-update-script,
 }:
 let
   version = "1.0.71";
@@ -217,7 +216,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     exo-pyo3-bindings = pyo3-bindings;
     exo-dashboard = dashboard;
   };

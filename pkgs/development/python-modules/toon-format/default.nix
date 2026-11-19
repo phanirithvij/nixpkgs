@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hypothesis,
-  nix-update-script,
   pydantic,
   pytestCheckHook,
   uv-build,
@@ -39,8 +38,6 @@ buildPythonPackage (finalAttrs: {
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "toon_format" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Community-driven Python implementation of TOON";

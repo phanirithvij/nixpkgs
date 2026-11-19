@@ -4,7 +4,6 @@
   fetchPypi,
   lib,
   manifestoo-core,
-  nix-update-script,
   setuptools-scm,
 }:
 
@@ -25,8 +24,6 @@ buildPythonPackage rec {
     click-odoo
     manifestoo-core
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "click_odoo_contrib" ];
 

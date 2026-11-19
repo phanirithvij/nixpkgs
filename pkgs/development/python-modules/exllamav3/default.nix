@@ -3,7 +3,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   cudaPackages,
-  nix-update-script,
 
   setuptools,
 
@@ -110,8 +109,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   # Tests require GPU hardware and external model files
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Quantization and inference library for running LLMs locally on modern consumer-class GPUs";

@@ -8,7 +8,6 @@
   qt5,
   setuptools,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -48,8 +47,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "AnyQt" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "PyQt/PySide compatibility layer";

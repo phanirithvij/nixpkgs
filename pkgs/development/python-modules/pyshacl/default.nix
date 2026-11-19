@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   importlib-metadata,
-  nix-update-script,
   owlrl,
   packaging,
   poetry-core,
@@ -69,8 +68,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pyshacl" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python validator for SHACL";

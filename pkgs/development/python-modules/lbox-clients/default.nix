@@ -4,7 +4,6 @@
   fetchFromGitHub,
   google-api-core,
   hatchling,
-  nix-update-script,
   pytest-cov-stub,
   pytestCheckHook,
   requests,
@@ -39,8 +38,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "lbox" ];
 
   __darwinAllowLocalNetworking = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "The data factory for next gen AI";

@@ -2,7 +2,6 @@
   lib,
   elasticsearch-curator,
   fetchFromGitHub,
-  nix-update-script,
   python3,
   testers,
 }:
@@ -75,7 +74,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       package = elasticsearch-curator;
       command = "${lib.getExe elasticsearch-curator} --version";
     };
-    updateScript = nix-update-script { };
   };
 
   meta = {

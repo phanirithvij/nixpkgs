@@ -8,7 +8,6 @@
   httpx,
   ijson,
   isal,
-  nix-update-script,
   opentelemetry-api,
   orjson,
   pydantic,
@@ -82,8 +81,6 @@ buildPythonPackage (finalAttrs: {
     # Smoke tests are failing
     "tests/test_smoke.py"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python SDK for the Vulners vulnerability-intelligence API";

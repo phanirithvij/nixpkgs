@@ -16,7 +16,6 @@
   pytest-asyncio,
 
   # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -51,8 +50,6 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_sail" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "LangChain integration for Sail, a Spark-compatible compute engine on Apache Arrow and DataFusion";

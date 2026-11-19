@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  nix-update-script,
   pydantic,
   python-dateutil,
   requests,
@@ -34,8 +33,6 @@ buildPythonPackage (finalAttrs: {
 
   # Module has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "STACKIT IaaS API client for Python";

@@ -8,7 +8,6 @@
   gst_all_1,
   libadwaita,
   glib-networking,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "monophony";
@@ -64,8 +63,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       "''${gappsWrapperArgs[@]}"
     )
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linux app for streaming music from YouTube";

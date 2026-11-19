@@ -5,7 +5,6 @@
   hatchling,
   hypothesis,
   mashumaro,
-  nix-update-script,
   openapi-schema-validator,
   pyprojectVersionPatchHook,
   pytest-cov-stub,
@@ -50,8 +49,6 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: emitted schema narrows
     "test_emitted_openapi_never_narrows"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Data validation library for Python";

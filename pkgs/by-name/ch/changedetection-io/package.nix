@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  nix-update-script,
   nixosTests,
   versionCheckHook,
 }:
@@ -132,7 +131,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = { inherit (nixosTests) changedetection-io; };
   };
 

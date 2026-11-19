@@ -3,7 +3,6 @@
   installShellFiles,
   python3,
   fetchFromGitHub,
-  nix-update-script,
   testers,
   gimme-aws-creds,
 }:
@@ -65,7 +64,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = gimme-aws-creds;
       command = ''touch tmp.conf && OKTA_CONFIG="tmp.conf" gimme-aws-creds --version'';

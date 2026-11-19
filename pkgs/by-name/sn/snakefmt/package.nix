@@ -2,7 +2,6 @@
   lib,
   python3,
   fetchPypi,
-  nix-update-script,
   versionCheckHook,
 }:
 
@@ -32,8 +31,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Uncompromising Snakemake code formatter";

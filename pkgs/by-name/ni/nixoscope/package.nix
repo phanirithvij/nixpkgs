@@ -3,7 +3,6 @@
   lib,
   python3Packages,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -36,8 +35,6 @@ python3Packages.buildPythonPackage rec {
     "-s"
     "tests"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Visualize dependencies between NixOS modules";

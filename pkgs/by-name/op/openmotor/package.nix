@@ -8,7 +8,6 @@
   copyDesktopItems,
   makeDesktopItem,
   replaceVars,
-  nix-update-script,
 }:
 
 let
@@ -141,8 +140,6 @@ python3Packages.buildPythonApplication rec {
       ];
     })
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source internal ballistics simulator for rocket motor experimenters";

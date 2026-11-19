@@ -3,7 +3,6 @@
   fetchFromGitHub,
   httpx,
   lib,
-  nix-update-script,
   poetry-core,
   pytestCheckHook,
   requests,
@@ -33,8 +32,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Execute discord webhooks";

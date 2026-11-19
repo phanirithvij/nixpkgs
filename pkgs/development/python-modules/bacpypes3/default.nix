@@ -5,7 +5,6 @@
   hatchling,
   ifaddr,
   mcp,
-  nix-update-script,
   pydantic,
   pyprojectVersionPatchHook,
   pytest-asyncio,
@@ -51,8 +50,6 @@ buildPythonPackage (finalAttrs: {
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "bacpypes3" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "BACnet communications library";

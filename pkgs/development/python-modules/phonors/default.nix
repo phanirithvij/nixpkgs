@@ -3,7 +3,6 @@
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
-  nix-update-script,
   rustc,
   rustPlatform,
 }:
@@ -36,8 +35,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "phonors" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python module implemented in Rust for Phonopy";

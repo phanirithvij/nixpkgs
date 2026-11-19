@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitea,
-  nix-update-script,
 
   setuptools,
   pytestCheckHook,
@@ -42,8 +41,6 @@ buildPythonPackage rec {
     "osmocom.gsmtap"
     "osmocom.gsup"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python osmocom core libraries";

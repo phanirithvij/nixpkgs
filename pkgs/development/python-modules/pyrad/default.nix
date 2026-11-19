@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   setuptools,
   netaddr,
   pytestCheckHook,
@@ -48,8 +47,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pyrad" ];
 
   __darwinAllowLocalNetworking = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python RADIUS Implementation";

@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   fetchpatch,
-  nix-update-script,
   python3Packages,
   gdk-pixbuf,
   glib,
@@ -122,10 +121,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
      --prefix WEBKIT_DISABLE_COMPOSITING_MODE : "1"
     )
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   desktopItems = [
     (makeDesktopItem {

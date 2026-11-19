@@ -5,7 +5,6 @@
   fetchFromGitHub,
   httpx,
   idapro,
-  nix-update-script,
   packaging,
   pexpect,
   pip,
@@ -98,8 +97,6 @@ buildPythonPackage (finalAttrs: {
     "test_download_cell_wheelhouse_fails_for_required_python_dependency_without_wheels"
     "test_bundle_create_downloads_wheels_without_ida"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI for IDA plugin management and configuration";

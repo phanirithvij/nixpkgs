@@ -4,7 +4,6 @@
   buildPythonPackage,
   rustPlatform,
   pytestCheckHook,
-  nix-update-script,
 }:
 buildPythonPackage {
   inherit (ast-grep) version src cargoDeps;
@@ -26,8 +25,6 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ast_grep_py" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     inherit (ast-grep.meta)

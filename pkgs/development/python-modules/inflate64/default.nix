@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromCodeberg,
-  nix-update-script,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -32,8 +31,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "inflate64"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Compress and decompress with Enhanced Deflate compression algorithm";

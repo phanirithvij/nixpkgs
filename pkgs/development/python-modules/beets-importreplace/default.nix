@@ -6,7 +6,6 @@
   beets-minimal,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  nix-update-script,
 }:
 buildPythonPackage (finalAttrs: {
   pname = "beets-importreplace";
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "beetsplug.importreplace" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Plugin for beets to perform regex replacements during import";

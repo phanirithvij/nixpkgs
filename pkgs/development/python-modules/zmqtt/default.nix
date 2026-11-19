@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
@@ -40,8 +39,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "zmqtt" ];
 
   disabledTestMarks = [ "broker" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module for asyncio MQTT 3.1.1 and 5.0";

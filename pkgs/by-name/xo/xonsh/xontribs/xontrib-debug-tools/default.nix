@@ -7,7 +7,6 @@
   writableTmpDirAsHomeHook,
   pytestCheckHook,
   xonsh,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -36,8 +35,6 @@ buildPythonPackage rec {
     pytestCheckHook
     xonsh
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Debug tools for xonsh shell";

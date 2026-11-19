@@ -5,7 +5,6 @@
   cargo,
   rustPlatform,
   rustc,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "kernels_data" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Kernels data structures";

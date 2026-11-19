@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -34,8 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ntdswolf" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Offline NTDS.dit parser and credential extractor for Active Directory forensics";

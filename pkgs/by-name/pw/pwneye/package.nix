@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -53,8 +52,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doInstallCheck = true;
 
   pythonImportsCheck = [ "pwneye" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for discovering and working with ONVIF and RTSP cameras";

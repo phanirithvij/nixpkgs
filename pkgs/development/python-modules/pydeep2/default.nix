@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   setuptools,
   ssdeep,
 }:
@@ -30,8 +29,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "pydeep" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python bindings for ssdeep";

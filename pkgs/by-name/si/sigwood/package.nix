@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   gitMinimal,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -106,8 +105,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "sigwood" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for threat hunting in log files";

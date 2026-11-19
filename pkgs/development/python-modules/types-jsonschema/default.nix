@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  nix-update-script,
   referencing,
   setuptools,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [ referencing ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Typing stubs for jsonschema";

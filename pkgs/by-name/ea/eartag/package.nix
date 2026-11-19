@@ -17,7 +17,6 @@
   librsvg,
   python3Packages,
   blueprint-compiler,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -77,10 +76,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/eartag";

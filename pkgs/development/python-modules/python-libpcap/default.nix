@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   libpcap,
-  nix-update-script,
   setuptools,
 }:
 
@@ -31,8 +30,6 @@ buildPythonPackage (finalAttrs: {
 
   # Tests require network access
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cython libpcap";

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   poetry-core,
   django,
   django-pgtrigger,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-Gl6NfBaoj3WKLHwJElbb27CYVQ83s3f86NUOZE7lHCk=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -11,7 +11,6 @@
   appstream-glib,
   gobject-introspection,
   libadwaita,
-  nix-update-script,
 }:
 let
   version = "2.0.0";
@@ -48,8 +47,6 @@ python3Packages.buildPythonApplication {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Multi-type dice roller";

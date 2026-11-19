@@ -5,7 +5,6 @@
 
   setuptools,
   direnv,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   dependencies = [
     direnv
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Direnv support for Xonsh";

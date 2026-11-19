@@ -2,7 +2,6 @@
   fetchFromGitHub,
   lib,
   buildPythonPackage,
-  nix-update-script,
   setuptools,
   setuptools-scm,
 }:
@@ -29,8 +28,6 @@ buildPythonPackage (finalAttrs: {
   pythonRemoveDeps = [ "future" ];
 
   pythonImportsCheck = [ "uefi_firmware" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for parsing, extracting, and recreating UEFI firmware volumes";

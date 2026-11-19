@@ -5,7 +5,6 @@
   plover,
   setuptools,
   wheel,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,8 +36,6 @@ buildPythonPackage (finalAttrs: {
     # Modules providing Plover entry points
     "plover_combo.combo_ui"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Combo Mode for Plover";

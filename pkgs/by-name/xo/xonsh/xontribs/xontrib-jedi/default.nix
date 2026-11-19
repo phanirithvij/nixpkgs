@@ -8,7 +8,6 @@
   writableTmpDirAsHomeHook,
   pytestCheckHook,
   xonsh,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -46,8 +45,6 @@ buildPythonPackage rec {
     # stdout not properly captured?
     "test_jedi_error_logged_when_debug_set"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Xonsh Python mode completions using jedi";

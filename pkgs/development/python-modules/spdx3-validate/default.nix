@@ -5,7 +5,6 @@
   halo,
   hatchling,
   jsonschema,
-  nix-update-script,
   pyshacl,
   pytest-cov-stub,
   pytestCheckHook,
@@ -39,8 +38,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "spdx3_validate" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Validator for SPDX 3 data files";

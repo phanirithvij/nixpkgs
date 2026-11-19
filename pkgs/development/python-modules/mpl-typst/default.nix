@@ -8,7 +8,6 @@
   numpy,
   pytestCheckHook,
   pillow,
-  nix-update-script,
   typst,
 }:
 
@@ -71,8 +70,6 @@ buildPythonPackage rec {
     # fatal error when matplotlib creates a canvas
     "mpl_typst/backend_test.py"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Typst backend for matplotlib";

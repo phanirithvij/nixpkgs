@@ -4,7 +4,6 @@
   buildPythonPackage,
   cargo,
   fetchPypi,
-  nix-update-script,
   openssl,
   pkg-config,
   pytest-asyncio,
@@ -66,8 +65,6 @@ buildPythonPackage (finalAttrs: {
     "test_redirect_onto_proxied_host_reevaluates_no_proxy"
     "test_redirect_onto_no_proxy_host_reevaluates_to_direct"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Offensive-first HTTP library";

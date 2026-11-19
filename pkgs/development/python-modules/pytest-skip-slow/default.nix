@@ -5,7 +5,6 @@
   flit-core,
   pytest,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -27,8 +26,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pytest_skip_slow" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pytest plugin to skip `@pytest.mark.slow` tests by default";

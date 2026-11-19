@@ -1,7 +1,6 @@
 {
   fetchPypi,
   lib,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -22,8 +21,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ase
     rdkit
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Curses based ASCII molecule viewer for terminals";

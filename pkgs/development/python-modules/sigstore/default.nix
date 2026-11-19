@@ -26,7 +26,6 @@
   writableTmpDirAsHomeHook,
 
   # passthru
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -93,8 +92,6 @@ buildPythonPackage (finalAttrs: {
     "test_trust_root_tuf_caches_and_requests"
     "test_regression_verify_legacy_bundle"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Codesigning tool for Python packages";

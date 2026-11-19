@@ -5,7 +5,6 @@
   glibcLocales,
   python3,
   fetchFromGitHub,
-  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 
@@ -68,8 +67,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "devpi" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Client for devpi, a pypi index server and packaging meta tool";

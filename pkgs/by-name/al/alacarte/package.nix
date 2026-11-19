@@ -13,7 +13,6 @@
   glib,
   gtk3,
   docbook_xsl,
-  nix-update-script,
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alacarte";
@@ -56,8 +55,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     substituteInPlace man/Makefile.am \
       --replace-fail "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/alacarte";

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  nix-update-script,
   uv-build,
   bdffont,
   freetype-py,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pcffont" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/TakWolf/pcffont-python";

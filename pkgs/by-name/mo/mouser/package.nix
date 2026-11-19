@@ -6,7 +6,6 @@
   qt6,
   copyDesktopItems,
   makeDesktopItem,
-  nix-update-script,
   xdotool,
   kdotool,
 }:
@@ -146,8 +145,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       startupWMClass = "Mouser";
     })
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight local alternative to Logitech Options+ for remapping HID++ mice";

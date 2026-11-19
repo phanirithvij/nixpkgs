@@ -3,7 +3,6 @@
   buildNpmPackage,
   fetchFromGitHub,
   libappindicator,
-  nix-update-script,
   nodejs_24,
   python3,
   wrapGAppsHook3,
@@ -138,8 +137,6 @@ python3.pkgs.buildPythonApplication {
     "test_get_default_fallback_half_tree"
     "test_get_set_explicit"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Decentralized P2P filesharing client based on the Bittorrent protocol";

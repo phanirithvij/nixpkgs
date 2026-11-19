@@ -10,7 +10,6 @@
   libadwaita,
   meson,
   ninja,
-  nix-update-script,
   pandoc,
   pkg-config,
   python3Packages,
@@ -62,10 +61,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ":"
     (lib.makeBinPath [ pandoc ])
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Convert your documents";

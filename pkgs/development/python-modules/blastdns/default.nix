@@ -4,7 +4,6 @@
   buildPythonPackage,
   cargo,
   fetchFromGitHub,
-  nix-update-script,
   orjson,
   pydantic,
   pyprojectVersionPatchHook,
@@ -80,8 +79,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "blastdns" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Ultra-fast DNS resolver";

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   matrix-synapse-unwrapped,
-  nix-update-script,
   twisted,
 }:
 
@@ -26,8 +25,6 @@ buildPythonPackage rec {
 
   buildInputs = [ matrix-synapse-unwrapped ];
   dependencies = [ twisted ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Synapse module that forwards spam checking to an HTTP server";

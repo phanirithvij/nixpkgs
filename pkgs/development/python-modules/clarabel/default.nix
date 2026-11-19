@@ -9,7 +9,6 @@
   numpy,
   scipy,
   pytestCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -49,8 +48,6 @@ buildPythonPackage (finalAttrs: {
     python examples/python/example_sdp.py
     python examples/python/example_qp.py
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/oxfordcontrol/Clarabel.rs/releases/tag/v${finalAttrs.version}/CHANGELOG.md";

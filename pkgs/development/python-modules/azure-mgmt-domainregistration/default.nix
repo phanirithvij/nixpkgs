@@ -7,7 +7,6 @@
   azure-mgmt-core,
   isodate,
   typing-extensions,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "azure.mgmt.domainregistration"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "This package will be released in the near future. Stay tuned";

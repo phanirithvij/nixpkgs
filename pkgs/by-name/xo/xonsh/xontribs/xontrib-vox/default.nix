@@ -9,7 +9,6 @@
   pytestCheckHook,
   pytest-subprocess,
   xonsh,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -48,8 +47,6 @@ buildPythonPackage rec {
     # Monkeypatch in test fails, preventing test from running
     "test_interpreter"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python virtual environment manager for the xonsh shell";

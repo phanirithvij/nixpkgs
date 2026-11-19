@@ -8,7 +8,6 @@
   lib,
   lxml,
   natsort,
-  nix-update-script,
   pillow,
   poetry-core,
   pyside6,
@@ -58,8 +57,6 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "mandown" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/potatoeggy/mandown/releases/tag/v${version}";

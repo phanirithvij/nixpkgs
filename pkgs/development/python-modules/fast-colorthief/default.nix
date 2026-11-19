@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   cmake,
-  nix-update-script,
 
   numpy,
   pillow,
@@ -44,8 +43,6 @@ buildPythonPackage rec {
   preBuild = "cd ..";
 
   pythonImportsCheck = [ "fast_colorthief" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Selection of most dominant colors in image using Modified Median Cut Quantization";

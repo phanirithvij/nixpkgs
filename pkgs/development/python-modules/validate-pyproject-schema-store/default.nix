@@ -4,7 +4,6 @@
   fastjsonschema,
   fetchFromGitHub,
   hatchling,
-  nix-update-script,
   pytestCheckHook,
 }:
 
@@ -28,8 +27,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "validate_pyproject_schema_store" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Daily automatic mirror of SchemaStore for validate-pyproject";

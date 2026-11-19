@@ -5,7 +5,6 @@
   charset-normalizer,
   fetchFromGitHub,
   idna,
-  nix-update-script,
   pytestCheckHook,
   setuptools,
   urllib3,
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ua_generator" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Random user-agent generator";

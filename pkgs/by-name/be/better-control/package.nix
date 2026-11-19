@@ -14,7 +14,6 @@
   wrapGAppsHook3,
   gobject-introspection,
   upower,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -96,8 +95,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postFixup = ''
     wrapPythonProgramsIn "$out/share/better-control" "$out ''${pythonPath[*]}"
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple control panel for linux based on GTK";

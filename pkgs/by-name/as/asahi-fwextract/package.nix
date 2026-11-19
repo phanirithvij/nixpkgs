@@ -5,7 +5,6 @@
   gzip,
   gnutar,
   lzfse,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -29,10 +28,6 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   build-system = [ python3.pkgs.setuptools ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Asahi firmware extraction script";

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  nix-update-script,
 
   # build-system
   flit-gettext,
@@ -45,9 +44,6 @@ buildPythonPackage rec {
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.test_app.settings
   '';
-
-  # needed for npmDeps update
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Allows superusers to hijack (=login as) and work on behalf of another user";

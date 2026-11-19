@@ -5,7 +5,6 @@
   meson-python,
   versioningit,
   pkg-config,
-  nix-update-script,
   pytestCheckHook,
 }:
 
@@ -44,8 +43,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "uarray" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Universal array library";

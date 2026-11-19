@@ -3,7 +3,6 @@
   fetchFromGitHub,
   pythonPackages,
   mopidy,
-  nix-update-script,
 }:
 
 pythonPackages.buildPythonApplication (finalAttrs: {
@@ -32,10 +31,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "mopidy_spotify" ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Mopidy extension for playing music from Spotify";

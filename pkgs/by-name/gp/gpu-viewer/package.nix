@@ -24,7 +24,6 @@
   vdpauinfo,
 
   # passthru
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -79,10 +78,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ''${makeWrapperArgs[@]} \
       ''${gappsWrapperArgs[@]}
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://github.com/arunsivaramanneo/GPU-Viewer";

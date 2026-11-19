@@ -12,7 +12,6 @@
   click,
   appdirs,
   stdenv,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -56,8 +55,6 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [ "philipstv" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI and library to control Philips Android-powered TVs";

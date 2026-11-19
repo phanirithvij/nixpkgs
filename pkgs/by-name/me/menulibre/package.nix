@@ -7,7 +7,6 @@
   intltool,
   gobject-introspection,
   wrapGAppsHook3,
-  nix-update-script,
   testers,
   menulibre,
   writableTmpDirAsHomeHook,
@@ -49,7 +48,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = menulibre;
       command = "HOME=$TMPDIR menulibre --version | cut -d' ' -f2";

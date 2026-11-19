@@ -2,7 +2,6 @@
   lib,
   python3,
   fetchPypi,
-  nix-update-script,
   writableTmpDirAsHomeHook,
 }:
 
@@ -38,8 +37,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "sigexport" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     mainProgram = "sigexport";

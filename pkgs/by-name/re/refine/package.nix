@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitLab,
-  nix-update-script,
   blueprint-compiler,
   desktop-file-utils,
   libadwaita,
@@ -72,8 +71,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstallCheck = ''
     mesonCheckPhase
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tweak various aspects of GNOME";

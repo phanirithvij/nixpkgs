@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  nix-update-script,
   typing-extensions,
   pyright,
   pytest-asyncio,
@@ -46,8 +45,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "nexusrpc"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Nexus Python SDK";

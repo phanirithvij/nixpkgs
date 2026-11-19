@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -32,8 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytest-cov-stub
     pytestCheckHook
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Attack path mapping for Active Directory, ADCS, SCCM and MSSQL";

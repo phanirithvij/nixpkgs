@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nix-update-script,
   pyrosimple,
   python3,
   testers,
@@ -55,7 +54,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = testers.testVersion {
       package = pyrosimple;
       command = "pyroadmin --version";

@@ -3,7 +3,6 @@
   python3,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
 
   imagemagick,
   colorz,
@@ -72,8 +71,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       modern-colorthief
     ];
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "16 colors fork of pywal";

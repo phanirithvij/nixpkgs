@@ -5,7 +5,6 @@
   fetchurl,
   hatch-build-scripts,
   hatchling,
-  nix-update-script,
   pytestCheckHook,
   runCommandLocal,
   shacl2code,
@@ -64,8 +63,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   pythonImportsCheck = [ "spdx_python_model" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Generated Python code for SPDX Spec version 3";

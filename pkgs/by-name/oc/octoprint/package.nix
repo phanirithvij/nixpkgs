@@ -216,7 +216,6 @@ let
 
           passthru = {
             inherit (self) python;
-            updateScript = nix-update-script { };
             tests = {
               plugins = (callPackage ./plugins.nix { }) super self;
               inherit (nixosTests) octoprint;

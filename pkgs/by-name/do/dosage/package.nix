@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchPypi,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -33,8 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     rich
     zstandard
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Comic strip downloader and archiver";

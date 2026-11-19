@@ -7,7 +7,6 @@
   iputils,
   netperf,
   procps,
-  nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flent";
@@ -55,7 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export QT_QPA_PLATFORM=offscreen
   '';
 
-  passthru.updateScript = nix-update-script { };
   meta = {
     description = "FLExible Network Tester";
     homepage = "https://flent.org";

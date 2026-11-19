@@ -2,7 +2,6 @@
   lib,
   aws-encryption-sdk-cli,
   fetchPypi,
-  nix-update-script,
   python3Packages,
   testers,
 }:
@@ -56,7 +55,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = aws-encryption-sdk-cli;
       command = "aws-encryption-cli --version";

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   adwaita-icon-theme,
   gtk4,
   libadwaita,
@@ -57,7 +56,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/zefr0x/hashes/tree/main";

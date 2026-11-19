@@ -3,7 +3,6 @@
   buildPythonPackage,
   cargo,
   fetchPypi,
-  nix-update-script,
   poetry-core,
   pytestCheckHook,
   rustc,
@@ -47,8 +46,6 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [ "test" ];
 
   pythonImportsCheck = [ "radixtarget" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast radix tree for IP addresses and DNS names";

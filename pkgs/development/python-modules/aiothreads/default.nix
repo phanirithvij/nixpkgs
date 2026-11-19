@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  nix-update-script,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -35,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "aiothreads" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module to bridge async and thread";

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
 }:
 
@@ -27,8 +26,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   pythonImportsCheck = [ "credwolf" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to validate AD credentials over NTLM and Kerberos";

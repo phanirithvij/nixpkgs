@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
 }:
 
 let
@@ -47,10 +46,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     versionCheckHook
   ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Language server for nginx.conf";

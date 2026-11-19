@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pytestCheckHook,
   setuptools,
 }:
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "pluginlib"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Framework for creating and importing plugins in Python";

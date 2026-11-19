@@ -12,7 +12,6 @@
   rustc,
   rust-jemalloc-sys,
   zstd,
-  nix-update-script,
   pkgs,
 }:
 
@@ -64,8 +63,6 @@ buildPythonPackage (finalAttrs: {
       pkgs.zstd
     ];
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "MOdular Storage of Archived and Indexed Contents from Software Heritage";

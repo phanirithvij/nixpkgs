@@ -3,7 +3,6 @@
   fetchFromGitHub,
   hiera-eyaml,
   python3Packages,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -37,8 +36,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "yamlpath"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line processors for YAML/JSON/Compatible data";

@@ -9,7 +9,6 @@
   importlib-metadata,
   jinja2,
   jsonschema,
-  nix-update-script,
   openai,
   pydantic,
   python-dotenv,
@@ -50,8 +49,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "litellm" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pre-compromise fork of litellm to interface with LLM API providers";

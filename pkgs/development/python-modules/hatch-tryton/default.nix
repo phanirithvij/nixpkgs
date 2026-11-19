@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   hatchling,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -22,8 +21,6 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [ hatchling ];
 
   pythonImportsCheck = [ "hatch_tryton" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hatchling plugin for Tryton";

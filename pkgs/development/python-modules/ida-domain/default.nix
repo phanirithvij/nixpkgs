@@ -5,7 +5,6 @@
   graphviz,
   hatchling,
   idapro,
-  nix-update-script,
   packaging,
   pytest-cov-stub,
   pytestCheckHook,
@@ -44,8 +43,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   # pythonImportsCheck = [ "ida_domain" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python interface for IDA Pro reverse engineering platform";

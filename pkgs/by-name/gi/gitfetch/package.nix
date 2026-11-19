@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   gh,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -34,8 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gh
     ]}"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Neofetch-style CLI tool for git provider statistics";

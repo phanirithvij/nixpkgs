@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 let
@@ -48,8 +47,6 @@ python3Packages.buildPythonApplication {
     "unittest"
     "-v"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to start and stop streaming and getting streaming codes for Bilibili live";

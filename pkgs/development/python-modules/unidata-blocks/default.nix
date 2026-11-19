@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  nix-update-script,
   uv-build,
   langcodes,
 }:
@@ -27,8 +26,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "unidata_blocks" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library that helps query unicode blocks by Blocks.txt";

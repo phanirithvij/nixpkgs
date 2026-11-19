@@ -4,7 +4,6 @@
   fastcore,
   fasttransport,
   fetchFromGitHub,
-  nix-update-script,
   setuptools,
 }:
 
@@ -31,8 +30,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "fastspec" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Dynamic OpenAPI and discovery spec client for Python";

@@ -1,6 +1,5 @@
 {
   lib,
-  nix-update-script,
   python3Packages,
   fetchFromGitHub,
 }:
@@ -56,8 +55,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "oelint_adv" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Advanced bitbake-recipe linter";

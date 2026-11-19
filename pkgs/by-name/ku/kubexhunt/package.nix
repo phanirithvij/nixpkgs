@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -39,8 +38,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "kubexhunt" ];
 
   doInstallCheck = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Kubernetes security assessment toolkit";

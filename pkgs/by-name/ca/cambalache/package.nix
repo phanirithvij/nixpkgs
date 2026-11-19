@@ -18,7 +18,6 @@
   libxml2,
   webkitgtk_4_1,
   webkitgtk_6_0,
-  nix-update-script,
   casilda,
 }:
 
@@ -81,10 +80,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     # Wrap a helper script in an unusual location.
     wrapPythonProgramsIn "$out/${python3.sitePackages}/cambalache/priv/merengue" "$out ''${pythonPath[*]}"
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     homepage = "https://gitlab.gnome.org/jpu/cambalache";

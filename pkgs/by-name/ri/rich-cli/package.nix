@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -48,10 +47,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/rich";
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Command Line Interface to Rich";

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   libnotify,
 }:
@@ -18,8 +17,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-FU1EHLQ+/2sOGeeGwONsrV786kHTFfMel7ocBcCe+rI=";
   };
-
-  passthru.updateScript = nix-update-script { };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace gcalcli/argparsers.py \

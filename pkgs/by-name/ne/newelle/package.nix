@@ -17,7 +17,6 @@
   lsb-release,
   bash,
   ffmpeg,
-  nix-update-script,
 }:
 
 let
@@ -108,8 +107,6 @@ pythonPackages.buildPythonApplication {
       ffmpeg
     ])
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/qwersyk/Newelle";

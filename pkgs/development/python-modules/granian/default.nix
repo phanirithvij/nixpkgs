@@ -16,7 +16,6 @@
   websockets,
   httpx,
   sniffio,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -128,8 +127,6 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "granian" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rust HTTP server for Python ASGI/WSGI/RSGI applications";

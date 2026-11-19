@@ -4,7 +4,6 @@
   fetchFromGitHub,
   hatchling,
   lxml,
-  nix-update-script,
   six,
 }:
 
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   pythonImportsCheck = [ "citeproc_styles" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CSL styles for citeproc-py";

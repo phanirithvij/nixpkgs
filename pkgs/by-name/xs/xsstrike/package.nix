@@ -3,7 +3,6 @@
   python3Packages,
   fetchFromGitHub,
   fetchpatch2,
-  nix-update-script,
   versionCheckHook,
 }:
 
@@ -54,8 +53,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doInstallCheck = true;
 
   versionCheckProgramArg = [ "-h" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Advanced XSS scanner";

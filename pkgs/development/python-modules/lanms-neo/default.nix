@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   pybind11,
   numpy,
 }:
@@ -25,8 +24,6 @@ buildPythonPackage {
     pybind11
     numpy
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Standalone module for Locality-Aware NMS";

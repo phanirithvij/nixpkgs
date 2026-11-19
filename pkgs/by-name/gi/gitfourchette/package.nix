@@ -10,7 +10,6 @@
   bash,
   writableTmpDirAsHomeHook,
   hicolor-icon-theme,
-  nix-update-script,
   withMfusepy ? true,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -100,8 +99,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
         $out/share/icons/hicolor/''${size}x''${size}/apps/gitfourchette.png
     done
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Comfortable Git UI";

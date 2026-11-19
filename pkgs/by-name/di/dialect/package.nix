@@ -17,7 +17,6 @@
   libadwaita,
   libsecret,
   libspelling,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -75,8 +74,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://dialectapp.org";

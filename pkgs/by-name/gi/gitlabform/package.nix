@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   yamlpath,
 }:
 
@@ -51,8 +50,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "gitlabform"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Specialized configuration as a code tool for GitLab";

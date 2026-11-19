@@ -10,7 +10,6 @@
   p7zip,
 
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -74,10 +73,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       icons/comic2ebook.png \
       "$out/share/icons/hicolor/256x256/apps/kcc.png"
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   desktopItems = [
     (makeDesktopItem {

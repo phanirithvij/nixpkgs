@@ -8,7 +8,6 @@
   python-dateutil,
   pytestCheckHook,
   versionCheckHook,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -52,8 +51,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "pvl" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python implementation of the Parameter Value Language (PVL) used in PDS3 and ISIS labels";

@@ -3,7 +3,6 @@
   fetchFromGitHub,
   python3Packages,
   nix-eval-jobs,
-  nix-update-script,
   bashInteractive,
 }:
 
@@ -46,10 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "nix_fast_build" ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "Speed-up your Nix evaluation and building process by running them in parallel";

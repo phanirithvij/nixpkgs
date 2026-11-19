@@ -3,7 +3,6 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   geckodriver,
   curl,
   versionCheckHook,
@@ -72,8 +71,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       ]
     })
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Automatic framework to detect, exploit and report XSS vulnerabilities in web-based applications";

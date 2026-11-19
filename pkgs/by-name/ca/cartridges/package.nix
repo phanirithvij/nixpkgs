@@ -11,7 +11,6 @@
   libadwaita,
   meson,
   ninja,
-  nix-update-script,
   pkg-config,
   python3Packages,
   wrapGAppsHook4,
@@ -70,10 +69,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstallCheck = ''
     mesonCheckPhase
   '';
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
 
   meta = {
     description = "GTK4 + Libadwaita game launcher";

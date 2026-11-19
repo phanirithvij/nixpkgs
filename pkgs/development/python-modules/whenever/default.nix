@@ -15,7 +15,6 @@
   hypothesis,
   freezegun,
   time-machine,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -69,8 +68,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "whenever" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Strict, predictable, and typed datetimes";

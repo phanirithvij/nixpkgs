@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
   nixosTests,
 }:
 
@@ -47,7 +46,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "mcp_clickhouse" ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests = {
       inherit (nixosTests.clickhouse) mcp;
     };

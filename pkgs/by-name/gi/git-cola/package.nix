@@ -9,7 +9,6 @@
   versionCheckHook,
   copyDesktopItems,
   imagemagick,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -76,8 +75,6 @@ python3Packages.buildPythonApplication rec {
       magick cola/icons/git-cola.svg -background none -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/${pname}.png
     done
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Sleek and powerful Git GUI";

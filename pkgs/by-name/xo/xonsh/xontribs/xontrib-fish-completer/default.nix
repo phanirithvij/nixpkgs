@@ -8,7 +8,6 @@
   pytestCheckHook,
   pytest-subprocess,
   xonsh,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -33,8 +32,6 @@ buildPythonPackage rec {
     pytest-subprocess
     xonsh
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Populate rich completions using fish and remove the default bash based completer";

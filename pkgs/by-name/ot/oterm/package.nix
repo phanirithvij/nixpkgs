@@ -5,7 +5,6 @@
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
-  nix-update-script,
 }:
 
 let
@@ -87,8 +86,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       --fish <(_OTERM_COMPLETE=source_fish $out/bin/oterm) \
       --zsh  <(_OTERM_COMPLETE=source_zsh  $out/bin/oterm)
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Text-based terminal client for Ollama";

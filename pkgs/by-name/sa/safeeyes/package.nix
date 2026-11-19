@@ -14,7 +14,6 @@
   xprop,
   wrapGAppsHook3,
   versionCheckHook,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -79,7 +78,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.version = testers.testVersion { package = safeeyes; };
   };
 

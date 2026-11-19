@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromCodeberg,
   lib,
-  nix-update-script,
   poetry-core,
   pytestCheckHook,
   pure-sasl,
@@ -36,8 +35,6 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "IRCv3-compliant Python 3 IRC library";

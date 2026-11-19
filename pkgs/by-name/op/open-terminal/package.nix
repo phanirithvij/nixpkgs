@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -47,8 +46,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "open_terminal.cli"
     "open_terminal.utils.notebooks"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Self-hosted remote terminal API for AI agents, used by Open WebUI";

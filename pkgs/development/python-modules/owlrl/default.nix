@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
   poetry-core,
   pyoxigraph,
   pytestCheckHook,
@@ -32,8 +31,6 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "owlrl" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Implementation of the OWL2 RL Profile";

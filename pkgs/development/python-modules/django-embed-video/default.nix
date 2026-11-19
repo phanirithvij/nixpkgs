@@ -9,7 +9,6 @@
   django,
   requests,
 
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,8 +36,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   pythonImportsCheck = [ "embed_video" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Django app for easy embedding YouTube and Vimeo videos and music from SoundCloud";

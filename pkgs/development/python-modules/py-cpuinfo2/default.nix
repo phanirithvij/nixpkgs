@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  nix-update-script,
   pytestCheckHook,
 }:
 
@@ -30,8 +29,6 @@ buildPythonPackage (finalAttrs: {
     # Test fails (need further investigation)
     "test_all"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module for getting CPU info with pure Python";

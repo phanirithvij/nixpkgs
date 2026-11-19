@@ -2,7 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -26,8 +25,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Project has no tests
   doCheck = false;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Entra ID user enumeration and auth method discovery";

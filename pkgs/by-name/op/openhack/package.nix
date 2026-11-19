@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
   python3Packages,
   versionCheckHook,
 }:
@@ -46,8 +45,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   doInstallCheck = true;
 
   pythonImportsCheck = [ "openhack" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open Source Agentic Security Scanner";

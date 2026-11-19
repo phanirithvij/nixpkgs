@@ -6,7 +6,6 @@
   fetchFromGitHub,
   pythonOlder,
 
-  nix-update-script,
   pcpp,
   platformdirs,
   poetry-core,
@@ -57,7 +56,6 @@ buildPythonPackage (finalAttrs: {
   passthru.tests = callPackages ./tests {
     keymap-drawer = finalAttrs.finalPackage;
   };
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Module and CLI tool to help parse and draw keyboard layouts";

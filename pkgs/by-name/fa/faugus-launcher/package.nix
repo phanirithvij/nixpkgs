@@ -14,7 +14,6 @@
   lsfg-vk,
   meson,
   ninja,
-  nix-update-script,
   pciutils,
   python3Packages,
   umu-launcher,
@@ -103,8 +102,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     xdg-utils
   ]
   ++ lib.optional withGameMode gamemode;
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple and lightweight app for running Windows games using UMU-Launcher";
