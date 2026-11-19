@@ -4,12 +4,9 @@
   fetchFromGitHub,
   hatchling,
   bleak,
-  mypy,
-  ruff,
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
