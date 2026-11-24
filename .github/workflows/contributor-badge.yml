@@ -26,6 +26,8 @@ jobs:
           persist-credentials: false
 
       - name: Update badge JSON
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Count unique git commit authors and round to metric format (e.g. 13973 -> 14k)
           COUNT=$(git shortlog -s HEAD | wc -l)
@@ -43,6 +45,7 @@ jobs:
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git
 
           git fetch origin badges:badges 2>/dev/null || git branch badges HEAD
           git checkout badges
