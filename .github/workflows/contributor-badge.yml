@@ -1,0 +1,62 @@
+# Periodically publishes contributor count for nixpkgs README shields.io contributors badge,
+# avoiding GitHub API 403 limits for contributors-anon https://shields.io/badges/git-hub-contributors
+# The resulting json is commited in `contributors-badge-dont-delete` branch of nixpkgs.
+name: "Update Contributors Badge"
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  update-badge:
+    if: github.repository_owner == 'NixOS' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          filter: blob:none
+          fetch-depth: 0
+
+      - name: Update badge JSON
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Count unique git commit authors and round to metric format (e.g. 13973 -> 14k)
+          # Keeping it simple for now for conversion to metric
+          COUNT=$(git shortlog -s HEAD | wc -l)
+          FORMATTED="$(( (COUNT + 500) / 1000 ))k"
+
+          cat <<EOF > contributors-count-updated.json
+          {
+            "schemaVersion": 1,
+            "label": "contributors",
+            "message": "$FORMATTED",
+            "color": "brightgreen"
+          }
+          EOF
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          gh auth setup-git
+
+          BRANCH="contributors-badge-dont-delete"
+
+          git fetch origin $BRANCH:$BRANCH 2>/dev/null || git branch $BRANCH HEAD
+          git checkout $BRANCH
+
+          cp contributors-count-updated.json ./contributors-count.json
+          git add contributors-count.json
+
+          if ! git diff --staged --quiet; then
+            git commit -m "contributors-count.json: update to $COUNT"
+            git push origin $BRANCH
+          fi
